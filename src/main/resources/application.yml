@@ -1,0 +1,45 @@
+spring:
+  config:
+    import: optional:env.properties    # 환경변수 파일 import
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: null
+    
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.mybatis: DEBUG
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    
+jwt:
+  secret: ${JWT_SECRET}
+  token-validity-in-seconds: ${JWT_VALIDITY}
