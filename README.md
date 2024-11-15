@@ -49,47 +49,30 @@
 ### 사용자 관련 테이블
 
 | 테이블명 | 설명 | 주요 컬럼 |
-
-|---------|------|-----------|
-
+|:---------|:-----|:----------|
 | Users | 사용자 정보 | user_id(PK), user_email, user_name, user_nickname |
-
 | Password_Question | 비밀번호 찾기 질문 | question_id(PK), question_description |
-
 | Password_Answers | 비밀번호 답변 | password_answer_id(PK), user_id(FK), question_id(FK) |
-
 | Tokens | 인증 토큰 | token_id(PK), user_id(FK), access_token, refresh_token |
 
 ### 챌린지 관련 테이블
 
 | 테이블명 | 설명 | 주요 컬럼 |
-
-|---------|------|-----------|
-
+|:---------|:-----|:----------|
 | Challenges | 챌린지 정보 | challenge_id(PK), challenge_title, challenge_description |
-
 | Challenge_Categories | 챌린지 카테고리 | challenge_category_code(PK), challenge_category_name |
-
 | Challenge_Participants | 챌린지 참여자 | participant_id(PK), challenge_id(FK), user_id(FK) |
-
 | Comments | 챌린지 댓글 | comment_id(PK), challenge_id(FK), comment_content |
 
 ### 운동 데이터 테이블
 
 | 테이블명 | 설명 | 주요 컬럼 |
-
-|---------|------|-----------|
-
+|:---------|:-----|:----------|
 | Time | 운동 시간 정보 | time_id(PK), user_id(FK), start_time, end_time |
-
 | Calorie | 소모 칼로리 | calorie_id(PK), time_id(FK), total_calorie |
-
 | HeartRate | 심박수 정보 | heart_rate_id(PK), time_id(FK), max/min/mean_heart_rate |
-
 | Distance | 이동 거리 | distance_id(PK), time_id(FK), distance |
-
 | Steps | 걸음 수 | steps_id(PK), time_id(FK), step_count |
-
 | Speed | 속도 정보 | speed_id(PK), time_id(FK), mean_speed, max_speed |
 
 ## API 문서 📚
