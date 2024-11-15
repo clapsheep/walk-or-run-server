@@ -44,6 +44,54 @@
 | Database | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) <br> ![MyBatis](https://img.shields.io/badge/MyBatis-3776AB?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMTcuNTIzIDIgMTIgMnptLS4zNDMgMTQuNzA2aC0uODhWNy4yOTRoLjg4djkuNDEyeiIvPjwvc3ZnPg==) |
 | DevOps | ![AWS](https://img.shields.io/badge/AWS-FF9900?style=flat-square&logo=amazonwebservices&logoColor=white) <br> ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) <br> ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white) |
 
+## 데이터베이스 스키마
+
+### 사용자 관련 테이블
+
+| 테이블명 | 설명 | 주요 컬럼 |
+
+|---------|------|-----------|
+
+| Users | 사용자 정보 | user_id(PK), user_email, user_name, user_nickname |
+
+| Password_Question | 비밀번호 찾기 질문 | question_id(PK), question_description |
+
+| Password_Answers | 비밀번호 답변 | password_answer_id(PK), user_id(FK), question_id(FK) |
+
+| Tokens | 인증 토큰 | token_id(PK), user_id(FK), access_token, refresh_token |
+
+### 챌린지 관련 테이블
+
+| 테이블명 | 설명 | 주요 컬럼 |
+
+|---------|------|-----------|
+
+| Challenges | 챌린지 정보 | challenge_id(PK), challenge_title, challenge_description |
+
+| Challenge_Categories | 챌린지 카테고리 | challenge_category_code(PK), challenge_category_name |
+
+| Challenge_Participants | 챌린지 참여자 | participant_id(PK), challenge_id(FK), user_id(FK) |
+
+| Comments | 챌린지 댓글 | comment_id(PK), challenge_id(FK), comment_content |
+
+### 운동 데이터 테이블
+
+| 테이블명 | 설명 | 주요 컬럼 |
+
+|---------|------|-----------|
+
+| Time | 운동 시간 정보 | time_id(PK), user_id(FK), start_time, end_time |
+
+| Calorie | 소모 칼로리 | calorie_id(PK), time_id(FK), total_calorie |
+
+| HeartRate | 심박수 정보 | heart_rate_id(PK), time_id(FK), max/min/mean_heart_rate |
+
+| Distance | 이동 거리 | distance_id(PK), time_id(FK), distance |
+
+| Steps | 걸음 수 | steps_id(PK), time_id(FK), step_count |
+
+| Speed | 속도 정보 | speed_id(PK), time_id(FK), mean_speed, max_speed |
+
 ## API 문서 📚
 Spring Docs를 통해 API 문서를 제공할 예정입니다. (준비중)
 
