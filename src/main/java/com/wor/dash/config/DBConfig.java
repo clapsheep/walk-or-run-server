@@ -4,7 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan(basePackages={"com.fitlog.wor.*.model.dao"})
+@MapperScan(basePackages={"com.wor.dash.*.model.dao"})
 public class DBConfig {
 
 }
