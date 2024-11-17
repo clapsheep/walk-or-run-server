@@ -74,12 +74,23 @@ jobs:
        host: ${{ secrets.AWS_EC2_HOST }}
        username: ${{ secrets.AWS_EC2_USERNAME }}
        key: ${{ secrets.AWS_EC2_SSH_KEY }}
+       port: 22
+       script_stop: true
+       debug: true
+       timeout: 60s
+       command_timeout: 20m
        script: |
+         echo "Starting deployment..."
          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+         echo "Logged in to ECR"
          cd ~/running-project
-         docker-compose down
+         echo "Changed directory"
+         docker compose down
+         echo "Stopped existing containers"
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
-         docker-compose up -d
+         echo "Pulled new image"
+         docker compose up -d
+         echo "Deployment complete"
 
    - name: Clean up Gradle Cache
      run: |
