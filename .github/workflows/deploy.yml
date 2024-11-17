@@ -5,6 +5,12 @@ on:
    branches: [ "main" ]
  pull_request:
    branches: [ "main" ]
+   types: [opened, synchronize]
+
+# 동시 실행 방지
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
 
 env:
  AWS_REGION: ap-northeast-2
@@ -16,7 +22,7 @@ jobs:
    runs-on: ubuntu-latest
    environment: 
      name: production
-     url: ${{ steps.deployment.outputs.url }}
+     url: http://${{ secrets.AWS_EC2_HOST }}:8080
 
    steps:
    - name: Checkout
@@ -30,6 +36,7 @@ jobs:
 
    - name: Cache Gradle packages
      uses: actions/cache@v3
+     if: github.event_name == 'push'
      with:
        path: |
          ~/.gradle/caches
@@ -37,11 +44,17 @@ jobs:
        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
        restore-keys: |
          ${{ runner.os }}-gradle-
+       save-always: false
+       upload-chunk-size: 32768
+
+   - name: Validate Gradle wrapper
+     uses: gradle/wrapper-validation-action@v1
 
    - name: Build with Gradle
      uses: gradle/gradle-build-action@v2
      with:
-       arguments: build
+       arguments: build --no-daemon --parallel
+       gradle-home-cache-cleanup: true
 
    - name: Configure AWS credentials
      uses: aws-actions/configure-aws-credentials@v1
@@ -63,11 +76,6 @@ jobs:
        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-   - name: Start Deployment
-     id: deployment
-     run: |
-       echo "url=http://${{ secrets.AWS_EC2_HOST }}:8080" >> $GITHUB_OUTPUT
-
    - name: Deploy to EC2
      uses: appleboy/ssh-action@v1.0.0
      with:
@@ -85,8 +93,11 @@ jobs:
          echo "Logged in to ECR"
          cd ~/running-project
          echo "Changed directory"
-         docker compose down
-         echo "Stopped existing containers"
+         echo "Cleaning up existing containers..."
+         docker compose down --remove-orphans
+         docker rm -f mysql springboot-app || true
+         docker network rm running-project_app_network || true
+         echo "Cleaned up existing containers"
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
          echo "Pulled new image"
          docker compose up -d
