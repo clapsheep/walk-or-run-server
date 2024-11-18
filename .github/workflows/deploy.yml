@@ -100,7 +100,18 @@ jobs:
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
          echo "Pulled new image"
          docker compose up -d
-         echo "Deployment complete"
+         echo "Waiting for containers to start..."
+         sleep 30  # MySQL이 완전히 시작될 때까지 대기
+         
+         # 컨테이너 상태 확인
+         if docker ps | grep -q mysql && docker ps | grep -q springboot-app; then
+           echo "All containers are running successfully"
+           exit 0
+         else
+           echo "Container startup failed. Checking logs..."
+           docker compose logs
+           exit 1
+         fi
 
    - name: Clean up Gradle Cache
      run: |
