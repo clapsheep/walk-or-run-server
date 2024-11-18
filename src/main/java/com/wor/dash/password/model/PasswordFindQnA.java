@@ -11,5 +11,5 @@ public
 class PasswordFindQnA {
     private int questionId;
     private String questionDescription;
-    
+
 }
