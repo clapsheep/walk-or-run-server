@@ -5,10 +5,10 @@ import com.wor.dash.user.model.User;
 
 public interface UserMapper {
 	
-	User findByUserEmail(String userEmail);
+	User selectByUserEmail(String userEmail);
 	
 	
-	int addUser(User user);
+	int insertUser(User user);
 	
 	
 	User selectWithoutPassword(String userEmail);

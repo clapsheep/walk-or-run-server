@@ -36,11 +36,8 @@ public class SecurityConfig {
 
     @Value("${project.origin-url}")
     private String allowOrginUrl;
-
     private final UserDetailServiceImpl userDetailsServiceImp;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final CustomLogoutHandler logoutHandler;
 
     public SecurityConfig(UserDetailServiceImpl userDetailsServiceImp,
@@ -56,22 +53,15 @@ public class SecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(//"/swagger-ui/**",를 열면 해당 다른 것도 열어야함
-                        //req->req.requestMatchers("**","/login/**","/register/**", "/refresh_token/**")
-                        req -> req.requestMatchers("/*.html", "/css/**", "/image/**",
-                                        //"/api/login",
-                                        //"/login/**","/register/**", "/refresh_token/**",
+                .authorizeHttpRequests(
+                        req -> req.requestMatchers(
+                                        "/api/**",
                                         "/api/register",
                                         "/api/auth/**",
                                         "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html",
-                                        "/swagger-resources/**",
-                                        "/swagger-resources",
                                         "/webjars/**",
                                         "/configuration/ui",
                                         "/configuration/security")
-                                //req->req.requestMatchers("/login/**","/register/**", "/refresh_token/**")
                                 .permitAll()
                                 //.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")

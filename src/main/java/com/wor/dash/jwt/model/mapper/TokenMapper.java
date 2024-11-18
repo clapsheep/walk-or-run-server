@@ -3,10 +3,11 @@ package com.wor.dash.jwt.model.mapper;
 import java.util.List;
 
 import com.wor.dash.jwt.model.Token;
+import com.wor.dash.jwt.model.TokenSelective;
 
 public interface TokenMapper {
 	
-	List<Token> findAllAccessTokensByUser(Integer userId);
+	List<Token> selectAllAccessTokensByUser(Integer userId);
 	
 	
 	Token selectByAccessToken(String token);
@@ -18,5 +19,5 @@ public interface TokenMapper {
 	int insertSelective(Token token);
 	
 	
-	int updateBySelective(Token token, String cond);
+	int updateBySelective(TokenSelective tokenSelective);
 }

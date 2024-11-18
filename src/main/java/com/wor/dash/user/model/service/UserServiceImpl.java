@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 		System.out.println("유저서비스까지 옴");
 		User user = null;
 		try {
-			user = userMapper.findByUserEmail(userEmail);
+			user = userMapper.selectByUserEmail(userEmail);
 //			System.out.println(user.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User addUser(User user) {
 		log.debug("UserServiceImpl/addUser");
-		userMapper.addUser(user);
-		return userMapper.findByUserEmail(user.getUserEmail());
+		userMapper.insertUser(user);
+		return userMapper.selectByUserEmail(user.getUserEmail());
 	}
 
 	@Override
