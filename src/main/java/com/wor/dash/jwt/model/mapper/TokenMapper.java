@@ -1,4 +1,4 @@
-package com.wor.dash.jwt.model.dao;
+package com.wor.dash.jwt.model.mapper;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.wor.dash.user.model.dao;
+package com.wor.dash.user.model.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
