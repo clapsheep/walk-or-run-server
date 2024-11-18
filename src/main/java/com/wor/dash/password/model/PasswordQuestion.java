@@ -8,10 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public
-class PasswordFindQnA {
+class PasswordQuestion {
     private int questionId;
     private String questionDescription;
-    private int passwordAnswerId;
-    private int userId;
-    private String passwordQuestionAnswer;
 }
