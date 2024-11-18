@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wor.dash.jwt.model.dao.TokenMapper">
+  <resultMap id="BaseResultMap" type="com.wor.dash.jwt.model.Token">
+    <id column="token_id" jdbcType="INTEGER" property="tokenId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="logout" jdbcType="INTEGER" property="logout" />
+    <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
+    <result column="refresh_token" jdbcType="VARCHAR" property="refreshToken" />
+  </resultMap>
+  
+  <select id="findAllAccessTokensByUser" parameterType="int" resultMap="BaseResultMap">
+    select 
+    t.id, t.access_token, t.is_logged_out, t.refresh_token, t.user_id
+    from Tokens t inner join User u on t.user_id = u.id
+	where t.user_id= #{userId} and t.is_logged_out = false
+  </select>
+  
+  <select id="selectByAccessToken" parameterType="String" resultMap="BaseResultMap">
+  	select token_id, user_id, logout, access_token, refresh_token
+  	from Tokens
+  	where access_token = #{token} and logout = 1
+  </select>
+  
+  <select id="selectByRefreshToken" parameterType="String" resultMap="BaseResultMap">
+  	select token_id, user_id, logout, access_token, refresh_token
+  	from Tokens
+  	where refresh_token = #{token} and logout = 1
+  </select>
+  
+  <insert id="insertSelective" parameterType="Token">
+    insert into Tokens
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tokenId != null">
+        token_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="accessToken != null">
+        access_token,
+      </if>
+      <if test="refreshToken != null">
+        refresh_token,
+      </if>
+      <if test="logout != null">
+        logout,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tokenId != null">
+        #{tokenId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="accessToken != null">
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null">
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="logout != null">
+        #{logout,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <!-- <insert id="insertSelective" parameterType="Token">
+  	insert into 
+  </insert> -->
+  
+</mapper>

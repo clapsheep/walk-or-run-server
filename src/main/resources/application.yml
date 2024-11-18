@@ -12,8 +12,14 @@ spring:
       enabled: true
     restart:
       enabled: true
+  
+  security:
+    user:
+      name: user
+      password: user123
 
 mybatis:
+  type-aliases-package: com.wor.dash.*.model
   mapper-locations: classpath:mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
@@ -24,7 +30,9 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure.security: DEBUG
     org.mybatis: DEBUG
+    com.wor.dash: DEBUG
 
 server:
   port: 8080
@@ -42,4 +50,8 @@ springdoc:
     
 jwt:
   secret: ${JWT_SECRET}
-  token-validity-in-seconds: ${JWT_VALIDITY}
+  access-token-expiration: ${JWT_ACCESS_VALIDITY}
+  refresh-token-expiration: ${JWT_REFRESH_VALIDITY}
+  
+project:
+  origin-url: http://localhost:5173
