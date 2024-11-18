@@ -5,6 +5,7 @@ import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -18,12 +19,32 @@ public class User {
 	private String userPassword;
 	private String userName;
 	private String userEmail;
-	private String userNickName;
+	private String userNickname;
 	private String userPhoneNumber;
-	private Date userJoinDate;
-	private Date userWithdrawalDate;
+	private String userJoinDate;
+	private String userWithdrawalDate;
 	private int userWithdrawalStatus;
 	private String userRole;
+	
+	public User(String userEmail, String userPassword) {
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userName = "";
+		this.userNickname = "";
+		this.userPhoneNumber = "";
+	}
+	
+	public User(String userEmail, String userPassword, String userName, 
+			String userNickname, String userPhoneNumber) {
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userName = userName;
+		this.userNickname = userNickname;
+		this.userPhoneNumber = userPhoneNumber;
+	}
+	
+//	public User()
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -36,16 +57,16 @@ public class User {
 	public String getUserEmail() {
 		return userEmail;
 	}
-	public String getUserNickName() {
-		return userNickName;
+	public String getUserNickname() {
+		return userNickname;
 	}
 	public String getUserPhoneNumber() {
 		return userPhoneNumber;
 	}
-	public Date getUserJoinDate() {
+	public String getUserJoinDate() {
 		return userJoinDate;
 	}
-	public Date getUserWithdrawlDate() {
+	public String getUserWithdrawlDate() {
 		return userWithdrawalDate;
 	}
 	public int getUserWithdrawlStatus() {

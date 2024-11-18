@@ -59,7 +59,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(//"/swagger-ui/**",를 열면 해당 다른 것도 열어야함
                 		 //req->req.requestMatchers("**","/login/**","/register/**", "/refresh_token/**")
                 		req->req.requestMatchers("/*.html","/css/**","/image/**",
+                				//"/api/login",
                 				//"/login/**","/register/**", "/refresh_token/**",
+                				"/api/register",
                 				"/api/board/**",
                 				"/api/auth/**",
                 				"/api/v1/auth-service/**",  // Your specific API access,

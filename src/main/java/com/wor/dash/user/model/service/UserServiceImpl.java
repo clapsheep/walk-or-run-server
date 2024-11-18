@@ -22,12 +22,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<User> findByUserEmail(String userEmail) {
-		User user = userMapper.findByUserEmail(userEmail);
-		return Optional.ofNullable(user);
+		System.out.println("유저서비스까지 옴");
+		return Optional.ofNullable(userMapper.findByUserEmail(userEmail));
 	}
 
 	@Override
 	public User addUser(User user) {
+		log.debug("UserServiceImpl/addUser");
 		userMapper.addUser(user);
 		return userMapper.findByUserEmail(user.getUserEmail());
 	}

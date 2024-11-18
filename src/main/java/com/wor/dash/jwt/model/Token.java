@@ -14,9 +14,9 @@ import lombok.ToString;
 public class Token {
     private Integer tokenId;
     private int userId;
-    private int logout;
     private String accessToken;
     private String refreshToken;
+    private int logout;
     
 //	public void setTokenId(Integer tokenId) {
 //		this.tokenId = tokenId;

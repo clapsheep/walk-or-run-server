@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wor.dash.jwt.model.Token;
 import com.wor.dash.response.AuthenticationResponse;
@@ -17,9 +18,11 @@ import com.wor.dash.user.model.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
+@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
 	
 	private final UserService repository;
@@ -41,7 +44,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Override
+//	@Transactional
 	public AuthenticationResponse register(User request) {
+		log.debug("AuthenticationServiceImpl/register");
+		System.out.println(request.toString());
 		if(repository.findByUserEmail(request.getUserEmail()).isPresent()) {
             return new AuthenticationResponse(null, null,"User already exist");
         }
@@ -49,10 +55,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = new User();
         user.setUserEmail(request.getUserEmail());
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
+        user.setUserName(request.getUserName());
+        user.setUserNickname(request.getUserNickname());
+        user.setUserPhoneNumber(request.getUserPhoneNumber());
 
-        user.setUserRole(request.getUserRole());
-
+        log.debug("before addUser");
         user = repository.addUser(user);
+        log.debug("addUser complete");
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -71,13 +80,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.getUserPassword()
                 )
         );
-
-        User user = repository.findByUserEmail(request.getUserEmail()).orElseThrow();
+		log.debug("authenticate====================================================");
+		System.out.println("email: " + request.getUserEmail());
+		User  user = repository.findByUserEmail(request.getUserEmail()).get();
+		log.debug("3==============================={}",user.toString());
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
+        log.debug("4tokencreated===================================================");
         revokeAllTokenByUser(user);
+        log.debug("56tokenrevoked===================================================");
         saveUserToken(accessToken, refreshToken, user);
+        log.debug("tokensaved===================================================");
 
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
 	}

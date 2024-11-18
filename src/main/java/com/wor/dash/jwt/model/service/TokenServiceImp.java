@@ -9,7 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wor.dash.jwt.model.Token;
 import com.wor.dash.jwt.model.dao.TokenMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class TokenServiceImp implements TokenService {
 
 	private TokenMapper tokenMapper;
@@ -51,7 +54,9 @@ where t.user.id = :userId and t.loggedOut = false
 	@Override
 	public void addToken(Token token) {
 		token.setTokenId(null);
+		log.debug("TokenServiceImpl/addToken=============================={}111", token);
 		tokenMapper.insertSelective(token);
+		log.debug("TokenServiceImpl/addToken=============================={}222", token);
 	}
 
 	/**
