@@ -1,5 +1,7 @@
 package com.wor.dash.record.model.service;
 
-public interface StepService {
+import com.wor.dash.record.model.Step;
 
+public interface StepService {
+//    int insertStep(Step step);
 }

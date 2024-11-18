@@ -1,5 +1,7 @@
 package com.wor.dash.record.model.service;
 
-public interface CalorieService {
+import com.wor.dash.record.model.Calorie;
 
+public interface CalorieService {
+//    int insertCalorie(Calorie calorie);
 }

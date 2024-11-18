@@ -1,5 +1,7 @@
 package com.wor.dash.record.model.service;
 
-public interface DistanceService {
+import com.wor.dash.record.model.Distance;
 
+public interface DistanceService {
+//    int insertDistance(Distance distance);
 }
