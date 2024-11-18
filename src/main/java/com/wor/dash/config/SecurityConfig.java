@@ -33,11 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfig {
-	
-	@Value("${project.origin-url}")
-	private String allowOrginUrl;
-	
-	private final UserDetailServiceImpl userDetailsServiceImp;
+
+    @Value("${project.origin-url}")
+    private String allowOrginUrl;
+
+    private final UserDetailServiceImpl userDetailsServiceImp;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -51,45 +51,46 @@ public class SecurityConfig {
         this.logoutHandler = logoutHandler;
     }
 
-	@Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(//"/swagger-ui/**",를 열면 해당 다른 것도 열어야함
-                		 //req->req.requestMatchers("**","/login/**","/register/**", "/refresh_token/**")
-                		req->req.requestMatchers("/*.html","/css/**","/image/**",
-                				//"/api/login",
-                				//"/login/**","/register/**", "/refresh_token/**",
-                				"/api/register",
-                				"/api/board/**",
-                				"/api/auth/**",
-                				"/api/v1/auth-service/**",  // Your specific API access,
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/webjars/**")
-                        //req->req.requestMatchers("/login/**","/register/**", "/refresh_token/**")
+                        //req->req.requestMatchers("**","/login/**","/register/**", "/refresh_token/**")
+                        req -> req.requestMatchers("/*.html", "/css/**", "/image/**",
+                                        //"/api/login",
+                                        //"/login/**","/register/**", "/refresh_token/**",
+                                        "/api/register",
+                                        "/api/auth/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-resources/**",
+                                        "/swagger-resources",
+                                        "/webjars/**",
+                                        "/configuration/ui",
+                                        "/configuration/security")
+                                //req->req.requestMatchers("/login/**","/register/**", "/refresh_token/**")
                                 .permitAll()
-                                .requestMatchers("/api/demo/**").hasAnyRole("USER", "ADMIN")
-                                //.requestMatchers("/board/**").hasAuthority("USER")
+                                //.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsServiceImp)
-                .sessionManagement(session->session
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
-                        e->e.accessDeniedHandler(
-                                        (request, response, accessDeniedException)->response.setStatus(403)
+                        e -> e.accessDeniedHandler(
+                                        (request, response, accessDeniedException) -> response.setStatus(403)
                                 )
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .logout(l->l
+                .logout(l -> l
                         .logoutUrl("/api/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
-                        ))  
+                        ))
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
                     @Override
@@ -108,13 +109,13 @@ public class SecurityConfig {
                 })))
                 .build();
     }
-	
-	@Bean
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-	
-	@Bean
+
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
