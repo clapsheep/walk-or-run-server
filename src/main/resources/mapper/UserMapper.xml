@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wor.dash.user.model.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.wor.dash.user.model.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="user_nickname" jdbcType="VARCHAR" property="userNickName" />
+    <result column="user_phone_number" jdbcType="VARCHAR" property="userPhoneNumber" />
+    <result column="user_join_date" jdbcType="TIMESTAMP" property="userJoinDate" />
+    <result column="user_withdrawal_date" jdbcType="TIMESTAMP" property="userWithdrawalDate" />
+    <result column="user_withdrawal_status" jdbcType="TINYINT" property="userWithdrawalStatus" />
+    <result column="is_admin" jdbcType="TINYINT" property="isAdmin" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	user_id, user_password, user_name, user_email, user_nickname, user_phone_number,
+  	user_join_date, user_withdrawal_date, user_withdrawal_status, is_admin
+  </sql>
+  
+  <select id="findByUserEmail" parameterType="String" resultMap="BaseResultMap">
+  	select 
+	<include refid="Base_Column_List" />
+  	from users
+  	where user_email = #{userEmail}
+  </select>
+  
+  <insert id="addUser" parameterType="com.wor.dash.user.model.User" useGeneratedKeys="true" keyProperty="id">
+  	insert into users
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+  	  <if test="userId != null">
+  	  	user_id,
+  	  </if>
+  	  <if test="userPassword != null">
+  	  	user_password,
+  	  </if>
+  	  <if test="userName != null">
+  	  	user_name,
+  	  </if>
+  	  <if test="userEmail != null">
+  	  	user_email,
+  	  </if>
+  	  <if test="userNickName != null">
+  	  	user_nickname,
+  	  </if>
+  	  <if test="userPhoneNumber != null">
+  	  	user_phone_number,
+  	  </if>
+  	  <if test="userJoinDate != null">
+  	  	user_join_date,
+  	  </if>
+  	  <if test="userWithdrawalDate != null">
+  	  	user_withdrawal_date,
+  	  </if>
+  	  <if test="userWithdrawalStatus != null">
+  	  	user_withdrawal_status,
+  	  </if>
+  	  <if test="isAdmin != null">
+  	  	is_admin,
+  	  </if>
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides=",">
+  	  <if test="userId != null">
+  	  	#{userId, jdbcType=INTEGER},
+  	  </if>
+  	  <if test="userPassword != null">
+  	  	#{userPassword, jdbcType=VARCHAR},
+  	  </if>
+  	  <if test="userName != null">
+  	  	#{userName, jdbcType=VARCHAR},
+  	  </if>
+  	  <if test="userEmail != null">
+  	  	#{userEmail, jdbcType=VARCHAR},
+  	  </if>
+  	  <if test="userNickName != null">
+  	  	#{userNickName, jdbcType=VARCHAR},
+  	  </if>
+  	  <if test="userPhoneNumber != null">
+  	  	#{userPhoneNumber, jdbcType=VARCHAR},
+  	  </if>
+  	  <if test="userJoinDate != null">
+  	  	#{userJoinDate, jdbcType=TIMESTAMP},
+  	  </if>
+  	  <if test="userWithdrawalDate != null">
+  	  	#{userWithdrawalDate, jdbcType=TIMESTAMP},
+  	  </if>
+  	  <if test="userWithdrawalStatus != null">
+  	  	#{userWithdrawalStatus, jdbcType=TINYINT},
+  	  </if>
+  	  <if test="isAdmin != null">
+  	  	#{isAdmin, jdbcType=TINYINT},
+  	  </if>
+  	</trim>
+  </insert>
+  
+  <select id="selectWithoutPassword" parameterType="String" resultMap="BaseResultMap">
+  	select user_id, user_name, user_email, user_nickname, user_phone_number, user_join_date,
+  	user_withdrawal_date, user_withdrawal_status, is_admin
+  	from users
+  	where user_email = #{userEmail}
+  </select>
+</mapper>

@@ -12,6 +12,11 @@ spring:
       enabled: true
     restart:
       enabled: true
+  
+  security:
+    user:
+      name: user
+      password: user123
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -24,6 +29,7 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure.security: DEBUG
     org.mybatis: DEBUG
 
 server:
@@ -42,4 +48,8 @@ springdoc:
     
 jwt:
   secret: ${JWT_SECRET}
-  token-validity-in-seconds: ${JWT_VALIDITY}
+  access-token-expiration: ${JWT_ACCESS_VALIDITY}
+  refresh-token-expiration: ${JWT_REFRESH_VALIDITY}
+  
+project:
+  origin-url: http://localhost:5500
