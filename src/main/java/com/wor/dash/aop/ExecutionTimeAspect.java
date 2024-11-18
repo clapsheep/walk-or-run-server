@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class ExecutionTimeAspect {
     private Logger log = LoggerFactory.getLogger(ExecutionTimeAspect.class);
 
-    @Around(value = "execution(* com.wor.dash.*.model.dao.*.*(..))")
+    @Around(value = "execution(* com.wor.dash.*.model.mapper.*.*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long t = System.currentTimeMillis();
         Object result = joinPoint.proceed();

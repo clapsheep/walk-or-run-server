@@ -82,7 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 		log.debug("authenticate====================================================");
 		System.out.println("email: " + request.getUserEmail());
-		User  user = repository.findByUserEmail(request.getUserEmail()).get();
+		User user = repository.findByUserEmail(request.getUserEmail()).get();
 		log.debug("3==============================={}",user.toString());
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
