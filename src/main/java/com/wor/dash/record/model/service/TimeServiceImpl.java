@@ -1,5 +1,5 @@
 
-package com.wor.dash.records.model.service;
+package com.wor.dash.record.model.service;
 
 import org.springframework.stereotype.Service;
 

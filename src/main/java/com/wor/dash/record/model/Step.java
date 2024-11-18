@@ -1,4 +1,4 @@
-package com.wor.dash.records.model;
+package com.wor.dash.record.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class HeartRate {
-	private int heartRateId;
+public class Step {
+	private int stepId;
 	@NonNull private int timeId;
-	private int maxHeartRate;
-	private int minHeartRate;
-	private int meanHeartRate;
+	private int stepCount;
 }
