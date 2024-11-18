@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/wor/challenges")
+@RequestMapping("api/challenge")
 public class ChallengeController {
 	
 	private final ChallengeService challengeService;

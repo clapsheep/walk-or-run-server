@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/wor/comment")
+@RequestMapping("api/comment")
 public class CommentController {
 	
 	private final CommentService commentService;
@@ -37,7 +37,6 @@ public class CommentController {
         List<Comment> commentList = commentService.getAllComment();
         return ResponseEntity.ok(commentList);
     }
-	
 	
 	
 	@PutMapping
