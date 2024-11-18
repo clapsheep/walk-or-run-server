@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.wor.dash.user.model.User;
-import com.wor.dash.user.model.dao.UserMapper;
+import com.wor.dash.user.model.mapper.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
