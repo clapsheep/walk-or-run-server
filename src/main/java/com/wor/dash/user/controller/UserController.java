@@ -1,4 +1,4 @@
-package com.wor.dash.jwt.controller;
+package com.wor.dash.user.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/auth")
-public class AuthenticationController {
+public class UserController {
 	
 	private final AuthenticationService authService;
 	private final TokenService tokenRepository;
 	
-	public AuthenticationController(AuthenticationService authService, TokenService tokenRepository) {
+	public
+	UserController(AuthenticationService authService, TokenService tokenRepository) {
 		super();
 		this.authService = authService;
 		this.tokenRepository = tokenRepository;

@@ -3,6 +3,7 @@ package com.wor.dash.jwt.model.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.wor.dash.jwt.model.TokenSelective;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ where t.user.id = :userId and t.loggedOut = false
 
 	@Override
 	public List<Token> findAllAccessTokensByUser(Integer userId) {
-		return tokenMapper.findAllAccessTokensByUser(userId);
+		return tokenMapper.selectAllAccessTokensByUser(userId);
 	}
 
 	@Override
@@ -67,21 +68,21 @@ where t.user.id = :userId and t.loggedOut = false
 	public void addAllTokens(List<Token> validTokens) {
 		if(validTokens != null && validTokens.size() > 0) {
 			for(int i=0; i < validTokens.size(); i++) {
-				String cond = "id = " + validTokens.get(i).getTokenId();
-				Token token = new Token();
-				token.setLogout(1);
-				tokenMapper.updateBySelective(token, cond);
+				TokenSelective tokenSelective = new TokenSelective();
+				tokenSelective.setCond(validTokens.get(i).getTokenId());
+				tokenSelective.setLogout(1);
+				tokenMapper.updateBySelective(tokenSelective);
 			}
 		}
 	}
 
 	@Override
 	public void updatgDsave(Token storedToken) {
-		Token token = new Token();
-		token.setTokenId(storedToken.getTokenId());
-		token.setLogout(1);
-		String cond = "id = " + storedToken.getTokenId();
-		tokenMapper.updateBySelective(token, cond);
+		TokenSelective tokenSelective = new TokenSelective();
+		tokenSelective.setTokenId(storedToken.getTokenId());
+		tokenSelective.setLogout(1);
+		tokenSelective.setCond(storedToken.getTokenId());
+		tokenMapper.updateBySelective(tokenSelective);
 	}
 
 }

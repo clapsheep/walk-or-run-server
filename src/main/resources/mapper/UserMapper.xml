@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.user.model.mapper.UserMapper">
-  <!-- <resultMap id="BaseResultMap" type="com.wor.dash.user.model.User">
-    <id column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
-    <result column="user_nickname" jdbcType="VARCHAR" property="userNickname" />
-    <result column="user_phone_number" jdbcType="VARCHAR" property="userPhoneNumber" />
-    <result column="user_join_date" jdbcType="TIMESTAMP" property="userJoinDate" />
-    <result column="user_withdrawal_date" jdbcType="TIMESTAMP" property="userWithdrawalDate" />
-    <result column="user_withdrawal_status" jdbcType="TINYINT" property="userWithdrawalStatus" />
-    <result column="user_role" jdbcType="VARCHAR" property="userRole" />
-  </resultMap> -->
-  
+
   <sql id="Base_Column_List">
   	user_id, user_password, user_name, user_email, user_nickname, user_phone_number,
   	user_join_date, user_withdrawal_date, user_withdrawal_status, user_role
   </sql>
   
-  <select id="findByUserEmail" parameterType="string" resultType="user">
+  <select id="selectByUserEmail" parameterType="string" resultType="user">
   	select 
 	<include refid="Base_Column_List" />
-  	from Users
+  	from User
   	where user_email = #{userEmail}
   </select>
   
-  <insert id="addUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
-  	insert into Users
+  <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
+  	insert into User
   	<trim prefix="(" suffix=")" suffixOverrides=",">
   	  <if test="userId != null">
   	  	user_id,
@@ -97,7 +85,7 @@
   <select id="selectWithoutPassword" parameterType="string" resultType="user">
   	select user_id, user_name, user_email, user_nickname, user_phone_number, user_join_date,
   	user_withdrawal_date, user_withdrawal_status, user_role
-  	from Users
+  	from User
   	where user_email = #{userEmail}
   </select>
 </mapper>
