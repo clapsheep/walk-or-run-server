@@ -23,7 +23,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Optional<User> findByUserEmail(String userEmail) {
 		System.out.println("유저서비스까지 옴");
-		return Optional.ofNullable(userMapper.findByUserEmail(userEmail));
+		User user = null;
+		try {
+			user = userMapper.findByUserEmail(userEmail);
+//			System.out.println(user.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(user);
 	}
 
 	@Override

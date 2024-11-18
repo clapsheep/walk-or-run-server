@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.jwt.model.mapper.TokenMapper">
-  <resultMap id="BaseResultMap" type="com.wor.dash.jwt.model.Token">
+  <!-- <resultMap id="BaseResultMap" type="com.wor.dash.jwt.model.Token">
     <id column="token_id" jdbcType="INTEGER" property="tokenId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="logout" jdbcType="INTEGER" property="logout" />
     <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
     <result column="refresh_token" jdbcType="VARCHAR" property="refreshToken" />
-  </resultMap>
+  </resultMap> -->
   
-  <select id="findAllAccessTokensByUser" parameterType="int" resultMap="BaseResultMap">
+  <select id="findAllAccessTokensByUser" parameterType="Integer" resultType="Token">
     select 
-    t.id, t.access_token, t.is_logged_out, t.refresh_token, t.user_id
-    from Tokens t inner join User u on t.user_id = u.id
-	where t.user_id= #{userId} and t.is_logged_out = false
+    t.token_id, t.access_token, t.logout, t.refresh_token, t.user_id
+    from Tokens t inner join Users u on t.user_id = u.user_id
+	where t.user_id= #{userId} and t.logout = 0
   </select>
   
-  <select id="selectByAccessToken" parameterType="String" resultMap="BaseResultMap">
+  <select id="selectByAccessToken" parameterType="String" resultType="Token">
   	select token_id, user_id, logout, access_token, refresh_token
   	from Tokens
   	where access_token = #{token} and logout = 1
   </select>
   
-  <select id="selectByRefreshToken" parameterType="String" resultMap="BaseResultMap">
+  <select id="selectByRefreshToken" parameterType="String" resultType="Token">
   	select token_id, user_id, logout, access_token, refresh_token
   	from Tokens
   	where refresh_token = #{token} and logout = 1
