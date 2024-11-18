@@ -8,8 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//import com.ssafy.interceptor.ConfirmInterceptor;
-
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Value("${project.origin-url}")

@@ -1,4 +1,4 @@
-package com.wor.dash.records.model;
+package com.wor.dash.record.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

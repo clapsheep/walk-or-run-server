@@ -1,4 +1,4 @@
-package com.wor.dash.records.model;
+package com.wor.dash.record.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class Time {
-	private int timeId;
-	@NonNull private int userId;
-	private String stratTime;
-	private String endTime;
+public class Speed {
+	private int speedId;
+	@NonNull private int timeId;
+	private double meanSpeed;
+	private double maxSpeed;
 }

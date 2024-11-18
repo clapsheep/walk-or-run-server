@@ -50,8 +50,6 @@ public class AuthenticationController {
             @RequestBody User request
     ) {
     	log.debug("AuthenticationController/login");
-    	System.out.println("여기 옴00-000===========================================");
-    	System.out.println(request.getUserEmail());
     	try {
     		return ResponseEntity.ok(authService.authenticate(request));
 		} catch (Exception e) {
