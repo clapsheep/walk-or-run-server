@@ -20,8 +20,8 @@ import com.wor.dash.comment.model.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("api/comment")
+@RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
