@@ -1,4 +1,4 @@
-package com.wor.dash.records.model;
+package com.wor.dash.record.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class Calorie {
-	private int calorieId;
-	@NonNull private int timeId;
-	private double totalCalorie;
+public class Time {
+	private int timeId;
+	@NonNull private int userId;
+	private String stratTime;
+	private String endTime;
 }

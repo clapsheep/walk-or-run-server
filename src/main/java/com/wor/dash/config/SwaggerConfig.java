@@ -26,7 +26,6 @@ public class SwaggerConfig {
                 .contact(new io.swagger.v3.oas.models.info.Contact()
                         .name("JaeSeoHan")
                         .email("hanahyun1@korea.ac.cr").url("https://github.com/clapsheep/WalkOrRun-server"));
-
         return new OpenAPI().components(new Components()).info(info);
     }
 
