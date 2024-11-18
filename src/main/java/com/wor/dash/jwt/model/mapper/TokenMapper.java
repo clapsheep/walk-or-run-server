@@ -2,11 +2,8 @@ package com.wor.dash.jwt.model.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.wor.dash.jwt.model.Token;
 
-@Mapper
 public interface TokenMapper {
 	
 	List<Token> findAllAccessTokensByUser(Integer userId);
