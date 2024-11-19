@@ -5,6 +5,7 @@ import com.wor.dash.comment.model.service.CommentService;
 import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/comment")
 @RequiredArgsConstructor
+@Tag(name = "Comment Controller", description = "챌린지 댓글 기능을 관리합니다.")
 public class CommentController {
 
     private final CommentService commentService;

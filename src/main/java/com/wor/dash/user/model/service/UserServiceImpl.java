@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<Integer> updateUserInfo(User user) {
+		log.debug("UserServiceImpl/updateUserInfo");
 		return Optional.ofNullable(userMapper.updateUser(user));
 	}
 

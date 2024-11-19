@@ -3,6 +3,8 @@ package com.wor.dash.user.controller;
 import com.wor.dash.response.AuthenticationResponse;
 import com.wor.dash.user.model.MyChallenge;
 import com.wor.dash.user.model.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,20 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping("/api/user")
 @AllArgsConstructor
+@Tag(name = "User Controller", description = "전반적인 유저 관련 기능을 관리합니다.(인증 포함)")
 public class UserController {
 	
 	private final AuthenticationService authService;
 	private final TokenService tokenRepository;
 	private final UserService userService;
-	
+
+	@Operation(summary = "회원가입", description = "회원가입을 위한 API \n 이미 있는 경우는 400 반환 \n \n" +
+			"<필수입력> \n " +
+			"- userPassword : 비밀번호 \n " +
+			"- userName : 유저 이름 \n " +
+			"- userEmail : 이메일(아이디로 사용) \n" +
+			"- userNickname : 닉네임 \n" +
+			"- userPhoneNumber : 휴대폰 번호")
 	@PostMapping("/auth/register")
     public ResponseEntity<?> register(
             @RequestBody User request
@@ -45,6 +55,10 @@ public class UserController {
 		}
     }
 
+	@Operation(summary = "로그인", description = "로그인을 위한 API \n \n" +
+			"<필수입력> \n " +
+			"- userEmail : 아이디(이메일) \n " +
+			"- userPassword : 비밀번호")
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(
             @RequestBody User request
@@ -59,6 +73,7 @@ public class UserController {
 		}
     }
 
+	@Operation(summary = "토큰 재발행", description = "권한 토큰 재발행을 위한 API \n \n")
     @PostMapping("/auth/refresh")
     public ResponseEntity<?> refreshToken(
             HttpServletRequest request,
@@ -72,6 +87,9 @@ public class UserController {
 		}
     }
 
+	@Operation(summary = "마이페이지 기능", description = "유저의 개인정보 조회를 위한 API \n \n" +
+			"<필수입력> \n " +
+			"- userId : User table의 Primary Key")
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getUserInfo(@PathVariable("userId") int userId) {
 		log.debug("AuthenticationController/getUserInfo");
@@ -88,6 +106,9 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "유저 권한 변경", description = "유저 관리자 설정을 위한 API(관리자만 가능) \n \n" +
+			"<필수입력> \n " +
+			"- userId : User table의 Primary Key")
 	@PatchMapping("/{userId}")
 	public ResponseEntity<?> updateUserRole(@PathVariable("userId") int userId) {
 		log.debug("AuthenticationController/updateUserRole");
@@ -99,6 +120,7 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "내 정보 변경", description = "개인정보 변경을 위한 API \n \n")
 	@PutMapping("/update")
 	public ResponseEntity<?> updateUserInfo(@RequestBody User user) {
 		log.debug("AuthenticationController/updateUserInfo");
@@ -110,6 +132,9 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "참여한 챌린지 목록 반환 기능", description = "유저가 참여한 챌린지 목록 조회를 위한 API \n \n" +
+			"<필수입력> \n " +
+			"- userId : User table의 Primary Key")
 	@GetMapping("/challenge/{userId}")
 	public ResponseEntity<?> getChallenges(@PathVariable("userId") int userId) {
 		log.debug("AuthenticationController/getChallenges");
@@ -125,6 +150,7 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "탈퇴 기능", description = "유저 탈퇴를 위한 API")
 	@PutMapping("/withdraw")
 	public ResponseEntity<?> withdraw(@RequestBody User user) {
 		log.debug("AuthenticationController/withdraw");
@@ -134,5 +160,21 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","withdraw",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	// 비밀번호로 확인 후 변경하는 로직 추가 필요
+	@PostMapping("/checkPw")
+	public ResponseEntity<?> checkPw(
+			@RequestBody User user,
+			@RequestHeader("Authorization") String authHeader) {
+		log.debug("AuthenticationController/checkPw");
+		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
+		}
+
+//		try {
+////			Optional<String>
+//		}
+		return new ResponseEntity<ApiResponse> (new ApiResponse("success", "checkPw", 200), HttpStatus.OK);
 	}
 }
