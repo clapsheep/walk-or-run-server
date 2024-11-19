@@ -37,8 +37,9 @@ public class UserController {
             ) {
 		log.debug("AuthController/register 컨트롤러 회원가입");
     	try {
-    		authService.register(request);
-			return new ResponseEntity<ApiResponse>(new ApiResponse("success","register",200), HttpStatus.CREATED);
+			AuthenticationResponse response = authService.register(request);
+			if(response.getAccessToken() != null) return new ResponseEntity<ApiResponse>(new ApiResponse("success","register",201), HttpStatus.CREATED);
+			else return new ResponseEntity<ApiResponse>(new ApiResponse("User Already Exists", "register", 400), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<ApiResponse>(new ApiResponse("fail","register",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -80,7 +81,7 @@ public class UserController {
 			if(challenges.isPresent()) {
 				return new ResponseEntity<User>(challenges.get(), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent","getUserInfo",204), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<ApiResponse>(new ApiResponse("empty","getUserInfo",204), HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","getUserInfo",500), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -98,9 +99,9 @@ public class UserController {
 		}
 	}
 
-	@PutMapping("/modify")
-	public ResponseEntity<?> modifyUserInfo(@RequestBody User user) {
-		log.debug("AuthenticationController/modifyUserInfo");
+	@PutMapping("/update")
+	public ResponseEntity<?> updateUserInfo(@RequestBody User user) {
+		log.debug("AuthenticationController/updateUserInfo");
 		try {
 			Optional<Integer> change = userService.updateUserInfo(user);
 			return new ResponseEntity<ApiResponse> (new ApiResponse("success", "modifyUserInfo", 200), HttpStatus.OK);
@@ -109,7 +110,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/challenges/{userId}")
+	@GetMapping("/challenge/{userId}")
 	public ResponseEntity<?> getChallenges(@PathVariable("userId") int userId) {
 		log.debug("AuthenticationController/getChallenges");
 		try {
@@ -117,7 +118,7 @@ public class UserController {
 			if(challenges.isPresent()) {
 				return new ResponseEntity<List<MyChallenge>> (challenges.get(), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<ApiResponse> (new ApiResponse("nocontent", "getChallenges", 204), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<ApiResponse> (new ApiResponse("empty", "getChallenges", 204), HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","getChallenges",500), HttpStatus.INTERNAL_SERVER_ERROR);

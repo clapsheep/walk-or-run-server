@@ -10,7 +10,7 @@ import com.wor.dash.user.model.User;
 public interface UserService {
 
 	User addUser(User user);
-	int getUserId(String userEmail);
+	Optional<Integer> getUserId(String userEmail);
 	Optional<User> getPublicInfo(int userId);
 	Optional<Integer> updateUserRole(int userId);
 	Optional<Integer> updateUserInfo(User user);

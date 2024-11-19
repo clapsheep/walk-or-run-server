@@ -30,8 +30,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int getUserId(String userEmail) {
-		return userMapper.selectUserId(userEmail);
+	public Optional<Integer> getUserId(String userEmail) {
+		log.debug("UserServiceImpl/getUserId: " + userMapper.selectUserId(userEmail));
+		return Optional.ofNullable(userMapper.selectUserId(userEmail));
 	}
 
 	@Override

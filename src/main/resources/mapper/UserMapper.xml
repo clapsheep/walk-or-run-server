@@ -34,7 +34,7 @@
                 #{userPhoneNumber, jdbcType=VARCHAR})
     </insert>
 
-    <select id="selectUserEmail" parameterType="string" resultType="int">
+    <select id="selectUserId" parameterType="String" resultType="int">
         select user_id
         from User
         where user_email = #{userEmail}
