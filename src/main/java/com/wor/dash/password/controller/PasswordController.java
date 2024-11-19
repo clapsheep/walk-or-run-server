@@ -63,4 +63,30 @@ public class PasswordController {
     }
 
     @PostMapping("/isnert")
+    public ResponseEntity<?> addAnswer(@RequestBody PasswordAnswer answer) {
+        Optional<Integer> insert = passwordService.addAnswer(answer);
+        try {
+            if (insert.isPresent()) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse("success", "addAnswer", 200), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "addAnswer", 404), HttpStatus.NOT_FOUND);
+            }
+        } catch(Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse("fail", "addAnswer", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateAnswer(@RequestBody PasswordAnswer answer) {
+        Optional<Integer> update = passwordService.updateAnswer(answer);
+        try {
+            if (update.isPresent()) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse("success", "updateAnswer", 200), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "updateAnswer", 404), HttpStatus.NOT_FOUND);
+            }
+        } catch(Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse("fail", "updateAnswer", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

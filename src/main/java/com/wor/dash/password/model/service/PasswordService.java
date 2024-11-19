@@ -15,5 +15,6 @@ interface PasswordService {
     Optional<PasswordQuestion> getQuestion(int questionId);
     Optional<PasswordFindQnA> getQnA(int userId);
     Optional<Integer> addAnswer(PasswordAnswer passwordAnswer);
+    Optional<Integer> updateAnswer(PasswordAnswer passwordAnswer);
 
 }

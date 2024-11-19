@@ -29,6 +29,4 @@
         FROM Comment
         WHERE Comment_id = #{commentId}
     </delete>
-
-
 </mapper>

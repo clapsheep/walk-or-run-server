@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
 		return Optional.ofNullable(user);
 	}
 
+	@Override
+	public Optional<Integer> updateUserRole(int userId) {
+		return Optional.ofNullable(userMapper.updateUserRole(userId));
+	}
+
 }

@@ -45,4 +45,9 @@ class PasswordServiceImpl implements PasswordService {
     Optional<Integer> addAnswer(PasswordAnswer passwordAnswer) {
         return Optional.of(passwordMapper.insertPasswordAnswer(passwordAnswer));
     }
+
+    @Override
+    public Optional<Integer> updateAnswer(PasswordAnswer passwordAnswer) {
+        return Optional.of(passwordMapper.updatePasswordAnswer(passwordAnswer));
+    }
 }
