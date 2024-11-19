@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wor.dash.challenge.model.mapper.RecordMapper">
+    <insert id="insertCalorie" parameterType="calorie">
+        INSERT INTO Calorie
+            (calorie_id, time_id, total_calorie, calorie_day)
+        VALUES (#{calorieId}, #{timeId}, #{totalCalorie}, #{calorieDay}
+    </insert>
+
+</mapper>
