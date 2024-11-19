@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/password")
+@RequestMapping("/api/user/password")
 @AllArgsConstructor
 @Tag(name = "Password Controller", description = "비밀번호 찾기 기능을 관리합니다.")
 public class PasswordController {
@@ -78,7 +78,7 @@ public class PasswordController {
             "- userId : 현재 로그인된 유저의 아이디 \n " +
             "- qudstionId : 비밀번호 질문 아이디 \n " +
             "- passwordQuestionAnswer : 비밀번호 질문 답변")
-    @PostMapping("/isnert")
+    @PostMapping
     public ResponseEntity<?> addAnswer(@RequestBody PasswordAnswer answer) {
         Optional<Integer> insert = passwordService.addAnswer(answer);
         try {
@@ -95,7 +95,7 @@ public class PasswordController {
     @Operation(summary = "비밀번호 확인 질문 및 답변 추가", description = "비밀번호 확인 질문 및 답변 추가를 위한 API \n \n" +
             "<필수입력> \n " +
             "- userId : 현재 로그인된 유저의 아이디")
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<?> updateAnswer(@RequestBody PasswordAnswer answer) {
         Optional<Integer> update = passwordService.updateAnswer(answer);
         try {

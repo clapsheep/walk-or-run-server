@@ -1,5 +1,6 @@
 package com.wor.dash.user.controller;
 
+import com.wor.dash.jwt.model.service.JwtService;
 import com.wor.dash.response.AuthenticationResponse;
 import com.wor.dash.user.model.MyChallenge;
 import com.wor.dash.user.model.service.UserService;
@@ -33,6 +34,7 @@ public class UserController {
 	private final AuthenticationService authService;
 	private final TokenService tokenRepository;
 	private final UserService userService;
+	private final JwtService jwtService;
 
 	@Operation(summary = "회원가입", description = "회원가입을 위한 API \n 이미 있는 경우는 400 반환 \n \n" +
 			"<필수입력> \n " +
@@ -163,8 +165,8 @@ public class UserController {
 	}
 
 	// 비밀번호로 확인 후 변경하는 로직 추가 필요
-	@PostMapping("/checkPw")
-	public ResponseEntity<?> checkPw(
+	@PostMapping("/changePw")
+	public ResponseEntity<?> changePw(
 			@RequestBody User user,
 			@RequestHeader("Authorization") String authHeader) {
 		log.debug("AuthenticationController/checkPw");
@@ -172,9 +174,22 @@ public class UserController {
 			return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
 		}
 
-//		try {
-////			Optional<String>
-//		}
-		return new ResponseEntity<ApiResponse> (new ApiResponse("success", "checkPw", 200), HttpStatus.OK);
+		Boolean checkPassword = userService.checkUserPassword(user);
+		if(checkPassword) {
+			Optional<Integer> changePassword = userService.updateUserPassword(user);
+			if(changePassword.isPresent()) {
+				String accessToken = jwtService.generateAccessToken(user);
+				String refreshToken = jwtService.generateRefreshToken(user);
+
+				authService.revokeAllTokenByUser(user);
+				authService.saveUserToken(accessToken, refreshToken, user);
+
+				return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(accessToken, refreshToken, "New token generated"), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<ApiResponse> (new ApiResponse("bad request", "changePw", 400), HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			return new ResponseEntity<ApiResponse> (new ApiResponse("unauthorized", "checkPw", 401), HttpStatus.UNAUTHORIZED);
+		}
 	}
 }

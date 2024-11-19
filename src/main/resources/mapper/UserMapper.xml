@@ -111,4 +111,10 @@
         where user_id = #{userId}
     </update>
 
+    <update id="updateUserPassword" parameterType="User">
+        update User
+        set user_password = #{userPassword}
+        where user_email = #{userEmail}
+    </update>
+
 </mapper>

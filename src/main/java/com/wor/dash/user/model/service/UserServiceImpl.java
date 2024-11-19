@@ -3,7 +3,11 @@ package com.wor.dash.user.model.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.wor.dash.jwt.model.service.UserDetailServiceImpl;
 import com.wor.dash.user.model.MyChallenge;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.wor.dash.user.model.User;
@@ -13,14 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
-	
-	private UserMapper userMapper;
-	
-	public UserServiceImpl(UserMapper userMapper) {
-		super();
-		this.userMapper = userMapper;
-	}
+
+	private final PasswordEncoder passwordEncoder;
+	private final UserDetailServiceImpl userDetailsService;
+	private final  UserMapper userMapper;
 
 	@Override
 	public User addUser(User user) {
@@ -63,6 +65,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Optional<Integer> withdrawUser(int userId) {
 		return Optional.ofNullable(userMapper.deleteUser(userId));
+	}
+
+	@Override
+	public
+	Boolean checkUserPassword(User user) {
+		log.debug("UserServiceImpl/checkUserPassword");
+		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserEmail());
+		return passwordEncoder.matches(user.getUserPassword(), userDetails.getPassword());
+	}
+
+	@Override
+	public
+	Optional<Integer> updateUserPassword(User user) {
+		log.debug("UserServiceImpl/updateUserPassword");
+		return Optional.ofNullable(userMapper.updateUserPassword(user));
 	}
 
 }

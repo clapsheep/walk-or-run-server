@@ -16,5 +16,7 @@ public interface UserService {
 	Optional<Integer> updateUserInfo(User user);
 	Optional<List<MyChallenge>> getChallenges(int userId);
 	Optional<Integer> withdrawUser(int userId);
+	Boolean checkUserPassword(User user);
+	Optional<Integer> updateUserPassword(User user);
 
 }

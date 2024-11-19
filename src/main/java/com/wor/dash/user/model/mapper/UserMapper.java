@@ -14,4 +14,6 @@ public interface UserMapper {
 	List<MyChallenge> selectChallengesByUserId(int userId);
 	int deleteUser(int userId);
 	Integer selectUserId(String userEmail);
+	Integer updateUserPassword(User user);
+
 }
