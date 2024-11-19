@@ -25,6 +25,7 @@ public class RecordController {
 
         try {
             recordService.uploadCsvFile(file);
+
             return new ResponseEntity<>(new ApiResponse("success", "File Upload Success", 200), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("fail", "File Upload Failed", 400), HttpStatus.INTERNAL_SERVER_ERROR);

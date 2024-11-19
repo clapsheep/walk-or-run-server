@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface RecordService {
     void uploadCsvFile(MultipartFile file) throws IOException;
+
 }
