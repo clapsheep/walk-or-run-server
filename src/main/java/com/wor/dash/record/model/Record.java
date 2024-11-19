@@ -1,11 +1,13 @@
 package com.wor.dash.record.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class Record {
     private int totalCalorie; // 총소모칼로리
@@ -21,5 +23,4 @@ public class Record {
     private int minHeartRate; // 최소 심박수
     private int distance; // 이동 거리(미터)
     private int meanSpeed;
-
 }
