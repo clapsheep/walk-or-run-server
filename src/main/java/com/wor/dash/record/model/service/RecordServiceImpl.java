@@ -111,17 +111,17 @@ public class RecordServiceImpl implements RecordService {
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
         try {
             Record record = new Record();
-            record.setUserId(1); // 기본값 설정
+            record.setUserId(2); // 기본값 설정
 
             // CSV 데이터에서 필요한 필드 추출
-            record.setTotalCalorie(parseIntOrNull(data[6]));
+            record.setTotalCalorie(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.calorie")));
             record.setDistance(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.distance")));
             record.setMaxHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.max_heart_rate")));
             record.setMinHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.min_heart_rate")));
             record.setMeanHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.mean_heart_rate")));
             record.setCount(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.count")));
             record.setMeanSpeed(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.mean_speed")));
-            record.setMaxSpeed(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.max_speed")));
+            record.setMaxSpeed(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.max_speed")));
 
             // 시간 데이터 처리
             String startTime = getValue(data, columnMap, "com.samsung.health.exercise.start_time");
@@ -129,7 +129,7 @@ public class RecordServiceImpl implements RecordService {
             record.setStartTime(startTime);
             record.setEndTime(endTime);
 
-            System.out.println(record);
+//            System.out.println("최대속도 ============> "+record.getMaxSpeed());
 
             return record;
         } catch (Exception e) {
