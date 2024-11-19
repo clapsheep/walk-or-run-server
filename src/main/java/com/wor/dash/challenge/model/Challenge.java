@@ -1,11 +1,6 @@
 package com.wor.dash.challenge.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -13,12 +8,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Challenge {
-	private int challengeId;
-	@NonNull int challengeCategoryCode;
-	@NonNull private String challengeTitle;
-	@NonNull private String challengeDescription;
-	@NonNull private int challengeAuthorId;
-	private String challengeCreateDate;
-	private String challengeDeleteDate;
-	private int challengeIsEnded;
+    @NonNull
+    int challengeCategoryCode;
+    private int challengeId;
+    @NonNull
+    private String challengeTitle;
+    @NonNull
+    private String challengeDescription;
+    @NonNull
+    private int challengeAuthorId;
+    @NonNull
+    private int challengeParticipantCnt;
+    private String challengeCreateDate;
+    private String challengeDeleteDate;
+    private int challengeIsEnded;
+    @NonNull
+    private int challengeTargetCnt;
 }
