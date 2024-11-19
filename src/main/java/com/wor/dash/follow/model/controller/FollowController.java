@@ -2,6 +2,8 @@ package com.wor.dash.follow.model.controller;
 
 import java.util.List;
 
+import com.wor.dash.response.ApiResponse;
+import com.wor.dash.user.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,33 +23,63 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/follow")
 @RequiredArgsConstructor
 public class FollowController {
+
 	private final FollowService followService;
-	
-	
+
 	@PostMapping
-    public ResponseEntity<Void> followUser(@RequestBody Follow follow) {
-        followService.addFollow(follow);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ApiResponse> followUser(@RequestBody Follow follow) {
+        try{
+            followService.addFollow(follow);
+            return new ResponseEntity<>(new ApiResponse("success","follow",200), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ApiResponse("fail","follow",500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 	
-    @DeleteMapping("{followId}")
-    public ResponseEntity<Void> unfollowUser(@PathVariable("followId") int followId) {
-        followService.removeFollow(followId);
-        return ResponseEntity.ok().build();
+    @DeleteMapping
+    public ResponseEntity<ApiResponse> unfollowUser(@RequestBody Follow follow) {
+        try {
+            boolean res = followService.removeFollow(follow);
+            if (!res) {
+                return new ResponseEntity<>(new ApiResponse("fail","unfollow",400), HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<> (new ApiResponse("success","unfollow",200), HttpStatus.OK);
+        } catch (Exception e) {
+            return  new ResponseEntity<>(new ApiResponse("fail","follow",500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
-    
+    @PostMapping("/check")
+    public ResponseEntity<?> checkFollow(@RequestBody Follow follow) {
+        try{
+            boolean isFollow = followService.checkFollow(follow);
+            return new ResponseEntity<>(isFollow, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // 특정 사용자의 팔로우 목록 조회
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<Follow>> getFollowers(@PathVariable int userId) {
-        List<Follow> followers = followService.getFollowers(userId);
-        return ResponseEntity.ok(followers);
+    public ResponseEntity<?> getFollowers(@PathVariable int userId) {
+        try{
+            List<User> followers = followService.getFollowerList(userId);
+            return new ResponseEntity<>(followers, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 	
     // 특정 사용자의 팔로잉 목록 조회
     @GetMapping("/following/{userId}")
-    public ResponseEntity<List<Follow>> getFollowing(@PathVariable int userId) {
-        List<Follow> following = followService.getFollowing(userId);
-        return ResponseEntity.ok(following);
+    public ResponseEntity<?> getFollowing(@PathVariable int userId) {
+        try{
+            List<User> following = followService.getFollowingList(userId);
+            return new ResponseEntity<>(following, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
