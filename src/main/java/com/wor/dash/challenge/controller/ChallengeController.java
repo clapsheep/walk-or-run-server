@@ -5,6 +5,7 @@ import com.wor.dash.challenge.model.service.ChallengeService;
 import com.wor.dash.comment.model.Comment;
 import com.wor.dash.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/challenge")
+@Tag(name = "Challenge Controller", description = "챌린지 기능을 관리합니다.")
 public class ChallengeController {
 
     private final ChallengeService challengeService;
