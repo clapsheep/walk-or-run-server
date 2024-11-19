@@ -163,4 +163,18 @@ public class UserController {
 	}
 
 	// 비밀번호로 확인 후 변경하는 로직 추가 필요
+	@PostMapping("/checkPw")
+	public ResponseEntity<?> checkPw(
+			@RequestBody User user,
+			@RequestHeader("Authorization") String authHeader) {
+		log.debug("AuthenticationController/checkPw");
+		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
+		}
+
+//		try {
+////			Optional<String>
+//		}
+		return new ResponseEntity<ApiResponse> (new ApiResponse("success", "checkPw", 200), HttpStatus.OK);
+	}
 }
