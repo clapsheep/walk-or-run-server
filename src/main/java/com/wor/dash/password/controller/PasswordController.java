@@ -69,7 +69,7 @@ public class PasswordController {
             if (insert.isPresent()) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse("success", "addAnswer", 200), HttpStatus.OK);
             } else {
-                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "addAnswer", 404), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "addAnswer", 204), HttpStatus.NOT_FOUND);
             }
         } catch(Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse("fail", "addAnswer", 500), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,7 +83,7 @@ public class PasswordController {
             if (update.isPresent()) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse("success", "updateAnswer", 200), HttpStatus.OK);
             } else {
-                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "updateAnswer", 404), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<ApiResponse>(new ApiResponse("nocontent", "updateAnswer", 204), HttpStatus.NOT_FOUND);
             }
         } catch(Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse("fail", "updateAnswer", 500), HttpStatus.INTERNAL_SERVER_ERROR);

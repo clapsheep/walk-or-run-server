@@ -31,16 +31,13 @@
                 #{userPhoneNumber, jdbcType=VARCHAR})
     </insert>
 
-    <select id="selectWithoutPassword" parameterType="string" resultType="user">
+    <select id="selectPublicInfo" parameterType="string" resultType="user">
         select user_id,
                user_name,
                user_email,
                user_nickname,
                user_phone_number,
-               user_join_date,
-               user_withdrawal_date,
-               user_withdrawal_status,
-               user_role
+               user_join_date
         from User
         where user_email = #{userEmail}
     </select>
@@ -50,4 +47,30 @@
         SET user_role = 'ADMIN'
         WHERE user_id = #{userId}
     </update>
+
+    <update id="updateUser" parameterType="user">
+        UPDATE User
+        SET
+            user_name = #{userName},
+            user_nickname = #{userNickname},
+            user_phone_number = #{userPhoneNumber}
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="selectChallengesByUserId" parameterType="int" resultType="challenge">
+        select
+            cc.challenge_category_name,
+            c.challenge_title,
+            c.challenge_description,
+            u.user_nickname,
+            (challenge_delete_date - challenge_create_date) challenge_remain_date
+        from Challenge c inner join Challenge_Category cc
+        on c.challenge_category_code = cc.challenge_category_code
+        inner join User u
+        on c.challenge_author_id = u.user_id
+        inner join Challenge_Participant cp
+        on c.challenge_id = cp.challenge_id
+        where u.user_id = cp.user_id
+
+    </select>
 </mapper>

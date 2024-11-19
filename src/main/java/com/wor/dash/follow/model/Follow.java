@@ -13,7 +13,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class Follow {
-	private int followId;
-	@NonNull private int followingId;
-	@NonNull private int followerId;
+	private int followingId;
+	private int followerId;
 }
