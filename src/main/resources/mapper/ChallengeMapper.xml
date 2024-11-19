@@ -2,36 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.challenge.model.mapper.ChallengeMapper">
     <sql id="Challenge_Column_List">
-        challenge_id, challenge_category_code, challenge_title, challenge_description
+        challenge_id
+        , challenge_category_code, challenge_title, challenge_description
         ,challenge_author_id, challenge_create_date, challenge_delete_date
-        ,challenge_is_ended
+        ,challenge_is_ended, challenge_target_cnt
     </sql>
     <sql id="Challenge_insert_Column_List">
-        challenge_category_code, challenge_title, challenge_description, challenge_author_id
+        challenge_category_code
+        , challenge_title, challenge_description, challenge_author_id
     </sql>
     <select id="selectChallengeList" resultType="Challenge">
         select
-        <include refid="Challenge_Column_List" />
+        <include refid="Challenge_Column_List"/>,
+        (select count(*)
+        from Comment
+        where Comment.challenge_id = Challenge.challenge_id) as challenge_participant_cnt
+        from Challenge
+    </select>
+
+    <select id="selectActiveChallengeList" resultType="Challenge">
+        select
+        <include refid="Challenge_Column_List"/>,
+        (select count(*)
+        from Comment
+        where Comment.challenge_id = Challenge.challenge_id) as challenge_participant_cnt
         from Challenge
         where challenge_is_ended = 0
     </select>
+
+    <select id="selectEndedChallengeList" resultType="Challenge">
+        select
+        <include refid="Challenge_Column_List"/>,
+        (select count(*)
+        from Comment
+        where Comment.challenge_id = Challenge.challenge_id) as challenge_participant_cnt
+        from Challenge
+        where challenge_is_ended = 1
+    </select>
+
     <select id="selectChallenge" parameterType="int">
         select
-        <include refid="Challenge_Column_List" />
+        <include refid="Challenge_Column_List"/>
         from Challenge
         where challenge_id = #{challengeId}
     </select>
     <insert id="insertChallenge" parameterType="Challenge">
         insert into Challenge
-        (<include refid="Challenge_insert_Column_List" />)
-        values (#{challengeCategoryCode}, #{challengeTitle}, #{challengeDescription}, #{challengeAuthorId} )
+        (<include refid="Challenge_insert_Column_List"/>)
+        values (#{challengeCategoryCode}, #{challengeTitle}, #{challengeDescription}, #{challengeAuthorId})
     </insert>
     <update id="updateChallenge" parameterType="Challenge">
         update Challenge
         set challenge_category_code = #{challengeCategoryCode},
-        challenge_description = #{challengeDescription},
-        challenge_author_id = #{challengeAuthorId},
-        challenge_is_Ended = #{challengeIsEnded}
+            challenge_description   = #{challengeDescription},
+            challenge_author_id     = #{challengeAuthorId},
+            challenge_is_Ended      = #{challengeIsEnded}
         where challenge_id = #{challengeId}
     </update>
     <update id="deleteChallenge" parameterType="int">
