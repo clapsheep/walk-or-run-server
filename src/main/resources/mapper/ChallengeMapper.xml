@@ -64,4 +64,11 @@
         set challenge_is_ended = 1
         where challenge_id = #{challengeId}
     </update>
+
+    <update id="autoDeleteChallenge" parameterType="String">
+        update Challenge
+        set challenge_is_ended = 1
+        where challenge_delete_date &lt;= #{endtTime}
+          and challenge_is_ended = 0
+    </update>
 </mapper>

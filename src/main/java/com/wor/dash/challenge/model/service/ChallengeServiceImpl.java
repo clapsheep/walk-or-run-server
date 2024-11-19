@@ -63,7 +63,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void endChallenges(String endTime) {
-
+        challengeMapper.autoDeleteChallenge(endTime);
     }
 
     @Override

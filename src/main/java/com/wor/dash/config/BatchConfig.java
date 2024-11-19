@@ -29,13 +29,30 @@ public class BatchConfig {
     private final ChallengeService challengeService;
 
     @Bean
-    public Job dailyChallenge() {
+    public Job dailyChallengeJob() {
         return new JobBuilder("dailyChallengeJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(createDailyChallengeStep())
                 .next(endDailyChallengeStep())
                 .build();
     }
+
+    //@Scheduled(cron = "0 * * * * ?")
+    public void endDailyChallengesJob() {
+        log.debug("endDailyChallengesJob");
+//        JobParameters jobParameters = new JobParametersBuilder()
+//                .addString("run.id", String.valueOf(System.currentTimeMillis()))
+//                .toJobParameters();
+//
+//        try {
+//            Job dailyChallengeJob = dailyChallengeJob();
+//            JobExecution jobExecution = jobRepository.createJobExecution("endDailyChallengesJob", jobParameters);
+//            dailyChallengeJob.execute(jobExecution);
+//        } catch (Exception e) {
+//            log.error("Error executing endDailyChallengesJob", e);
+//        }
+    }
+
 
     @Bean
     public Step endDailyChallengeStep() {
@@ -50,7 +67,7 @@ public class BatchConfig {
                 }, transactionManager)
                 .build();
     }
-    
+
     @Bean
     public Step createDailyChallengeStep() {
         return new StepBuilder("createDailyChallengeStep", jobRepository)

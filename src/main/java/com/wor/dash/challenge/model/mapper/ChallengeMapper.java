@@ -21,5 +21,5 @@ public interface ChallengeMapper {
 
     int deleteChallenge(int challengeId);
 
-
+    void autoDeleteChallenge(String endTime);
 }
