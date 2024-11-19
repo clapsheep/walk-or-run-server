@@ -61,7 +61,11 @@ public class FollowController {
     public ResponseEntity<?> getFollowers(@PathVariable int userId) {
         try {
             List<User> followers = followService.getFollowerList(userId);
-            return new ResponseEntity<>(followers, HttpStatus.OK);
+            if (followers.isEmpty()) {
+                return new ResponseEntity<>(new ApiResponse("empty", "followers", 204), HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("success", "followers", 200), HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

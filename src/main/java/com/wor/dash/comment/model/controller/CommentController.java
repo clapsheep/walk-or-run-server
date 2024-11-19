@@ -36,7 +36,7 @@ public class CommentController {
         return ResponseEntity.ok(commentList);
     }
 
-    @Operation(summary = "댓글 수정", description = "이미 작성한 댓글을 달기 위한 API  \n\n <필수입력> \n - challengeId : 댓글을 단 챌린지ID \n - commentContent : 수정할 댓글 내용 \n - commentAuthorId : 로그인한 유저ID")
+    @Operation(summary = "댓글 수정", description = "이미 작성한 댓글을 달기 위한 API  \n\n <필수입력> \n - commentId : 댓글의 고유 ID \n - commentContent : 수정할 댓글 내용")
     @PutMapping
     public ResponseEntity<ApiResponse> updateChallenge(@RequestBody Comment comment) {
         try {
