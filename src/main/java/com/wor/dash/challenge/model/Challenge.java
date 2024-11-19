@@ -1,6 +1,5 @@
 package com.wor.dash.challenge.model;
 
-// JYL : 챌린지
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class Challenge {
 	@NonNull int challengeCategoryCode;
 	@NonNull private String challengeTitle;
 	@NonNull private String challengeDescription;
-	private int challengeAuthorId;
+	@NonNull private int challengeAuthorId;
 	private String challengeCreateDate;
 	private String challengeDeleteDate;
 	private int challengeIsEnded;

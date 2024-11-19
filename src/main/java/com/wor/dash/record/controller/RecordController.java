@@ -1,4 +1,4 @@
-package com.wor.dash.record.model.controller;
+package com.wor.dash.record.controller;
 
 import com.wor.dash.record.model.service.RecordService;
 import com.wor.dash.response.ApiResponse;

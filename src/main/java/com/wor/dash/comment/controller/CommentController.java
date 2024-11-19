@@ -1,32 +1,25 @@
-package com.wor.dash.comment.model.controller;
-
-import java.util.List;
-
-import com.wor.dash.response.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+package com.wor.dash.comment.controller;
 
 import com.wor.dash.comment.model.Comment;
 import com.wor.dash.comment.model.service.CommentService;
-
+import com.wor.dash.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("api/comment")
+@RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("")
+    @Operation(summary = "댓글 게시", description = "특정 챌린지에 댓글을 달기 위한 API  \n\n <필수입력> \n - challengeId : 댓글을 달 챌린지ID \n - commentContent : 댓글 내용 \n - commentAuthorId : 로그인한 유저ID")
+    @PostMapping
     public ResponseEntity<?> createComment(@RequestBody Comment comment) {
         try {
             commentService.addComment(comment);
@@ -34,19 +27,17 @@ public class CommentController {
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("fail", "createComment", 500), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
     }
 
-    // 구현 필요성? -> 댓글은 Challenge 가져올 때 Join으로 가져오는 것이 낫지 않은가?
-    @GetMapping("")
+    @Operation(summary = "댓글 목록 가져오기(paging)", description = "특정 챌린지에 달린 댓글 목록을 가져오기 위한 API \n (페이지 정보 포함)  \n\n <필수입력> \n - challengeId : 댓글을 단 챌린지ID \n - commentContent : 수정할 댓글 내용 \n - commentAuthorId : 로그인한 유저ID")
+    @GetMapping
     public ResponseEntity<List<Comment>> getCommentList() {
         List<Comment> commentList = commentService.getAllComment();
         return ResponseEntity.ok(commentList);
     }
 
-
-    @PutMapping("")
+    @Operation(summary = "댓글 수정", description = "이미 작성한 댓글을 달기 위한 API  \n\n <필수입력> \n - commentId : 댓글의 고유 ID \n - commentContent : 수정할 댓글 내용")
+    @PutMapping
     public ResponseEntity<ApiResponse> updateChallenge(@RequestBody Comment comment) {
         try {
             commentService.editComment(comment);
@@ -57,6 +48,7 @@ public class CommentController {
 
     }
 
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제하기 위한 API  \n\n <필수입력> \n - commentId : 댓글의 고유 ID")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse> deleteChallenge(@PathVariable int commentId) {
         try {
