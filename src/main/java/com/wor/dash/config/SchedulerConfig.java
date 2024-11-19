@@ -37,15 +37,29 @@ public class SchedulerConfig {
     public void createWeeklyChallengeTask() {
         try {
             challengeService.addWeeklyChallenge();
+            log.debug("[SchedulerConfig] : createWeeklyChallengeTask Success");
         } catch (Exception e) {
             log.debug("[SchedulerConfig] : addWeeklyChallenge Exception");
         }
     }
 
+    // TEST
+//    @Scheduled(cron = "0 11 23 * * *") //
+//    public void aa() {
+//        try {
+//            challengeService.addWeeklyChallenge();
+//            System.out.println("성공");
+//        } catch (Exception e) {
+//            log.debug("[SchedulerConfig] : aa Exception");
+//            e.printStackTrace();
+//        }
+//    }
+
     @Scheduled(cron = "0 0 0 1 * *")
     public void createMonthlyChallengeTask() {
         try {
             challengeService.addMonthlyChallenge();
+            log.debug("[SchedulerConfig] : addMonthlyChallenge Success");
         } catch (Exception e) {
             log.debug("[SchedulerConfig] : addMonthlyChallenge Exception");
         }
@@ -55,6 +69,7 @@ public class SchedulerConfig {
     public void checkChallengeIsEndedTask() {
         try {
             challengeService.checkIsEndedChallenge();
+            log.debug("[SchedulerConfig] : checkChallengeIsEndedTask Success");
         } catch (Exception e) {
             log.debug("[SchedulerConfig] : checkChallengeIsEndedTask Exception");
         }
