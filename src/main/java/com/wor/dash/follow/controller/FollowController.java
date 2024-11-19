@@ -1,4 +1,4 @@
-package com.wor.dash.follow.model.controller;
+package com.wor.dash.follow.controller;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class FollowController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 	
-    @DeleteMapping("{followId}")
+    @DeleteMapping("/{followId}")
     public ResponseEntity<Void> unfollowUser(@PathVariable("followId") int followId) {
         followService.removeFollow(followId);
         return ResponseEntity.ok().build();

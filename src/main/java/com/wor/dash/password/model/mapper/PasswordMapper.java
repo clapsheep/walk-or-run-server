@@ -13,5 +13,6 @@ interface PasswordMapper {
     PasswordQuestion selectQuestionByQuestionId(int questionId);
     PasswordFindQnA selectQnAByUserId(int userId);
     int insertPasswordAnswer(PasswordAnswer passwordAnswer);
+    int updatePasswordAnswer(PasswordAnswer passwordAnswer);
 
 }

@@ -20,25 +20,29 @@ class PasswordServiceImpl implements PasswordService {
     @Override
     public
     Optional<List<PasswordQuestion>> allQuestions() {
-
-        return Optional.empty();
+        List<PasswordQuestion> questionList = passwordMapper.selectAllQuestions();
+        if(questionList != null && !questionList.isEmpty()) {
+            return Optional.ofNullable(questionList);
+        } else {
+            return Optional.ofNullable(null);
+        }
     }
 
     @Override
     public
     Optional<PasswordQuestion> getQuestion(int questionId) {
-        return Optional.empty();
+        return Optional.ofNullable(passwordMapper.selectQuestionByQuestionId(questionId));
     }
 
     @Override
     public
     Optional<PasswordFindQnA> getQnA(int userId) {
-        return Optional.empty();
+        return Optional.ofNullable(passwordMapper.selectQnAByUserId(userId));
     }
 
     @Override
     public
     Optional<Integer> addAnswer(PasswordAnswer passwordAnswer) {
-        return Optional.empty();
+        return Optional.of(passwordMapper.insertPasswordAnswer(passwordAnswer));
     }
 }

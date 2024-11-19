@@ -1,4 +1,4 @@
-package com.wor.dash.comment.model.controller;
+package com.wor.dash.comment.controller;
 
 import java.util.List;
 
