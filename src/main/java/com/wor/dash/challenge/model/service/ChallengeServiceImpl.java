@@ -5,6 +5,9 @@ import com.wor.dash.challenge.model.mapper.ChallengeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -57,22 +60,59 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public void addDailyChallenge(Challenge challenge) {
+    public void addDailyChallenge() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime deleteTime = now.withHour(23)
+                .withMinute(59)
+                .withSecond(59);
 
+        String deleteTimeStr = deleteTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
+
+        Challenge challenge = new Challenge();
+        challenge.setChallengeCategoryCode(2);
+        challenge.setChallengeCategoryName("걷거나(걷기)");
+        challenge.setChallengeTitle("[일일] " + month + " / " + day  + " 챌린지");
+        challenge.setChallengeDescription("다시 한 번 시작입니다! 같이 걸어봐요!");
+        challenge.setChallengeAuthorId(2);
+        challenge.setChallengeTargetCnt(300);
+        challenge.setChallengeDeleteDate(deleteTimeStr);
+
+        challengeMapper.insertChallenge(challenge);
     }
 
     @Override
-    public void endChallenges(String endTime) {
-        challengeMapper.autoDeleteChallenge(endTime);
+    public void addWeeklyChallenge() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime deleteTime = now.withHour(23)
+                .withMinute(59)
+                .withSecond(59);
+
+        String deleteTimeStr = deleteTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
+
+        Challenge challenge = new Challenge();
+        challenge.setChallengeCategoryCode(2);
+        challenge.setChallengeCategoryName("걷거나(걷기)");
+        challenge.setChallengeTitle("[일일] " + month + " / " + day  + " 챌린지");
+        challenge.setChallengeDescription("다시 한 번 시작입니다! 같이 걸어봐요!");
+        challenge.setChallengeAuthorId(2);
+        challenge.setChallengeTargetCnt(300);
+        challenge.setChallengeDeleteDate(deleteTimeStr);
+
+        challengeMapper.insertChallenge(challenge);
     }
 
     @Override
-    public void addWeeklyChallenge(Challenge challenge) {
+    public void addMonthlyChallenge() {
 
     }
 
+
     @Override
-    public void addMonthChallenge(Challenge challenge) {
+    public void checkIsEndedChallenge() {
 
     }
 }
