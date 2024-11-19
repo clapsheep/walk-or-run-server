@@ -1,4 +1,4 @@
-package com.wor.dash.comment.model.controller;
+package com.wor.dash.comment.controller;
 
 import com.wor.dash.comment.model.Comment;
 import com.wor.dash.comment.model.service.CommentService;

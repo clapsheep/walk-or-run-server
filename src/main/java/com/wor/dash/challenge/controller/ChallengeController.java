@@ -1,4 +1,4 @@
-package com.wor.dash.challenge.model.controller;
+package com.wor.dash.challenge.controller;
 
 import java.util.List;
 
