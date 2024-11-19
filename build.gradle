@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'org.apache.commons:commons-csv:1.8'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface RecordMapper {
-    int insertRecord(Record record);
-
     void batchInsertRecords(List<Record> batch);
+    
 } 

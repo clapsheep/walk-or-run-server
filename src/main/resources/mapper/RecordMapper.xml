@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wor.dash.challenge.model.mapper.RecordMapper">
-    <insert id="insertCalorie" parameterType="calorie">
-        INSERT INTO Calorie
-            (calorie_id, time_id, total_calorie, calorie_day)
-        VALUES (#{calorieId}, #{timeId}, #{totalCalorie}, #{calorieDay}
-    </insert>
+<mapper namespace="com.wor.dash.record.model.mapper.RecordMapper">
 
+    <insert id="batchInsertRecords" parameterType="java.util.List">
+        INSERT INTO Record (
+        <!--        record_id,-->
+        user_id,
+        total_calorie,
+        distance,
+        max_heart_rate,
+        min_heart_rate,
+        mean_heart_rate,
+        step_count,
+        mean_speed,
+        max_speed,
+        start_time,
+        end_time
+        ) VALUES
+        <foreach collection="list" item="record" separator=",">
+            (
+            #{record.userId},
+            #{record.totalCalorie},
+            #{record.distance},
+            #{record.maxHeartRate},
+            #{record.minHeartRate},
+            #{record.meanHeartRate},
+            #{record.count},
+            #{record.meanSpeed},
+            #{record.maxSpeed},
+            #{record.startTime},
+            #{record.endTime}
+            )
+        </foreach>
+    </insert>
 </mapper>
