@@ -5,6 +5,7 @@ import java.util.List;
 import com.wor.dash.response.ApiResponse;
 import com.wor.dash.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("api/follow")
 @RequiredArgsConstructor
+@Tag(name = "Follow Controller", description = "팔로우 기능을 관리합니다.")
 public class FollowController {
 
     private final FollowService followService;

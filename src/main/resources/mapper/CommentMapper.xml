@@ -7,15 +7,24 @@
         VALUES (#{challengeId}, #{commentContent}, #{commentAuthorId}, now())
     </insert>
 
-    <select id="selectCommentList" parameterType="int" resultType="comment">
-        SELECT comment_id,
-               challenge_id,
-               comment_content,
-               comment_author_id,
-               comment_create_date
+    <select id="selectCommentList" resultType="comment">
+        SELECT c.comment_id,
+               c.challenge_id,
+               c.comment_content,
+               c.comment_author_id,
+               c.comment_create_date,
+               u.user_name as commentAuthorName
+        FROM Comment c
+                 LEFT JOIN User u ON c.comment_author_id = u.user_id
+        WHERE c.challenge_id = #{challengeId}
+        ORDER BY c.comment_create_date DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countComments" parameterType="int" resultType="int">
+        SELECT COUNT(*)
         FROM Comment
         WHERE challenge_id = #{challengeId}
-        ORDER BY comment_create_date DESC
     </select>
 
     <update id="updateComment" parameterType="comment">
