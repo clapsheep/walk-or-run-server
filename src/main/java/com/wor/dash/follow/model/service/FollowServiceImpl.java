@@ -10,12 +10,13 @@ import com.wor.dash.follow.model.mapper.FollowMapper;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class FollowServiceImpl implements FollowService {
 
 	private final FollowMapper followMapper;
-	
+
 	@Override
 	public void addFollow(Follow follow) {
 		followMapper.insertFollow(follow);
@@ -40,7 +41,7 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public boolean checkFollow(Follow follow) {
 		int res = followMapper.selectFollow(follow);
-        return res == 1;
+		return res == 1;
 	}
 
 }

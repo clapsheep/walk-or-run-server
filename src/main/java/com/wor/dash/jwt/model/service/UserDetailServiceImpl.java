@@ -23,7 +23,7 @@ private UserService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
-		Optional<User> nUser = userService.findByUserEmail(useremail); //조인으로 수정
+		Optional<User> nUser = userService.getUser(useremail); //조인으로 수정
 		return nUser.map(CustomUserDetails::new)
 		        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}

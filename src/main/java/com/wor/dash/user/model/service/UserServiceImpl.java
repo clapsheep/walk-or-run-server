@@ -1,7 +1,9 @@
 package com.wor.dash.user.model.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.wor.dash.challenge.model.Challenge;
 import org.springframework.stereotype.Service;
 
 import com.wor.dash.user.model.User;
@@ -21,12 +23,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findByUserEmail(String userEmail) {
+	public Optional<User> getUser(String userEmail) {
 		System.out.println("유저서비스까지 옴");
 		User user = null;
 		try {
 			user = userMapper.selectByUserEmail(userEmail);
-//			System.out.println(user.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -41,9 +42,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> selectByExampleWithoutPassword(String username) {
-		User user = userMapper.selectWithoutPassword(username);
+	public Optional<User> getPublicInfo(String username) {
+		User user = userMapper.selectPublicInfo(username);
 		return Optional.ofNullable(user);
+	}
+
+	@Override
+	public Optional<Integer> updateUserRole(int userId) {
+		return Optional.ofNullable(userMapper.updateUserRole(userId));
+	}
+
+	@Override
+	public Optional<Integer> updateUserInfo(User user) {
+		return Optional.ofNullable(userMapper.updateUser(user));
+	}
+
+	@Override
+	public Optional<List<Challenge>> getChallenges(int userId) {
+		List<Challenge> challenges = userMapper.selectChallengesByUserId(userId);
+		return Optional.ofNullable(challenges);
+	}
+
+	@Override
+	public Optional<Integer> withdrawUser(int userId) {
+		return Optional.ofNullable(userMapper.deleteUser(userId));
 	}
 
 }

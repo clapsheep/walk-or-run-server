@@ -1,4 +1,4 @@
-package com.wor.dash.challenge.model.controller;
+package com.wor.dash.challenge.controller;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.service.ChallengeService;
