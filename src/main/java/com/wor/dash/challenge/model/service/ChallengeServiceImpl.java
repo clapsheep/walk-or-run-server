@@ -55,4 +55,24 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         return result == 1;
     }
+
+    @Override
+    public void addDailyChallenge(Challenge challenge) {
+
+    }
+
+    @Override
+    public void endChallenges(String endTime) {
+
+    }
+
+    @Override
+    public void addWeeklyChallenge(Challenge challenge) {
+
+    }
+
+    @Override
+    public void addMonthChallenge(Challenge challenge) {
+
+    }
 }
