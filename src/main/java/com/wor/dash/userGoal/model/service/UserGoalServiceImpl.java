@@ -32,12 +32,12 @@ public class UserGoalServiceImpl implements UserGoalService {
     }
 
     @Override
-    public int updateUserGoal(UserGoal userGoal) {
+    public int editUserGoal(UserGoal userGoal) {
         return userGoalMapper.updateUserGoal(userGoal);
     }
 
     @Override
-    public int deleteUserGoal(int userGoalId) {
+    public int removeUserGoal(int userGoalId) {
         return userGoalMapper.deleteUserGoal(userGoalId);
     }
 }

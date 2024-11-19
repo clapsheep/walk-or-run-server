@@ -11,7 +11,7 @@ public interface UserGoalService {
 
     int addUserGoal(UserGoal userGoal);
 
-    int updateUserGoal(UserGoal userGoal);
+    int editUserGoal(UserGoal userGoal);
 
-    int deleteUserGoal(int userGoalId);
+    int removeUserGoal(int userGoalId);
 }

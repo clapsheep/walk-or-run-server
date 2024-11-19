@@ -58,7 +58,7 @@ public class UserGoalController {
     @PutMapping
     public ResponseEntity<?> updateUserGoal(@RequestBody UserGoal userGoal) {
         try {
-            userGoalService.updateUserGoal(userGoal);
+            userGoalService.editUserGoal(userGoal);
             return new ResponseEntity<>(new ApiResponse("success", "updateUserGoal", 200), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("fail", "updateUserGoal", 500), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,7 +68,7 @@ public class UserGoalController {
     @DeleteMapping
     public ResponseEntity<?> deleteUserGoal(@RequestBody int userGoalId) {
         try {
-            userGoalService.deleteUserGoal(userGoalId);
+            userGoalService.removeUserGoal(userGoalId);
             return new ResponseEntity<>(new ApiResponse("success", "deleteUserGoal", 200), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("fail", "deleteUserGoal", 500), HttpStatus.INTERNAL_SERVER_ERROR);
