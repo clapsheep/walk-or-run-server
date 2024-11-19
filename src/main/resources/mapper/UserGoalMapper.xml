@@ -5,8 +5,8 @@
     <select id="selectUserGoals" parameterType="int" resultType="UserGoal">
        <![CDATA[
         SELECT g.user_goal_id, g.user_id,
-               DATE_FORMAT(g.start_date, '%Y-%m-%d-%H-%i') as start_date,
-               DATE_FORMAT(g.end_date, '%Y-%m-%d-%H-%i') as end_date,
+               DATE_FORMAT(g.start_date, '%Y-%m-%d') as start_date,
+               DATE_FORMAT(g.end_date, '%Y-%m-%d') as end_date,
                g.target_amount,
                c.challenge_category_code, c.challenge_category_name,
                u.challenge_category_unit_code, u.challenge_category_unit_name,
@@ -28,10 +28,10 @@
                                         CASE
                                             WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
                                                 AND g.challenge_category_code = 1 THEN
-                                                r.distance
+                                                r.distance / 1000.0
                                             WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
                                                 AND g.challenge_category_code = 2 THEN
-                                                r.distance
+                                                r.distance / 1000.0
                                             ELSE 0
                                             END
                                 ), 0)
@@ -53,8 +53,8 @@
     <select id="selectUserGoalById" parameterType="int" resultType="UserGoal">
        <![CDATA[
         SELECT g.user_goal_id, g.user_id,
-               DATE_FORMAT(g.start_date, '%Y-%m-%d-%H-%i') as start_date,
-               DATE_FORMAT(g.end_date, '%Y-%m-%d-%H-%i') as end_date,
+               DATE_FORMAT(g.start_date, '%Y-%m-%d') as start_date,
+               DATE_FORMAT(g.end_date, '%Y-%m-%d') as end_date,
                g.target_amount,
                c.challenge_category_code, c.challenge_category_name,
                u.challenge_category_unit_code, u.challenge_category_unit_name,
@@ -76,10 +76,10 @@
                                         CASE
                                             WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
                                                 AND g.challenge_category_code = 1 THEN
-                                                r.distance
+                                                r.distance / 1000.0
                                             WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
                                                 AND g.challenge_category_code = 2 THEN
-                                                r.distance
+                                                r.distance / 1000.0
                                             ELSE 0
                                             END
                                 ), 0)
@@ -100,8 +100,14 @@
     <insert id="insertUserGoal" parameterType="userGoal" useGeneratedKeys="true" keyProperty="userGoalId">
         INSERT INTO User_Goal (user_id, start_date, end_date, target_amount, challenge_category_code,
                                challenge_category_unit_code)
-        VALUES (#{userId}, #{startDate}, #{endDate}, #{targetAmount}, #{challengeCategoryCode},
-                #{challengeCategoryUnitCode})
+        VALUES (
+                   #{userId},
+                   STR_TO_DATE(#{startDate}, '%Y-%m-%d'),
+                   STR_TO_DATE(#{endDate}, '%Y-%m-%d'),
+                   #{targetAmount},
+                   #{challengeCategoryCode},
+                   #{challengeCategoryUnitCode}
+               )
     </insert>
 
     <update id="updateUserGoal" parameterType="userGoal">
