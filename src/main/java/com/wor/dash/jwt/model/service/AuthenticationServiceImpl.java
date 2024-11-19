@@ -47,7 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //	@Transactional
 	public AuthenticationResponse register(User request) {
 		log.debug("AuthenticationServiceImpl/register");
-		if(repository.getUser(request.getUserEmail()).isPresent()) {
+		if(repository.getPublicInfo(request.getUserId()).isPresent()) {
             return new AuthenticationResponse(null, null,"User already exist");
         }
 
@@ -78,7 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        User user = repository.getUser(request.getUserEmail()).get();
+        User user = repository.getPublicInfo(request.getUserId()).get();
         if(user.getUserWithdrawalStatus() == 1) {
             return new AuthenticationResponse(null, null, "Withdrawn User");
         }
@@ -125,9 +125,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String token = authHeader.substring(7);
 
-        String username = jwtService.extractUserEmail(token);
+        String userEmail = jwtService.extractUserEmail(token);
+        int userId = repository.getUserId(userEmail);
 
-        User user = repository.getUser(username)
+        User user = repository.getPublicInfo(userId)
                 .orElseThrow(()->new RuntimeException("No user found"));
 
         if(jwtService.isValidRefreshToken(token, user)) {

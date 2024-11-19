@@ -3,7 +3,7 @@ package com.wor.dash.user.model.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.user.model.MyChallenge;
 import org.springframework.stereotype.Service;
 
 import com.wor.dash.user.model.User;
@@ -23,27 +23,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUser(String userEmail) {
-		System.out.println("유저서비스까지 옴");
-		User user = null;
-		try {
-			user = userMapper.selectByUserEmail(userEmail);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Optional.ofNullable(user);
-	}
-
-	@Override
 	public User addUser(User user) {
 		log.debug("UserServiceImpl/addUser");
 		userMapper.insertUser(user);
-		return userMapper.selectByUserEmail(user.getUserEmail());
+		return userMapper.selectPublicInfo(user.getUserId());
 	}
 
 	@Override
-	public Optional<User> getPublicInfo(String username) {
-		User user = userMapper.selectPublicInfo(username);
+	public int getUserId(String userEmail) {
+		return userMapper.selectUserId(userEmail);
+	}
+
+	@Override
+	public Optional<User> getPublicInfo(int userId) {
+		log.debug("UserServiceImpl/getPublicInfo");
+		User user = userMapper.selectPublicInfo(userId);
+		log.debug("UserServiceImpl/getPublicInfo");
 		return Optional.ofNullable(user);
 	}
 
@@ -58,8 +53,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<List<Challenge>> getChallenges(int userId) {
-		List<Challenge> challenges = userMapper.selectChallengesByUserId(userId);
+	public Optional<List<MyChallenge>> getChallenges(int userId) {
+		List<MyChallenge> challenges = userMapper.selectChallengesByUserId(userId);
 		return Optional.ofNullable(challenges);
 	}
 

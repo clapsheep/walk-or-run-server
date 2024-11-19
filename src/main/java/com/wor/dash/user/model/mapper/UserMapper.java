@@ -1,18 +1,17 @@
 package com.wor.dash.user.model.mapper;
 
-
-import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.user.model.MyChallenge;
 import com.wor.dash.user.model.User;
 
 import java.util.List;
 
 public interface UserMapper {
-	
-	User selectByUserEmail(String userEmail);
+
 	int insertUser(User user);
-	User selectPublicInfo(String userEmail);
+	User selectPublicInfo(int userId);
 	int updateUserRole(int userId);
 	int updateUser(User user);
-	List<Challenge> selectChallengesByUserId(int userId);
+	List<MyChallenge> selectChallengesByUserId(int userId);
 	int deleteUser(int userId);
+	int selectUserId(String userEmail);
 }

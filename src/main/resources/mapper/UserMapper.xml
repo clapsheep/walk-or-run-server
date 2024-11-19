@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.user.model.mapper.UserMapper">
-
-    <sql id="Base_Column_List">
-        user_id
-        , user_password, user_name, user_email, user_nickname, user_phone_number,
-  	user_join_date, user_withdrawal_date, user_withdrawal_status, user_role
-    </sql>
-
-    <select id="selectByUserEmail" parameterType="string" resultType="user">
-        select
-        <include refid="Base_Column_List"/>
-        from User
-        where user_email = #{userEmail}
-    </select>
+    <resultMap id="UserChallengeResultMap" type="User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_phone_number" property="userPhoneNumber"/>
+        <result column="user_join_date" property="userJoinDate"/>
+        <result column="user_role" property="userRole" />
+        <collection property="myChallenges" ofType="MyChallenge" javaType="java.util.ArrayList">
+            <result column="challenge_category_name" property="challengeCategoryName"/>
+            <result column="challenge_title" property="challengeTitle"/>
+            <result column="challenge_description" property="challengeDescription"/>
+            <result column="author" property="author"/>
+            <result column="dDay" property="dDay"/>
+        </collection>
+    </resultMap>
 
     <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
         insert into User
@@ -31,15 +34,39 @@
                 #{userPhoneNumber, jdbcType=VARCHAR})
     </insert>
 
-    <select id="selectPublicInfo" parameterType="string" resultType="user">
-        select user_id,
-               user_name,
-               user_email,
-               user_nickname,
-               user_phone_number,
-               user_join_date
+    <select id="selectUserEmail" parameterType="string" resultType="int">
+        select user_id
         from User
         where user_email = #{userEmail}
+    </select>
+
+    <select id="selectPublicInfo" parameterType="int" resultMap="UserChallengeResultMap">
+        select
+            u.user_id,
+            u.user_name,
+            u.user_email,
+            u.user_nickname,
+            u.user_phone_number,
+            u.user_role,
+            DATE_FORMAT(u.user_join_date, '%Y-%m-%d') as user_join_date,
+            cc.challenge_category_name,
+            c.challenge_title,
+            c.challenge_description,
+            a.user_nickname as author,
+            case
+                when DATEDIFF(c.challenge_delete_date, NOW()) > 0
+                    then CONCAT('D-', DATEDIFF(c.challenge_delete_date, NOW()))
+                when DATEDIFF(c.challenge_delete_date, NOW()) = 0
+                    then 'D-Day'
+                else
+                    CONCAT('D+', ABS(DATEDIFF(c.challenge_delete_date, NOW())))
+                end as dDay
+        from User u
+                 left join Challenge_Participant cp on u.user_id = cp.user_id
+                 left join Challenge c on cp.challenge_id = c.challenge_id
+                 left join Challenge_Category cc on c.challenge_category_code = cc.challenge_category_code
+                 left join User a on a.user_id = c.challenge_author_id
+        where u.user_id = #{userId};
     </select>
 
     <update id="updateUserRole" parameterType="int">
@@ -57,20 +84,31 @@
         WHERE user_id = #{userId}
     </update>
 
-    <select id="selectChallengesByUserId" parameterType="int" resultType="challenge">
-        select
-            cc.challenge_category_name,
-            c.challenge_title,
-            c.challenge_description,
-            u.user_nickname,
-            (challenge_delete_date - challenge_create_date) challenge_remain_date
-        from Challenge c inner join Challenge_Category cc
-        on c.challenge_category_code = cc.challenge_category_code
-        inner join User u
-        on c.challenge_author_id = u.user_id
-        inner join Challenge_Participant cp
-        on c.challenge_id = cp.challenge_id
-        where u.user_id = cp.user_id
-
+    <select id="selectChallengesByUserId" parameterType="int" resultType="MyChallenge">
+        select cc.challenge_category_name,
+               c.challenge_title,
+               c.challenge_description,
+               a.user_nickname as author,
+               case
+                   when DATEDIFF(c.challenge_delete_date, NOW()) > 0
+                       then CONCAT('D-', DATEDIFF(c.challenge_delete_date, NOW()))
+                   when DATEDIFF(c.challenge_delete_date, NOW()) = 0
+                       then 'D-Day'
+                   else
+                       CONCAT('D+', ABS(DATEDIFF(c.challenge_delete_date, NOW())))
+                   end as dDay
+        from User u
+                 left join Challenge_Participant cp on u.user_id = cp.user_id
+                 left join Challenge c on cp.challenge_id = c.challenge_id
+                 left join Challenge_Category cc on c.challenge_category_code = cc.challenge_category_code
+                 left join User a on a.user_id = c.challenge_author_id
+        where u.user_id = #{userId};
     </select>
+
+    <update id="deleteUser" parameterType="int">
+        update User
+        set user_withdrawal_status = 1
+        where user_id = #{userId}
+    </update>
+
 </mapper>
