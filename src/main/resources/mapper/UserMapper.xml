@@ -2,90 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.user.model.mapper.UserMapper">
 
-  <sql id="Base_Column_List">
-  	user_id, user_password, user_name, user_email, user_nickname, user_phone_number,
+    <sql id="Base_Column_List">
+        user_id
+        , user_password, user_name, user_email, user_nickname, user_phone_number,
   	user_join_date, user_withdrawal_date, user_withdrawal_status, user_role
-  </sql>
-  
-  <select id="selectByUserEmail" parameterType="string" resultType="user">
-  	select 
-	<include refid="Base_Column_List" />
-  	from User
-  	where user_email = #{userEmail}
-  </select>
-  
-  <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
-  	insert into User
-  	<trim prefix="(" suffix=")" suffixOverrides=",">
-  	  <if test="userId != null">
-  	  	user_id,
-  	  </if>
-  	  <if test="userPassword != null">
-  	  	user_password,
-  	  </if>
-  	  <if test="userName != null">
-  	  	user_name,
-  	  </if>
-  	  <if test="userEmail != null">
-  	  	user_email,
-  	  </if>
-  	  <if test="userNickname != null">
-  	  	user_nickname,
-  	  </if>
-  	  <if test="userPhoneNumber != null">
-  	  	user_phone_number,
-  	  </if>
-  	  <if test="userJoinDate != null">
-  	  	user_join_date,
-  	  </if>
-  	  <if test="userWithdrawalDate != null">
-  	  	user_withdrawal_date,
-  	  </if>
-  	  <if test="userWithdrawalStatus != null">
-  	  	user_withdrawal_status,
-  	  </if>
-  	  <if test="userRole != null">
-  	  	user_role,
-  	  </if>
-  	</trim>
-  	<trim prefix="values (" suffix=")" suffixOverrides=",">
-  	  <if test="userId != null">
-  	  	#{userId, jdbcType=INTEGER},
-  	  </if>
-  	  <if test="userPassword != null">
-  	  	#{userPassword, jdbcType=VARCHAR},
-  	  </if>
-  	  <if test="userName != null">
-  	  	#{userName, jdbcType=VARCHAR},
-  	  </if>
-  	  <if test="userEmail != null">
-  	  	#{userEmail, jdbcType=VARCHAR},
-  	  </if>
-  	  <if test="userNickname != null">
-  	  	#{userNickname, jdbcType=VARCHAR},
-  	  </if>
-  	  <if test="userPhoneNumber != null">
-  	  	#{userPhoneNumber, jdbcType=VARCHAR},
-  	  </if>
-  	  <if test="userJoinDate != null">
-  	  	#{userJoinDate, jdbcType=TIMESTAMP},
-  	  </if>
-  	  <if test="userWithdrawalDate != null">
-  	  	#{userWithdrawalDate, jdbcType=TIMESTAMP},
-  	  </if>
-  	  <if test="userWithdrawalStatus != null">
-  	  	#{userWithdrawalStatus, jdbcType=INTEGER},
-  	  </if>
-  	  <if test="userRole != null">
-  	  	#{userRole, jdbcType=VARCHAR},
-  	  </if>
-  	</trim>
-  </insert>
-  
-  <select id="selectWithoutPassword" parameterType="string" resultType="user">
-  	select user_id, user_name, user_email, user_nickname, user_phone_number, user_join_date,
-  	user_withdrawal_date, user_withdrawal_status, user_role
-  	from User
-  	where user_email = #{userEmail}
-  </select>
+    </sql>
+
+    <select id="selectByUserEmail" parameterType="string" resultType="user">
+        select
+        <include refid="Base_Column_List"/>
+        from User
+        where user_email = #{userEmail}
+    </select>
+
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
+        insert into User
+        (user_id,
+         user_password,
+         user_name,
+         user_email,
+         user_nickname,
+         user_phone_number)
+        values (#{userId, jdbcType=INTEGER},
+                #{userPassword, jdbcType=VARCHAR},
+                #{userName, jdbcType=VARCHAR},
+                #{userEmail, jdbcType=VARCHAR},
+                #{userNickname, jdbcType=VARCHAR},
+                #{userPhoneNumber, jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectPublicInfo" parameterType="string" resultType="user">
+        select user_id,
+               user_name,
+               user_email,
+               user_nickname,
+               user_phone_number,
+               user_join_date
+        from User
+        where user_email = #{userEmail}
+    </select>
+
+    <update id="updateUserRole" parameterType="int">
+        UPDATE User
+        SET user_role = 'ADMIN'
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUser" parameterType="user">
+        UPDATE User
+        SET
+            user_name = #{userName},
+            user_nickname = #{userNickname},
+            user_phone_number = #{userPhoneNumber}
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="selectChallengesByUserId" parameterType="int" resultType="challenge">
+        select
+            cc.challenge_category_name,
+            c.challenge_title,
+            c.challenge_description,
+            u.user_nickname,
+            (challenge_delete_date - challenge_create_date) challenge_remain_date
+        from Challenge c inner join Challenge_Category cc
+        on c.challenge_category_code = cc.challenge_category_code
+        inner join User u
+        on c.challenge_author_id = u.user_id
+        inner join Challenge_Participant cp
+        on c.challenge_id = cp.challenge_id
+        where u.user_id = cp.user_id
+
+    </select>
 </mapper>

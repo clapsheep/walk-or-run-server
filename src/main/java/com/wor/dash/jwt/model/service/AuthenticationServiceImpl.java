@@ -47,8 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //	@Transactional
 	public AuthenticationResponse register(User request) {
 		log.debug("AuthenticationServiceImpl/register");
-		System.out.println(request.toString());
-		if(repository.findByUserEmail(request.getUserEmail()).isPresent()) {
+		if(repository.getUser(request.getUserEmail()).isPresent()) {
             return new AuthenticationResponse(null, null,"User already exist");
         }
 
@@ -59,9 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setUserNickname(request.getUserNickname());
         user.setUserPhoneNumber(request.getUserPhoneNumber());
 
-        log.debug("before addUser");
         user = repository.addUser(user);
-        log.debug("addUser complete");
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -80,18 +77,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.getUserPassword()
                 )
         );
-		log.debug("authenticate====================================================");
-		System.out.println("email: " + request.getUserEmail());
-		User user = repository.findByUserEmail(request.getUserEmail()).get();
-		log.debug("3==============================={}",user.toString());
-        String accessToken = jwtService.generateAccessToken(user);
+
+        User user = repository.getUser(request.getUserEmail()).get();
+        if(user.getUserWithdrawalStatus() == 1) {
+            return new AuthenticationResponse(null, null, "Withdrawn User");
+        }
+		String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        log.debug("4tokencreated===================================================");
         revokeAllTokenByUser(user);
-        log.debug("56tokenrevoked===================================================");
         saveUserToken(accessToken, refreshToken, user);
-        log.debug("tokensaved===================================================");
 
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
 	}
@@ -114,7 +109,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         token.setAccessToken(accessToken);
         token.setRefreshToken(refreshToken);
         token.setLogout(1);
-        //token.setUser(user);
         token.setUserId(user.getUserId());
         token.setTokenId(null);
         tokenRepository.addToken(token);
@@ -126,21 +120,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
         }
 
         String token = authHeader.substring(7);
 
-        // extract username from token
         String username = jwtService.extractUserEmail(token);
 
-        // check if the user exist in database
-        User user = repository.findByUserEmail(username)
+        User user = repository.getUser(username)
                 .orElseThrow(()->new RuntimeException("No user found"));
 
-        // check if the token is valid
         if(jwtService.isValidRefreshToken(token, user)) {
-            // generate access token
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -150,7 +140,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(accessToken, refreshToken, "New token generated"), HttpStatus.OK);
         }
 
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
 	}
 
 }
