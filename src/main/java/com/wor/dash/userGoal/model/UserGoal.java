@@ -18,9 +18,13 @@ public class UserGoal {
     @NonNull
     private int challengeCategoryUnitCode;
     @NonNull
-    private int goalCount;
+    private  String  startDate;
+    @NonNull
+    private  String  endDate;
+    @NonNull
+    private double targetAmount;
 
-    private double goalRate;
+    private double currentAmount;
     private String challengeCategoryName;
     private String challengeCategoryUnitName;
 
