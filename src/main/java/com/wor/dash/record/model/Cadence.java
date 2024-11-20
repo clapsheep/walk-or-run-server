@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Distance {
-    private int recordId;
-    private int userId;
-    private double distance;
-    private String startTime;
+public class Cadence {
+    private Integer recordId;
+    private Integer userId;
+    private double cadence;
 }

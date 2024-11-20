@@ -1,6 +1,7 @@
 package com.wor.dash.record.model.service;
 
 import com.wor.dash.record.model.Record;
+import com.wor.dash.record.model.*;
 import com.wor.dash.record.model.mapper.RecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -108,6 +108,87 @@ public class RecordServiceImpl implements RecordService {
         }
     }
 
+    @Override
+    public Cadence getCadenceData(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getCadenceData(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Calorie> getCalorieList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getCalorieList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public Distance getDistanceData(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getDistanceData(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<HeartRate> getHeartRateList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getHeartRateList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Record> getRecordList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getRecordList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public Speed getSpeedData(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getSpeedData(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Step> getStepList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getStepList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<ExerciseTime> getExerciseTimeList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getExerciseTimeList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
         try {
             Record record = new Record();
@@ -146,4 +227,6 @@ public class RecordServiceImpl implements RecordService {
         }
         return null;
     }
+
+
 }

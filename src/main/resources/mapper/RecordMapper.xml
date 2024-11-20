@@ -32,17 +32,138 @@
             )
         </foreach>
     </insert>
+
+    <select id="getCadenceData">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.step_count) as stepCount,
+                SUM(TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) as totalMinutes,
+                SUM(r.step_count) / SUM(TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) as cadence,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) >= DATE(#{startTime})
+                AND DATE(start_time) = DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id;
+        ]]>
+        <!-- 테스트 : NOW() -> '2024-10-22'-->
+    </select>
+
+    <select id="getCalorieList">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.total_calorie) as totalCalorie,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) >= DATE(#{startTime}) - INTERVAL 6 DAY
+                -- AND DATE(start_time) <= DATE(#{endTime})
+                AND DATE(start_time) >= DATE('2024-10-22') - INTERVAL 6 DAY
+                AND DATE(start_time) <= DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+            ORDER BY startTime DESC;
+        ]]>
+        <!-- 테스트 : NOW() -> '2024-10-22'-->
+    </select>
+
+    <select id="getDistanceData">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.distance) as distance,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) = DATE(#{startTime})
+                AND DATE(start_time) = DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+        ]]>
+        <!-- 테스트 : NOW() -> '2024-10-22'-->
+    </select>
+
+    <select id="getHeartRateList">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.min_heart_rate) as minHeartRate,
+                SUM(r.max_heart_rate) as maxHeartRate,
+                SUM(r.mean_heart_rate) as meanHeartRate,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) >= DATE(#{startTime}) - INTERVAL 6 DAY
+                -- AND DATE(start_time) <= DATE(#{endTime})
+                AND DATE(start_time) >= DATE('2024-10-22') - INTERVAL 6 DAY
+                AND DATE(start_time) <= DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getRecordList">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.total_calorie) as totalCalorie,
+                SUM(r.distance) as distance,
+                SUM(r.max_heart_rate) as maxHeartRate,
+                SUM(r.min_heart_rate) as minHeartRate,
+                SUM(r.mean_heart_rate) as meanHeartRate,
+                SUM(r.step_count) as stepCount,
+                SUM(r.mean_speed) as meanSpeed,
+                SUM(r.max_speed) as maxSpeed,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime,
+                DATE_FORMAT(r.end_time, '%Y-%m-%d') as endTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) >= DATE(#{startTime}) - INTERVAL 6 DAY
+                -- AND DATE(start_time) <= DATE(#{endTime})
+                AND DATE(start_time) >= DATE('2024-10-22') - INTERVAL 6 DAY
+                AND DATE(start_time) <= DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getSpeedData">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.max_speed) as maxSpeed,
+                SUM(r.mean_speed) as meanSpeed,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) = DATE(#{startTime})
+                AND DATE(start_time) = DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+        ]]>
+    </select>
+
+    <select id="getStepList">
+        <![CDATA[
+            SELECT
+                MAX(r.record_id) as recordId,
+                r.user_id as userId,
+                SUM(r.step_count) as stepCount,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                -- AND DATE(start_time) >= DATE(#{startTime}) - INTERVAL 6 DAY
+                -- AND DATE(start_time) <= DATE(#{endTime})
+                AND DATE(start_time) >= DATE('2024-10-22') - INTERVAL 6 DAY
+                AND DATE(start_time) <= DATE('2024-10-22')
+            GROUP BY DATE_FORMAT(r.start_time, '%Y-%m-%d'), r.user_id
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
 </mapper>
 
-<!--        private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");-->
-<!--        private Integer userId;-->
-<!--        private Integer totalCalorie; // 총소모칼로리-->
-<!--        private String startTime; // 운동 시작 시간-->
-<!--        private Integer meanHeartRate; // 평균 심박수-->
-<!--        private Integer count; // 걸음수-->
-<!--        private Integer maxHeartRate; // 최대 심박수-->
-<!--        private Integer maxSpeed; // 최대 속도 (m/s)-->
-<!--        private Integer minHeartRate; // 최소 심박수-->
-<!--        private Double distance; // 이동 거리(미터)-->
-<!--        private Double meanSpeed;-->
-<!--        private String endTime;-->
