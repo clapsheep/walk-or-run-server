@@ -7,11 +7,11 @@ import java.util.List;
 public interface UserGoalService {
     List<UserGoal> getUserGoals(int userId);
 
-    UserGoal getUserGoalById(int userGoalId);
+    UserGoal getUserGoalById(int userId, int userGoalId);
 
-    int addUserGoal(UserGoal userGoal);
+    int addUserGoal(int userId, UserGoal userGoal);
 
-    int editUserGoal(UserGoal userGoal);
+    int editUserGoal(int userId, int userGoalId, UserGoal userGoal);
 
-    int removeUserGoal(int userGoalId);
+    int removeUserGoal(int userId, int userGoalId);
 }
