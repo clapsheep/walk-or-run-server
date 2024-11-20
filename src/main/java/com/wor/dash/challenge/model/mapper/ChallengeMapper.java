@@ -22,4 +22,10 @@ public interface ChallengeMapper {
     int deleteChallenge(int challengeId);
 
     void autoDeleteChallenge(String endTime);
+
+    void addDailyChallenge(int challengeSchedulerCycle);
+
+    void addWeeklyChallenge(int challengeSchedulerCycle);
+
+    void addMonthlyChallenge(int challengeSchedulerCycle);
 }

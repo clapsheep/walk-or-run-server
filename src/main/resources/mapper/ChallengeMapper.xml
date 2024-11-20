@@ -47,7 +47,7 @@
         where challenge_id = #{challengeId}
     </select>
     <insert id="insertChallenge" parameterType="Challenge">
-        INSERT INTO Challenge
+        insert into Challenge
         (
         challenge_category_code,
         challenge_title,
@@ -58,7 +58,7 @@
             , challenge_delete_date
         </if>
         )
-        VALUES
+        values
         (
         #{challengeCategoryCode},
         #{challengeTitle},
@@ -70,6 +70,75 @@
         </if>
         )
     </insert>
+
+    <insert id="addDailyChallenge" parameterType="int">
+        insert into Challenge (challenge_category_code,
+                               challenge_title,
+                               challenge_description,
+                               challenge_author_id,
+                               challenge_create_date,
+                               challenge_target_cnt,
+                               challenge_delete_date)
+        select s.challenge_category_code,
+               s.challenge_title,
+               s.challenge_description,
+               s.challenge_author_id,
+               DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') as challenge_create_date,
+               s.challenge_target_cnt,
+               DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') as challenge_delete_date
+        from Challenge_Scheduler s
+        where s.challenge_create_date <![CDATA[<=]]> NOW()
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
+           or s.challenge_delete_date IS NULL
+            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+    </insert>
+
+    <insert id="addWeeklyChallenge" parameterType="int">
+        insert into Challenge (challenge_category_code,
+                               challenge_title,
+                               challenge_description,
+                               challenge_author_id,
+                               challenge_create_date,
+                               challenge_target_cnt,
+                               challenge_delete_date)
+        select s.challenge_category_code,
+               s.challenge_title,
+               s.challenge_description,
+               s.challenge_author_id,
+               s.challenge_create_date,
+               s.challenge_target_cnt,
+               DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d 23:59:59') as challenge_delete_date
+        from Challenge_Scheduler s
+        where s.challenge_create_date <![CDATA[<=]]> NOW()
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
+           or s.challenge_delete_date IS NULL
+            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+    </insert>
+
+    <insert id="addMonthlyChallenge" parameterType="int">
+        insert into Challenge (challenge_category_code,
+                               challenge_title,
+                               challenge_description,
+                               challenge_author_id,
+                               challenge_create_date,
+                               challenge_target_cnt,
+                               challenge_delete_date)
+        select s.challenge_category_code,
+               s.challenge_title,
+               s.challenge_description,
+               s.challenge_author_id,
+               s.challenge_create_date,
+               s.challenge_target_cnt,
+               <![CDATA[
+               DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH) - INTERVAL 1 DAY, '%Y-%m-%d 23:59:59')
+                ]]> as challenge_delete_date
+        from Challenge_Scheduler s
+        where s.challenge_create_date <![CDATA[<=]]> NOW()
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
+           or s.challenge_delete_date IS NULL
+            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+    </insert>
+
     <update id="updateChallenge" parameterType="Challenge">
         update Challenge
         set challenge_category_code = #{challengeCategoryCode},
@@ -82,14 +151,14 @@
         update Challenge
         set challenge_is_ended = 1
         where challenge_id = #{challengeId}
-        and challenge_is_ended = 0
+          and challenge_is_ended = 0
     </update>
+
 
     <update id="autoDeleteChallenge" parameterType="String">
         update Challenge
-        set
-            challenge_is_ended = 1,
-        where challenge_delete_date &lt;= #{currentTime}
-          and challenge_is_ended = 0
+        set challenge_is_ended = 1,
+            where challenge_delete_date &lt;= #{currentTime}
+                and challenge_is_ended = 0
     </update>
 </mapper>

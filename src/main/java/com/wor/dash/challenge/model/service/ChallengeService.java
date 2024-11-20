@@ -19,11 +19,11 @@ public interface ChallengeService {
 
     boolean removeChallenge(int challengeId);
 
-    void addDailyChallenge();
+    void addDailyChallenge(int challenge_scheduler_cycle);
 
-    void addWeeklyChallenge();
+    void addWeeklyChallenge(int challenge_scheduler_cycle);
 
-    void addMonthlyChallenge();
+    void addMonthlyChallenge(int challenge_scheduler_cycle);
 
     void checkIsEndedChallenge();
 }
