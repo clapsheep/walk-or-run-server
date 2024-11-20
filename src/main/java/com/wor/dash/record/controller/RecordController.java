@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("api/record")
+@RequestMapping("api/user")
 @RequiredArgsConstructor
 public class RecordController {
     private final RecordService recordService;
 
-    @PostMapping("/upload-csv")
+    @PostMapping("/record/upload")
     public ResponseEntity<?> uploadCsv(@RequestParam("csv") MultipartFile file) {
         if (file.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse("fail", "FileEmpty", 400), HttpStatus.BAD_REQUEST);

@@ -1,6 +1,7 @@
 package com.wor.dash.record.model.service;
 
 import com.wor.dash.record.model.Record;
+import com.wor.dash.record.model.*;
 import com.wor.dash.record.model.mapper.RecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -108,6 +108,36 @@ public class RecordServiceImpl implements RecordService {
         }
     }
 
+    @Override
+    public List<Calorie> getCalorieData(int UserId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Distance> getDistanceDate(int UserId) {
+        return List.of();
+    }
+
+    @Override
+    public List<HeartRate> getHeartRate(int UserId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Record> getRecord(int UserId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Speed> getSpeed(int UserId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Step> getStepData(int UserId) {
+        return List.of();
+    }
+
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
         try {
             Record record = new Record();
@@ -146,4 +176,6 @@ public class RecordServiceImpl implements RecordService {
         }
         return null;
     }
+
+
 }
