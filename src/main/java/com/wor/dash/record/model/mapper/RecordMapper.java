@@ -3,6 +3,7 @@ package com.wor.dash.record.model.mapper;
 import com.wor.dash.record.model.Record;
 import com.wor.dash.record.model.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,17 +11,35 @@ import java.util.List;
 public interface RecordMapper {
     void batchInsertRecords(List<Record> batch);
 
-    Cadence getCadenceData(int userId);
+    Cadence getCadenceData(@Param("userId") int userId,
+                           @Param("startTime") String startTime,
+                           @Param("endTime") String endTime);
 
-    List<Calorie> getCalorieData(int userId);
+    List<Calorie> getCalorieList(@Param("userId") int userId,
+                                 @Param("startTime") String startTime,
+                                 @Param("endTime") String endTime);
 
-    Distance getDistanceData(int userId);
+    Distance getDistanceData(@Param("userId") int userId,
+                             @Param("startTime") String startTime,
+                             @Param("endTime") String endTime);
 
-    List<HeartRate> getHeartRateData(int userId);
+    List<HeartRate> getHeartRateList(@Param("userId") int userId,
+                                     @Param("startTime") String startTime,
+                                     @Param("endTime") String endTime);
 
-    List<Record> getRecordData(int userId);
+    List<Record> getRecordList(@Param("userId") int userId,
+                               @Param("startTime") String startTime,
+                               @Param("endTime") String endTime);
 
-    Speed getSpeedData(int userId);
+    Speed getSpeedData(@Param("userId") int userId,
+                       @Param("startTime") String startTime,
+                       @Param("endTime") String endTime);
 
-    List<Step> getStepData(int userId);
+    List<Step> getStepList(@Param("userId") int userId,
+                           @Param("startTime") String startTime,
+                           @Param("endTime") String endTime);
+
+    List<ExerciseTime> getExerciseTimeList(@Param("userId") int userId,
+                                           @Param("startTime") String startTime,
+                                           @Param("endTime") String endTime);
 } 

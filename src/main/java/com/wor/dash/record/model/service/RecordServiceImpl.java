@@ -109,9 +109,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Cadence getCadenceData(int userId) {
+    public Cadence getCadenceData(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getCadenceData(userId);
+            return recordMapper.getCadenceData(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -119,9 +119,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<Calorie> getCalorieData(int userId) {
+    public List<Calorie> getCalorieList(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getCalorieData(userId);
+            return recordMapper.getCalorieList(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -129,9 +129,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Distance getDistanceData(int userId) {
+    public Distance getDistanceData(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getDistanceData(userId);
+            return recordMapper.getDistanceData(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -139,9 +139,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<HeartRate> getHeartRateData(int userId) {
+    public List<HeartRate> getHeartRateList(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getHeartRateData(userId);
+            return recordMapper.getHeartRateList(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -149,9 +149,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<Record> getRecordData(int userId) {
+    public List<Record> getRecordList(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getRecordData(userId);
+            return recordMapper.getRecordList(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -159,9 +159,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Speed getSpeedData(int userId) {
+    public Speed getSpeedData(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getSpeedData(userId);
+            return recordMapper.getSpeedData(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -169,9 +169,19 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<Step> getStepData(int userId) {
+    public List<Step> getStepList(int userId, String startTime, String endTime) {
         try {
-            return recordMapper.getStepData(userId);
+            return recordMapper.getStepList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<ExerciseTime> getExerciseTimeList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getExerciseTimeList(userId, startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();

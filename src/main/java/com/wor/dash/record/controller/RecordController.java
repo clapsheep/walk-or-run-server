@@ -38,10 +38,19 @@ public class RecordController {
 
     // 심박수, 차트, 주간데이터
     @GetMapping("/record/heartRate")
-    public ResponseEntity<?> getHeartRateData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getHeartRateData(@PathVariable("userId") int userId,
+                                              @RequestParam("startTime") String startTime,
+                                              @RequestParam("endTime") String endTime) {
         try {
-            List<HeartRate> result = recordService.getHeartRateData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<HeartRate> result = recordService.getHeartRateList(userId, startTime, endTime);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
@@ -52,10 +61,19 @@ public class RecordController {
 
     // 운동중 걸음수, 차트, 주간 데이터
     @GetMapping("/record/step")
-    public ResponseEntity<?> getStepData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getStepData(@PathVariable("userId") int userId,
+                                         @RequestParam("startTime") String startTime,
+                                         @RequestParam("endTime") String endTime) {
         try {
-            List<Step> result = recordService.getStepData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<Step> result = recordService.getStepList(userId, startTime, endTime);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
@@ -66,10 +84,19 @@ public class RecordController {
 
     // 칼로리, 차트, 주간데이터
     @GetMapping("/record/calorie")
-    public ResponseEntity<?> getCalorieData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getCalorieData(@PathVariable("userId") int userId,
+                                            @RequestParam("startTime") String startTime,
+                                            @RequestParam("endTime") String endTime) {
         try {
-            List<Calorie> result = recordService.getCalorieData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<Calorie> result = recordService.getCalorieList(userId, startTime, endTime);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get calorie data", 500),
@@ -80,10 +107,19 @@ public class RecordController {
 
     // 케이던스 = (총 걸음수) / (총 걸린시간, 분), 수치, 일간데이터
     @GetMapping("/record/cadence")
-    public ResponseEntity<?> getCadenceData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getCadenceData(@PathVariable("userId") int userId,
+                                            @RequestParam("startTime") String startTime,
+                                            @RequestParam("endTime") String endTime) {
         try {
-            Cadence result = recordService.getCadenceData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            Cadence result = recordService.getCadenceData(userId, startTime, endTime);
+            if (result == null) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
@@ -94,10 +130,19 @@ public class RecordController {
 
     // 누적거리(m), 수치, 일간데이터
     @GetMapping("/record/distance")
-    public ResponseEntity<?> getDistanceData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getDistanceData(@PathVariable("userId") int userId,
+                                             @RequestParam("startTime") String startTime,
+                                             @RequestParam("endTime") String endTime) {
         try {
-            Distance result = recordService.getDistanceData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            Distance result = recordService.getDistanceData(userId, startTime, endTime);
+            if (result == null) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
@@ -108,10 +153,19 @@ public class RecordController {
 
     // 주간 평균 속도(m/s), 수치, 일간 데이터
     @GetMapping("/record/speed")
-    public ResponseEntity<?> getSpeedData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getSpeedData(@PathVariable("userId") int userId,
+                                          @RequestParam("startTime") String startTime,
+                                          @RequestParam("endTime") String endTime) {
         try {
-            Speed result = recordService.getSpeedData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            Speed result = recordService.getSpeedData(userId, startTime, endTime);
+            if (result == null) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
@@ -122,10 +176,42 @@ public class RecordController {
 
     // 모든 데이터
     @GetMapping("/record/record")
-    public ResponseEntity<?> getRecordData(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getRecordData(@PathVariable("userId") int userId,
+                                           @RequestParam("startTime") String startTime,
+                                           @RequestParam("endTime") String endTime) {
         try {
-            List<Record> result = recordService.getRecordData(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<Record> result = recordService.getRecordList(userId, startTime, endTime);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ApiResponse("fail", "Failed to get distance data", 500),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    // 운동 시간 통계 : 기간 내의 start_time, end_time 데이터를 전부 전달, 이후 데이터 조작은 프론트에서 구현
+    @GetMapping("/record/exerciseTime")
+    public ResponseEntity<?> getExerciseTimeList(@PathVariable("userId") int userId,
+                                                 @RequestParam("startTime") String startTime,
+                                                 @RequestParam("endTime") String endTime) {
+        try {
+            List<ExerciseTime> result = recordService.getExerciseTimeList(userId, startTime, endTime);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(
+                        new ApiResponse("success", "No data available for this user", 204),
+                        HttpStatus.NO_CONTENT
+                );
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(
                     new ApiResponse("fail", "Failed to get distance data", 500),
