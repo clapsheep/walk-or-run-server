@@ -164,6 +164,10 @@
                 </when>
             </choose>
         </where>
+        ORDER BY user_nickname
+        LIMIT #{offset}, #{pageSize}
     </select>
+
+
 
 </mapper>

@@ -2,6 +2,8 @@ package com.wor.dash.challenge.controller;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.service.ChallengeService;
+import com.wor.dash.comment.model.Comment;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.response.ApiResponse;
 import com.wor.dash.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,12 +17,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/")
+@RequestMapping("/api")
 @Tag(name = "Challenge Controller", description = "챌린지 기능을 관리합니다. " +
         "챌린지의 진행여부(challengeIsEnded)는 진행중(0), 종료(1)입니다.")
 public class ChallengeController {
 
     private final ChallengeService challengeService;
+    private List<Comment> commentList;
 
     @Operation(summary = "챌린지 추가", description = "챌린지 추가를 위한 API \n\n " +
             "<필수입력> \n\n " +
@@ -52,11 +55,10 @@ public class ChallengeController {
 
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/challenge")
-    public ResponseEntity<List<Challenge>> getAllChallengeList() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getAllChallenges(int page, int size) {
         try {
-            challenges = challengeService.getAllChallengeList();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -68,11 +70,10 @@ public class ChallengeController {
 
     @Operation(summary = "진행중인 챌린지 조회", description = "진행중인 챌린지를 전체 조회하기 위한 API")
     @GetMapping("/challenge/active")
-    public ResponseEntity<List<Challenge>> getActiveChallengeList() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getActiveChallengeList(int page, int size) {
         try {
-            challenges = challengeService.getActiveChallengeList();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getActiveChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -84,11 +85,10 @@ public class ChallengeController {
 
     @Operation(summary = "종료된 챌린지 조회", description = "종료된 챌린지를 전체 조회하기 위한 API")
     @GetMapping("/challenge/end")
-    public ResponseEntity<List<Challenge>> getEndedChallengeList() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getEndedChallengeList(int page, int size) {
         try {
-            challenges = challengeService.getEndedChallengeList();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getEndedChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -101,7 +101,7 @@ public class ChallengeController {
     @Operation(summary = "챌린지 수정", description = "챌린지를 수정하기 위한 API \n\n" +
             " <필수 입력> \n\n" +
             "### path \n" +
-            "- challengeId : 수정할 챌린지 ID \n\n" +
+            "- challengeId : 수정할 챌린지 ID \n" +
             "### body \n" +
             "- challengeCategoryCode : 챌린지 카테고리 코드 \n " +
             "- challengeTitle : 챌린지 제목 \n " +
@@ -157,7 +157,7 @@ public class ChallengeController {
     }
 
     @Operation(summary = "챌린지 스케쥴 전체 조회", description = "챌린지 스케쥴의 진행여부 상관없이 전체 조회하기 위한 API")
-    @GetMapping("/challenge/schedule")
+    @GetMapping("/admin/challenge/schedule")
     public ResponseEntity<List<Challenge>> getAllChallengeScheduleList() {
         List<Challenge> challengeList = null;
         try {
@@ -173,7 +173,7 @@ public class ChallengeController {
     }
 
     @Operation(summary = "반복중인 챌린지 스케쥴 조회", description = "반복중인 챌린지를 조회하기 위한 API")
-    @GetMapping("/challenge/schedule/active")
+    @GetMapping("/admin/challenge/schedule/active")
     public ResponseEntity<List<Challenge>> getActiveChallengeScheduleList() {
         List<Challenge> challengeList = null;
         try {
@@ -189,7 +189,7 @@ public class ChallengeController {
     }
 
     @Operation(summary = "반복종료된 챌린지 스케쥴 조회", description = "반복종료된 챌린지를 조회하기 위한 API")
-    @GetMapping("/challenge/schedule/end")
+    @GetMapping("/admin/challenge/schedule/end")
     public ResponseEntity<List<Challenge>> getEndedChallengeScheduleList() {
         List<Challenge> challengeList = null;
         try {
@@ -217,7 +217,7 @@ public class ChallengeController {
             "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 null) \n" +
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
-    @PostMapping("/challenge/schedule")
+    @PostMapping("/admin/challenge/schedule")
     public ResponseEntity<?> createScheduleChallenge(@RequestBody Challenge challenge) {
         challengeService.addChallengeSchedule(challenge);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -236,7 +236,7 @@ public class ChallengeController {
             "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 기존 시간 유지) \n" +
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
-    @PutMapping("/challenge/schedule/{challengeId}")
+    @PutMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> updateScheduleChallenge(@PathVariable("challengeId") int challengeId, @RequestBody Challenge challenge) {
         boolean isS = challengeService.editChallengeSchedule(challengeId, challenge);
         if (isS) {
@@ -250,7 +250,7 @@ public class ChallengeController {
             "### path \n" +
             "- challengeId : 종료 할 챌린지 ID"
     )
-    @DeleteMapping("/challenge/schedule/{challengeId}")
+    @DeleteMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> deleteScheduleChallenge(@PathVariable("challengeId") int challengeId) {
         boolean isS = challengeService.deleteChallengeSchedule(challengeId);
         if (isS) {

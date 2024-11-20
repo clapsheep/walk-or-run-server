@@ -1,5 +1,6 @@
 package com.wor.dash.search.controller;
 
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.response.ApiResponse;
 import com.wor.dash.search.model.SearchService;
 import com.wor.dash.user.model.User;
@@ -13,10 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-enum SearchType {
-
-}
-
 @Slf4j
 @RestController
 @CrossOrigin("*")
@@ -29,10 +26,10 @@ public class SearchController {
 
     @Operation(summary = "사용자 검색", description = "이메일 또는 닉네임으로 사용자를 검색합니다.")
     @GetMapping("/user")
-    public ResponseEntity<?> searchUser(@RequestParam String key, @RequestParam String value) {
+    public ResponseEntity<?> searchUser(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, @RequestParam String key, @RequestParam String value) {
         try {
-            List<User> res = searchService.searchUser(key, value);
-            if (res.isEmpty()) {
+            PageResponse<User> res = searchService.searchUser(key, value, page, size);
+            if (res.getContent().isEmpty()) {
                 return new ResponseEntity<>(new ApiResponse("empty", "searchUser", 204), HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(res, HttpStatus.OK);

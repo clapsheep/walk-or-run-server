@@ -11,11 +11,11 @@ import java.util.List;
 public interface ChallengeMapper {
     void insertChallenge(Challenge challenge);
 
-    List<Challenge> selectAllChallengeList();
+    List<Challenge> selectAllChallengeList(@Param("offset") int offset, @Param("pageSize") int limit);
 
-    List<Challenge> selectActiveChallengeList();
+    List<Challenge> selectActiveChallengeList(@Param("offset") int offset, @Param("pageSize") int limit);
 
-    List<Challenge> selectEndedChallengeList();
+    List<Challenge> selectEndedChallengeList(@Param("offset") int offset, @Param("pageSize") int limit);
 
     Challenge selectChallenge(int challengeId);
 
