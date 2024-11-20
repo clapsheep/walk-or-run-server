@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.comment.model.mapper.CommentMapper">
-    <insert id="insertComment" parameterType="comment">
+    <insert id="insertComment">
         INSERT INTO Comment
             (challenge_id, comment_content, comment_author_id, comment_create_date)
-        VALUES (#{challengeId}, #{commentContent}, #{commentAuthorId}, now())
+        VALUES (#{challengeId}, #{comment.commentContent}, #{comment.commentAuthorId}, now())
     </insert>
 
     <select id="selectCommentList" resultType="comment">
@@ -21,19 +21,19 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="countComments" parameterType="int" resultType="int">
+    <select id="countComments" resultType="int">
         SELECT COUNT(*)
         FROM Comment
         WHERE challenge_id = #{challengeId}
     </select>
 
-    <update id="updateComment" parameterType="comment">
+    <update id="updateComment">
         UPDATE Comment
-        SET comment_content = #{commentContent}
+        SET comment_content = #{comment.commentContent}
         WHERE comment_id = #{commentId}
     </update>
 
-    <delete id="deleteComment" parameterType="int">
+    <delete id="deleteComment">
         DELETE
         FROM Comment
         WHERE comment_id = #{commentId}

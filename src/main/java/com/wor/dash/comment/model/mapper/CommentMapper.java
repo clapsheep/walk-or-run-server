@@ -8,13 +8,13 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    void insertComment(Comment comment);
+    void insertComment(@Param("challengeId") int challengeId, @Param("comment") Comment comment);
 
     List<Comment> selectCommentList(@Param("challengeId") int challengeId, @Param("offset") int offset, @Param("pageSize") int limit);
 
-    int updateComment(Comment comment);
+    int updateComment(@Param("challengeId") int challengeId, @Param("commentId") int commentId, @Param("comment") Comment comment);
 
-    int deleteComment(int commentId);
+    int deleteComment(@Param("challengeId") int challengeId, @Param("commentId") int commentId);
 
-    int countComments(int challengeId);
+    int countComments(@Param("challengeId") int challengeId);
 }

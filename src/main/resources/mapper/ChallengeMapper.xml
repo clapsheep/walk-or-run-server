@@ -47,9 +47,28 @@
         where challenge_id = #{challengeId}
     </select>
     <insert id="insertChallenge" parameterType="Challenge">
-        insert into Challenge
-        (<include refid="Challenge_insert_Column_List"/>)
-        values (#{challengeCategoryCode}, #{challengeTitle}, #{challengeDescription}, #{challengeAuthorId})
+        INSERT INTO Challenge
+        (
+        challenge_category_code,
+        challenge_title,
+        challenge_description,
+        challenge_author_id,
+        challenge_target_cnt
+        <if test="challengeDeleteDate != null">
+            , challenge_delete_date
+        </if>
+        )
+        VALUES
+        (
+        #{challengeCategoryCode},
+        #{challengeTitle},
+        #{challengeDescription},
+        #{challengeAuthorId},
+        #{challengeTargetCnt}
+        <if test="challengeDeleteDate != null">
+            , #{challengeDeleteDate}
+        </if>
+        )
     </insert>
     <update id="updateChallenge" parameterType="Challenge">
         update Challenge
@@ -63,5 +82,14 @@
         update Challenge
         set challenge_is_ended = 1
         where challenge_id = #{challengeId}
+        and challenge_is_ended = 0
+    </update>
+
+    <update id="autoDeleteChallenge" parameterType="String">
+        update Challenge
+        set
+            challenge_is_ended = 1,
+        where challenge_delete_date &lt;= #{currentTime}
+          and challenge_is_ended = 0
     </update>
 </mapper>

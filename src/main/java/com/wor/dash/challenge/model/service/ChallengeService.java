@@ -18,4 +18,12 @@ public interface ChallengeService {
     boolean editChallenge(Challenge challenge);
 
     boolean removeChallenge(int challengeId);
+
+    void addDailyChallenge();
+
+    void addWeeklyChallenge();
+
+    void addMonthlyChallenge();
+
+    void checkIsEndedChallenge();
 }
