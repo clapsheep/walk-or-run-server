@@ -2,32 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.follow.model.mapper.FollowMapper">
 
-    <select id="selectFollow" parameterType="follow" resultType="int">
-        SELECT COUNT(*) FROM Follow
-        WHERE follower_id = #{followerId} AND following_id = #{followingId}
+    <select id="selectFollow" resultType="int">
+        SELECT COUNT(*)
+        FROM Follow
+        WHERE follower_id = #{userId}
+          AND following_id = #{targetUserId}
     </select>
 
     <select id="selectFollowerList" parameterType="int" resultType="user">
-        SELECT u.user_id , u.user_name, u.user_nickname
-        FROM User u JOIN Follow f ON u.user_id = f.follower_id
+        SELECT u.user_id, u.user_name, u.user_nickname
+        FROM User u
+                 JOIN Follow f ON u.user_id = f.follower_id
         WHERE f.following_id = #{userId}
     </select>
 
     <select id="selectFollowingList" parameterType="int" resultType="user">
-        SELECT u.user_id , u.user_name, u.user_nickname
-        FROM User u JOIN Follow f ON u.user_id = f.following_id
+        SELECT u.user_id, u.user_name, u.user_nickname
+        FROM User u
+                 JOIN Follow f ON u.user_id = f.following_id
         WHERE f.follower_id = #{userId}
     </select>
 
-    <insert id="insertFollow" parameterType="follow">
+    <insert id="insertFollow">
         INSERT INTO Follow
             (follower_id, following_id)
-        VALUES (#{followerId}, #{followingId})
+        VALUES (#{userId}, #{targetUserId})
     </insert>
 
-    <delete id="deleteFollow" parameterType="follow">
-        DELETE FROM Follow
-        WHERE follower_id = #{followerId} AND following_id = #{followingId}
+    <delete id="deleteFollow">
+        DELETE
+        FROM Follow
+        WHERE follower_id = #{userId}
+          AND following_id = #{targetUserId}
     </delete>
 
 </mapper>
