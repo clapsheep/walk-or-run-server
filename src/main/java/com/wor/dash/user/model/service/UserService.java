@@ -3,7 +3,7 @@ package com.wor.dash.user.model.service;
 import java.util.Optional;
 
 import com.wor.dash.pageInfo.model.PageResponse;
-import com.wor.dash.password.PasswordChangeUtil;
+import com.wor.dash.password.PasswordChanggeUtil;
 import com.wor.dash.user.model.MyChallenge;
 import com.wor.dash.user.model.User;
 
