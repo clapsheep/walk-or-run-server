@@ -2,6 +2,8 @@ package com.wor.dash.jwt.model.service;
 
 import java.util.List;
 
+import com.wor.dash.password.model.PasswordAnswer;
+import com.wor.dash.password.model.service.PasswordService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,37 +32,50 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private final JwtService jwtService;
 	private final TokenService tokenRepository;
 	private final AuthenticationManager authenticationManager;
+    private final PasswordService passwordRepository;
 	
 	public AuthenticationServiceImpl(UserService repository,
 						            PasswordEncoder passwordEncoder,
 						            JwtService jwtService,
 						            TokenService tokenRepository,
-						            AuthenticationManager authenticationManager) {
+						            AuthenticationManager authenticationManager,
+                                    PasswordService passwordRepository) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtService = jwtService;
 		this.tokenRepository = tokenRepository;
 		this.authenticationManager = authenticationManager;
+        this.passwordRepository = passwordRepository;
 	}
 
 	@Override
 //	@Transactional
 	public AuthenticationResponse register(User request) {
 		log.debug("AuthenticationServiceImpl/register");
-        log.debug("request: {}", request.getUserEmail());
-		if(repository.getUserId(request.getUserEmail()).isPresent()) {
+		if(repository.getUserEmail(request.getUserId()) != null) {
             log.debug("user id is already exist");
             return new AuthenticationResponse(null, null,"User already exist");
         }
 
+        System.out.println(request.toString());
         User user = new User();
         user.setUserEmail(request.getUserEmail());
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
         user.setUserName(request.getUserName());
         user.setUserNickname(request.getUserNickname());
         user.setUserPhoneNumber(request.getUserPhoneNumber());
-
+        log.debug("AthenticationServiceImpl/beforeAddUser");
         user = repository.addUser(user);
+        log.debug("AthenticationServiceImpl/successAddUser");
+
+        PasswordAnswer answer = new PasswordAnswer();
+        answer.setUserId(user.getUserId());
+        answer.setQuestionId(request.getUserPasswordQuestionId());
+        answer.setPasswordQuestionAnswer(request.getUserPasswordAnswer());
+
+
+        passwordRepository.addAnswer(answer);
+        log.debug("AthenticationServiceImpl/successAddAnswer");
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -73,17 +88,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public AuthenticationResponse authenticate(User request) {
+        System.out.println("beforelogin: " + request.toString());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUserEmail(),
                         request.getUserPassword()
                 )
         );
+        System.out.println("login: " + request.toString());
 
-        User user = repository.getPublicInfo(request.getUserId()).get();
+        User user = repository.getUserImportantInfo(request.getUserEmail()).get();
         if(user.getUserWithdrawalStatus() == 1) {
             return new AuthenticationResponse(null, null, "Withdrawn User");
         }
+        System.out.println("로그인 여기까지 옴");
 		String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -93,7 +111,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
 	}
 	
-	public void revokeAllTokenByUser(User user) {
+	private void revokeAllTokenByUser(User user) {
 		List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getUserId());
         if(validTokens.isEmpty()) {
             return;
@@ -106,7 +124,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         tokenRepository.addAllTokens(validTokens);
 	}
 
-    public void saveUserToken(String accessToken, String refreshToken, User user) {
+    private void saveUserToken(String accessToken, String refreshToken, User user) {
 		Token token = new Token();
         token.setAccessToken(accessToken);
         token.setRefreshToken(refreshToken);
@@ -117,20 +135,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Override
-	public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request,
-			HttpServletResponse response) {
-		String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
+	public AuthenticationResponse refreshToken(String userEmail, String authHeader) {
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
+            System.out.println("Bearer is null");
+            return new AuthenticationResponse(null, null, "Unauthorized Token");
         }
 
         String token = authHeader.substring(7);
 
-        String userEmail = jwtService.extractUserEmail(token);
-        int userId = repository.getUserId(userEmail).get();
-
-        User user = repository.getPublicInfo(userId)
+        User user = repository.getPublicInfo(userEmail)
                 .orElseThrow(()->new RuntimeException("No user found"));
 
         if(jwtService.isValidRefreshToken(token, user)) {
@@ -140,10 +153,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             revokeAllTokenByUser(user);
             saveUserToken(accessToken, refreshToken, user);
 
-            return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(accessToken, refreshToken, "New token generated"), HttpStatus.OK);
+            return new AuthenticationResponse(accessToken, refreshToken, "New token generated");
         }
 
-        return new ResponseEntity<AuthenticationResponse>(new AuthenticationResponse(null, null, "Unauthorized Token"), HttpStatus.UNAUTHORIZED);
+        return new AuthenticationResponse(null, null, "Unauthorized Token");
 	}
 
 }

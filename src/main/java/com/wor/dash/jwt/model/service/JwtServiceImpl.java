@@ -29,7 +29,7 @@ public class JwtServiceImpl implements JwtService {
     private long refreshTokenExpire;
     
     private final TokenService tokenRepository;
-    
+
     public JwtServiceImpl(TokenService tokenRepository) {
     	this.tokenRepository = tokenRepository;
     }

@@ -8,6 +8,8 @@
         <result column="user_nickname" property="userNickname"/>
         <result column="user_phone_number" property="userPhoneNumber"/>
         <result column="user_join_date" property="userJoinDate"/>
+        <result column="user_password_question_description" property="userPasswordQuestionDesc" />
+        <result column="user_password_answer" property = "userPasswordAnswer" />
         <result column="user_role" property="userRole" />
         <collection property="myChallenges" ofType="MyChallenge" javaType="java.util.ArrayList">
             <result column="challenge_category_name" property="challengeCategoryName"/>
@@ -20,14 +22,12 @@
 
     <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId">
         insert into User
-        (user_id,
-         user_password,
+        (user_password,
          user_name,
          user_email,
          user_nickname,
          user_phone_number)
-        values (#{userId, jdbcType=INTEGER},
-                #{userPassword, jdbcType=VARCHAR},
+        values (#{userPassword, jdbcType=VARCHAR},
                 #{userName, jdbcType=VARCHAR},
                 #{userEmail, jdbcType=VARCHAR},
                 #{userNickname, jdbcType=VARCHAR},
@@ -40,13 +40,15 @@
         where user_email = #{userEmail}
     </select>
 
-    <select id="selectPublicInfo" parameterType="int" resultMap="UserChallengeResultMap">
+    <select id="selectPublicInfo" parameterType="string" resultMap="UserChallengeResultMap">
         select
             u.user_id,
             u.user_name,
             u.user_email,
             u.user_nickname,
             u.user_phone_number,
+            pq.question_description as user_password_question_description,
+            pa.password_question_answer as user_password_answer,
             u.user_role,
             DATE_FORMAT(u.user_join_date, '%Y-%m-%d') as user_join_date,
             cc.challenge_category_name,
@@ -65,8 +67,28 @@
                  left join Challenge_Participant cp on u.user_id = cp.user_id
                  left join Challenge c on cp.challenge_id = c.challenge_id
                  left join Challenge_Category cc on c.challenge_category_code = cc.challenge_category_code
+                 left join Password_Answer pa on pa.user_id = u.user_id
+                 left join Password_Question pq on pq.question_id = pa.question_id
                  left join User a on a.user_id = c.challenge_author_id
-        where u.user_id = #{userId};
+        where u.user_email = #{userEmail};
+    </select>
+
+    <select id="selectUserImportantInfo" parameterType="string">
+        select
+            u.user_id,
+            u.user_password,
+            u.user_name,
+            u.user_email,
+            u.user_nickname,
+            u.user_phone_number,
+            u.user_join_date,
+            u.user_withdrawal_date,
+            u.user_withdrawal_status,
+            pa.password_question_answer as user_password_answer,
+            u.user_role
+        from User u
+                 left join Password_Answer pa on pa.user_id = u.user_id
+        where user_email = #{userEmail}
     </select>
 
     <update id="updateUserRole" parameterType="int">
@@ -116,5 +138,23 @@
         set user_password = #{userPassword}
         where user_email = #{userEmail}
     </update>
+
+    <select id="selectUserEncodedPassword" parameterType="string">
+        select user_password
+        from User
+        where user_email = #{userEmail}
+    </select>
+
+    <select id="selectUserEmailById" parameterType="int">
+        select user_email
+        from User
+        where user_id = #{userId}
+    </select>
+
+    <select id="getUsersForSearch" resultType="User">
+        select user_id, user_nickname
+        from User
+        where concat('user_', ${type}) like concat('%', ${value}, '%')
+    </select>
 
 </mapper>

@@ -3,10 +3,9 @@ package com.wor.dash.user.model.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.wor.dash.jwt.model.service.UserDetailServiceImpl;
+import com.wor.dash.password.PasswordChangeUtil;
 import com.wor.dash.user.model.MyChallenge;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,26 +20,19 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
 	private final PasswordEncoder passwordEncoder;
-	private final UserDetailServiceImpl userDetailsService;
 	private final  UserMapper userMapper;
 
 	@Override
 	public User addUser(User user) {
 		log.debug("UserServiceImpl/addUser");
 		userMapper.insertUser(user);
-		return userMapper.selectPublicInfo(user.getUserId());
+		return userMapper.selectPublicInfo(user.getUserEmail());
 	}
 
 	@Override
-	public Optional<Integer> getUserId(String userEmail) {
-		log.debug("UserServiceImpl/getUserId: " + userMapper.selectUserId(userEmail));
-		return Optional.ofNullable(userMapper.selectUserId(userEmail));
-	}
-
-	@Override
-	public Optional<User> getPublicInfo(int userId) {
+	public Optional<User> getPublicInfo(String userEmail) {
 		log.debug("UserServiceImpl/getPublicInfo");
-		User user = userMapper.selectPublicInfo(userId);
+		User user = userMapper.selectPublicInfo(userEmail);
 		log.debug("UserServiceImpl/getPublicInfo");
 		return Optional.ofNullable(user);
 	}
@@ -69,10 +61,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public
-	Boolean checkUserPassword(User user) {
+	Boolean checkUserPassword(PasswordChangeUtil user) {
 		log.debug("UserServiceImpl/checkUserPassword");
-		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserEmail());
-		return passwordEncoder.matches(user.getUserPassword(), userDetails.getPassword());
+		String email = userMapper.selectUserEmailById(user.getUserId());
+		User curUser = userMapper.selectUserImportantInfo(email);
+		String encodedPassword = curUser.getUserPassword();
+		System.out.println(curUser.toString());
+		System.out.println(user.getUserPasswordAnswer());
+		boolean isCorrectAnswer = user.getUserPasswordAnswer().equals(curUser.getUserPasswordAnswer());
+		if(!isCorrectAnswer) {
+			return false;
+		}
+		return passwordEncoder.matches(user.getUserPassword(), encodedPassword);
 	}
 
 	@Override
@@ -80,6 +80,17 @@ public class UserServiceImpl implements UserService {
 	Optional<Integer> updateUserPassword(User user) {
 		log.debug("UserServiceImpl/updateUserPassword");
 		return Optional.ofNullable(userMapper.updateUserPassword(user));
+	}
+
+	@Override
+	public String getUserEmail(int userId) {
+		log.debug("UserServiceImpl/getUserEmail");
+		return userMapper.selectUserEmailById(userId);
+	}
+
+	@Override
+	public Optional<User> getUserImportantInfo(String userEmail) {
+		return Optional.ofNullable(userMapper.selectUserImportantInfo(userEmail));
 	}
 
 }
