@@ -10,15 +10,17 @@ import java.util.List;
 public interface RecordService {
     void uploadCsvFile(MultipartFile file) throws IOException;
 
-    List<Calorie> getCalorieData(int UserId);
+    Cadence getCadenceData(int userId);
 
-    List<Distance> getDistanceDate(int UserId);
+    List<Calorie> getCalorieData(int userId);
 
-    List<HeartRate> getHeartRate(int UserId);
+    Distance getDistanceData(int userId);
 
-    List<Record> getRecord(int UserId);
+    List<HeartRate> getHeartRateData(int userId);
 
-    List<Speed> getSpeed(int UserId);
+    List<Record> getRecordData(int userId);
 
-    List<Step> getStepData(int UserId);
+    Speed getSpeedData(int userId);
+
+    List<Step> getStepData(int userId);
 }

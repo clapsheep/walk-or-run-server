@@ -109,34 +109,75 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<Calorie> getCalorieData(int UserId) {
-        return List.of();
+    public Cadence getCadenceData(int userId) {
+        try {
+            return recordMapper.getCadenceData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public List<Distance> getDistanceDate(int UserId) {
-        return List.of();
+    public List<Calorie> getCalorieData(int userId) {
+        try {
+            return recordMapper.getCalorieData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     @Override
-    public List<HeartRate> getHeartRate(int UserId) {
-        return List.of();
+    public Distance getDistanceData(int userId) {
+        try {
+            return recordMapper.getDistanceData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public List<Record> getRecord(int UserId) {
-        return List.of();
+    public List<HeartRate> getHeartRateData(int userId) {
+        try {
+            return recordMapper.getHeartRateData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     @Override
-    public List<Speed> getSpeed(int UserId) {
-        return List.of();
+    public List<Record> getRecordData(int userId) {
+        try {
+            return recordMapper.getRecordData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     @Override
-    public List<Step> getStepData(int UserId) {
-        return List.of();
+    public Speed getSpeedData(int userId) {
+        try {
+            return recordMapper.getSpeedData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    @Override
+    public List<Step> getStepData(int userId) {
+        try {
+            return recordMapper.getStepData(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
         try {
