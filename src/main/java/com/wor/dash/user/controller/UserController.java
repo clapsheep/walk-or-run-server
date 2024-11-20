@@ -30,8 +30,9 @@ public class UserController {
 	private final AuthenticationService authService;
 	private final UserService userService;
 
-	@Operation(summary = "회원가입", description = "회원가입을 위한 API \n" +
-            " 이미 있는 경우는 400 반환합니다 \n" +
+
+    @Operation(summary = "회원가입", description = "회원가입을 위한 API \n" +
+            " 이미 있는 경우는 400 반환 \n" +
             " \n" +
 			"<필수입력> \n " +
 			"- userPassword : 비밀번호 \n " +
