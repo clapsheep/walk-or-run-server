@@ -9,7 +9,7 @@ import java.util.List;
 public interface ChallengeMapper {
     void insertChallenge(Challenge challenge);
 
-    List<Challenge> selectChallengeList();
+    List<Challenge> selectAllChallengeList();
 
     List<Challenge> selectActiveChallengeList();
 
