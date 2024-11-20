@@ -8,11 +8,11 @@ import java.util.List;
 public interface ChallengeService {
     void addChallenge(Challenge challenge);
 
-    List<Challenge> getAllChallenges();
+    List<Challenge> getAllChallengeList();
 
-    List<Challenge> getActiveChallenges();
+    List<Challenge> getActiveChallengeList();
 
-    List<Challenge> getEndedChallenges();
+    List<Challenge> getEndedChallengeList();
 
     Challenge getChallengeById(int challengeId);
 

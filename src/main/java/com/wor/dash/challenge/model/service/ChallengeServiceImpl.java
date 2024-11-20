@@ -23,17 +23,17 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public List<Challenge> getAllChallenges() {
+    public List<Challenge> getAllChallengeList() {
         return challengeMapper.selectChallengeList();
     }
 
     @Override
-    public List<Challenge> getActiveChallenges() {
+    public List<Challenge> getActiveChallengeList() {
         return challengeMapper.selectActiveChallengeList();
     }
 
     @Override
-    public List<Challenge> getEndedChallenges() {
+    public List<Challenge> getEndedChallengeList() {
         return challengeMapper.selectEndedChallengeList();
     }
 

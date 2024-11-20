@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.challenge.model.mapper.ChallengeMapper">
-    <select id="selectChallengeList" resultType="Challenge">
+    <select id="selectAllChallengeList" resultType="Challenge">
         select challenge_id
              , challenge_category_code
              , challenge_title
@@ -188,7 +188,7 @@
         where challenge_id = #{challengeId}
           and challenge_is_ended = 0
     </update>
-    
+
     <update id="autoDeleteChallenge" parameterType="String">
         update Challenge
         set challenge_is_ended = 1,
