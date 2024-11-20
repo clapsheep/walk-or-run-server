@@ -52,7 +52,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return new AuthenticationResponse(null, null,"User already exist");
         }
 
-        System.out.println(request.toString());
         User user = new User();
         user.setUserEmail(request.getUserEmail());
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
@@ -83,20 +82,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public AuthenticationResponse authenticate(User request) {
-        System.out.println("beforelogin: " + request.toString());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUserEmail(),
                         request.getUserPassword()
                 )
         );
-        System.out.println("login: " + request.toString());
 
         User user = repository.getUserImportantInfo(request.getUserEmail()).get();
         if(user.getUserWithdrawalStatus() == 1) {
             return new AuthenticationResponse(null, null, "Withdrawn User");
         }
-        System.out.println("로그인 여기까지 옴");
 		String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -140,7 +136,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public AuthenticationResponse refreshToken(String userEmail, String authHeader) {
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("Bearer is null");
             return new AuthenticationResponse(null, null, "Unauthorized Token");
         }
 

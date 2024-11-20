@@ -90,9 +90,9 @@
                  left join Challenge c on cp.challenge_id = c.challenge_id
                  left join Challenge_Category cc on c.challenge_category_code = cc.challenge_category_code
                  left join User a on a.user_id = c.challenge_author_id
-        where u.user_id = #{userId};
+        where u.user_id = #{userId}
         ORDER BY c.challenge_create_date desc
-        LIMIT #{offset}, #{pageSize}
+        LIMIT #{offset}, #{pageSize};
     </select>
 
     <update id="deleteUser" parameterType="int">

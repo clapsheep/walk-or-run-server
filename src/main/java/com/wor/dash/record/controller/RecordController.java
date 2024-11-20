@@ -3,6 +3,7 @@ package com.wor.dash.record.controller;
 import com.wor.dash.record.model.service.RecordService;
 import com.wor.dash.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/record")
 @RequiredArgsConstructor
+@Slf4j
 public class RecordController {
     private final RecordService recordService;
 
     @PostMapping("/upload-csv")
     public ResponseEntity<?> uploadCsv(@RequestParam("csv") MultipartFile file) {
+        log.info("RecordController/uploadCsv");
         if (file.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse("fail", "FileEmpty", 400), HttpStatus.BAD_REQUEST);
         }
@@ -28,6 +31,7 @@ public class RecordController {
 
             return new ResponseEntity<>(new ApiResponse("success", "File Upload Success", 200), HttpStatus.CREATED);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new ResponseEntity<>(new ApiResponse("fail", "File Upload Failed", 400), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

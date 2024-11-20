@@ -1,7 +1,10 @@
 package com.wor.dash.user.model;
 
 import com.wor.dash.pageInfo.model.PageResponse;
+import com.wor.dash.userGoal.model.UserGoal;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +27,6 @@ public class User {
 	private String userPasswordQuestionDesc;
 	private String userPasswordAnswer;
 	private PageResponse<MyChallenge> challenges;
+	private
+	List<UserGoal> goals;
 }

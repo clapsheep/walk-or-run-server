@@ -3,6 +3,7 @@ package com.wor.dash.record.model.service;
 import com.wor.dash.record.model.Record;
 import com.wor.dash.record.model.mapper.RecordMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,32 +16,36 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RecordServiceImpl implements RecordService {
     private static final int BATCH_SIZE = 50;
     private final RecordMapper recordMapper;
 
     private Integer parseIntOrNull(String value) {
+        log.info("RecordService/parseIntOrNull");
         if (value == null || value.trim().isEmpty()) {
             return null;
         }
         try {
             return (int) Double.parseDouble(value.trim().replace(".0", ""));
         } catch (NumberFormatException e) {
+            log.error(e.getMessage());
             return null;
         }
     }
 
     private Double parseDoubleOrNull(String value) {
+        log.info("RecordService/parseDoubleOrNull");
         if (value == null || value.trim().isEmpty()) {
             return null;
         }
         try {
             return Double.parseDouble(value.trim());
         } catch (NumberFormatException e) {
+            log.error(e.getMessage());
             return null;
         }
     }
@@ -48,6 +53,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     @Transactional
     public void uploadCsvFile(MultipartFile file) throws IOException {
+        log.info("RecordService/uploadCsvFile");
         List<Record> records = new ArrayList<>();
         Map<Integer, Record> orderedRecords = new TreeMap<>();
         AtomicInteger lineCounter = new AtomicInteger(0);
@@ -83,8 +89,7 @@ public class RecordServiceImpl implements RecordService {
                             }
                         }
                     } catch (Exception e) {
-                        System.err.println("Error processing line " + lineNumber + ": " + currentLine);
-                        e.printStackTrace();
+                        log.error(e.getMessage());
                     }
                 }, executor);
 
@@ -109,6 +114,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
+        log.info("RecordService/parseRecord");
         try {
             Record record = new Record();
             record.setUserId(2); // 기본값 설정
@@ -133,13 +139,13 @@ public class RecordServiceImpl implements RecordService {
 
             return record;
         } catch (Exception e) {
-            System.err.println("Error parsing record");
-            e.printStackTrace();
+            log.error(e.getMessage());
             return null;
         }
     }
 
     private String getValue(String[] data, Map<String, Integer> columnMap, String columnName) {
+        log.info("RecordService/getValue");
         Integer index = columnMap.get(columnName);
         if (index != null && index < data.length) {
             return data[index];
