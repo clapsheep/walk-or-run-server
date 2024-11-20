@@ -2,6 +2,7 @@ package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.mapper.ChallengeMapper;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,22 +19,25 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void addChallenge(Challenge challenge) {
-        challengeMapper.insertChallenge(challenge);
+        List<Challenge> challenges = challengeMapper.insertChallenge(challenge);
 
     }
 
     @Override
-    public List<Challenge> getAllChallenges() {
+    public PageResponse<Challenge> getAllChallenges(int currentPage, int pageSize) {
+
         return challengeMapper.selectChallengeList();
     }
 
     @Override
-    public List<Challenge> getActiveChallenges() {
+    public PageResponse<Challenge> getActiveChallenges(int currentPage, int pageSize) {
+
         return challengeMapper.selectActiveChallengeList();
     }
 
     @Override
-    public List<Challenge> getEndedChallenges() {
+    public PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize) {
+
         return challengeMapper.selectEndedChallengeList();
     }
 
