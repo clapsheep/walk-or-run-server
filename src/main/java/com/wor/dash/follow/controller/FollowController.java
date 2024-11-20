@@ -20,7 +20,7 @@ public class FollowController {
 
     private final FollowService followService;
 
-    @Operation(summary = "팔로우 하기", description = "팔로우를 위한 API  \n\n <필수입력>  \n\n ### path  \n - userId : 로그인한 유저ID \n - targetUserId : 팔로우할 유저ID")
+    @Operation(summary = "팔로우", description = "팔로우를 위한 API  \n\n <필수입력>  \n\n ### path  \n - userId : 로그인한 유저ID \n - targetUserId : 팔로우할 유저ID")
     @PostMapping("/{targetUserId}")
     public ResponseEntity<ApiResponse> followUser(@PathVariable int userId, @PathVariable int targetUserId) {
         try {
@@ -31,7 +31,7 @@ public class FollowController {
         }
     }
 
-    @Operation(summary = "언팔로우 하기", description = "언팔로우를 위한 API  \n\n <필수입력>  \n\n ### path  \n - userId : 로그인한 유저ID \n - targetUserId : 언팔로우할 유저ID")
+    @Operation(summary = "언팔로우", description = "언팔로우를 위한 API  \n\n <필수입력>  \n\n ### path  \n - userId : 로그인한 유저ID \n - targetUserId : 언팔로우할 유저ID")
     @DeleteMapping("/{targetUserId}")
     public ResponseEntity<ApiResponse> unfollowUser(@PathVariable int userId, @PathVariable int targetUserId) {
         try {

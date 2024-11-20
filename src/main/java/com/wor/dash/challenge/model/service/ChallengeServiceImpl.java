@@ -44,8 +44,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public boolean editChallenge(Challenge challenge) {
-        int result = challengeMapper.updateChallenge(challenge);
+    public boolean editChallenge(int challengeId, Challenge challenge) {
+        int result = challengeMapper.updateChallenge(challengeId, challenge);
 
         return result == 1;
     }
