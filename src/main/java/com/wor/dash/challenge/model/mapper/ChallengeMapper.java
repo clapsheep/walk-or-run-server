@@ -20,4 +20,6 @@ public interface ChallengeMapper {
     int updateChallenge(Challenge challenge);
 
     int deleteChallenge(int challengeId);
+
+    void autoDeleteChallenge(String endTime);
 }
