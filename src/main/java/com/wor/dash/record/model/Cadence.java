@@ -12,5 +12,9 @@ import lombok.Setter;
 public class Cadence {
     private Integer recordId;
     private Integer userId;
+    private int stepCount;
+    private int totalMinutes;
     private double cadence;
+    private String startTime;
+
 }

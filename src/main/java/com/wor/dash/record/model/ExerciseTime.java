@@ -12,8 +12,8 @@ import lombok.Setter;
 public class ExerciseTime {
     private int recordId;
     private int userId;
-    private int startTime;
-    private int endTime;
+    private String startTime;
+    private String endTime;
     private int timeInterval;
 }
 

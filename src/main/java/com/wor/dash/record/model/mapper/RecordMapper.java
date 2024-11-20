@@ -9,9 +9,10 @@ import java.util.List;
 
 @Mapper
 public interface RecordMapper {
-    void batchInsertRecords(List<Record> batch);
+    void batchInsertRecords(@Param("batch")List<Record> batch,
+                            @Param("userId") int userId);
 
-    Cadence getCadenceData(@Param("userId") int userId,
+    List<Cadence> getCadenceList(@Param("userId") int userId,
                            @Param("startTime") String startTime,
                            @Param("endTime") String endTime);
 
@@ -19,9 +20,9 @@ public interface RecordMapper {
                                  @Param("startTime") String startTime,
                                  @Param("endTime") String endTime);
 
-    Distance getDistanceData(@Param("userId") int userId,
-                             @Param("startTime") String startTime,
-                             @Param("endTime") String endTime);
+    List<Distance> getDistanceList(@Param("userId") int userId,
+                                   @Param("startTime") String startTime,
+                                   @Param("endTime") String endTime);
 
     List<HeartRate> getHeartRateList(@Param("userId") int userId,
                                      @Param("startTime") String startTime,
@@ -31,9 +32,9 @@ public interface RecordMapper {
                                @Param("startTime") String startTime,
                                @Param("endTime") String endTime);
 
-    Speed getSpeedData(@Param("userId") int userId,
-                       @Param("startTime") String startTime,
-                       @Param("endTime") String endTime);
+    List<Speed> getSpeedList(@Param("userId") int userId,
+                             @Param("startTime") String startTime,
+                             @Param("endTime") String endTime);
 
     List<Step> getStepList(@Param("userId") int userId,
                            @Param("startTime") String startTime,
