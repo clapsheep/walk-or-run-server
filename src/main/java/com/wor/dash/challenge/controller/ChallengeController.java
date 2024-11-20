@@ -3,6 +3,7 @@ package com.wor.dash.challenge.controller;
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.service.ChallengeService;
 import com.wor.dash.comment.model.Comment;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,11 +54,10 @@ public class ChallengeController {
 
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping()
-    public ResponseEntity<List<Challenge>> getAllChallenges() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getAllChallenges(int page, int size) {
         try {
-            challenges = challengeService.getAllChallenges();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -69,11 +69,10 @@ public class ChallengeController {
 
     @Operation(summary = "진행중인 챌린지 조회", description = "진행중인 챌린지를 전체 조회하기 위한 API")
     @GetMapping("/active")
-    public ResponseEntity<List<Challenge>> getActiveChallengeList() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getActiveChallengeList(int page, int size) {
         try {
-            challenges = challengeService.getActiveChallenges();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getActiveChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -85,11 +84,10 @@ public class ChallengeController {
 
     @Operation(summary = "종료된 챌린지 조회", description = "종료된 챌린지를 전체 조회하기 위한 API")
     @GetMapping("end")
-    public ResponseEntity<List<Challenge>> getEndedChallengeList() {
-        List<Challenge> challenges = null;
+    public ResponseEntity<?> getEndedChallengeList(int page, int size) {
         try {
-            challenges = challengeService.getEndedChallenges();
-            if (challenges.size() > 0) {
+            PageResponse<Challenge> challenges = challengeService.getEndedChallenges(page, size);
+            if (challenges.getContent().size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
