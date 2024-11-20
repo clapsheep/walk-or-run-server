@@ -68,8 +68,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 //.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                                .anyRequest()
-                                .authenticated()
+//                                .anyRequest()
+//                                .authenticated()
                 ).userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -101,11 +101,6 @@ public class SecurityConfig {
                     }
                 })))
                 .build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean

@@ -14,10 +14,8 @@ public class SearchServiceImp implements SearchService {
 
     @Override
     public List<User> searchUser(String type, String value) {
-        List<User> res;
-        if (type.equals("email") && value.contains("nickname")) {
-            return null;
-            //return userMapper.getUsersForSearch(type, value);
+        if (type.equals("email") || type.equals("nickname")) {
+            return userMapper.getUserListForSearch(type, value);
         }
         return null;
     }

@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.wor.dash.jwt.filter.JwtAuthenticationFilter;
 import com.wor.dash.jwt.model.service.JwtService;
-import com.wor.dash.jwt.model.service.UserDetailServiceImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	
 	private final JwtService jwtService;
-	private final UserDetailServiceImpl userDetailService;
+	private final UserDetailsService userDetailService;
     private final UserService userService;
 	
 	@Override
@@ -39,16 +38,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		System.out.println("Filter");
 		
 		String authHeader = request.getHeader("Authorization");
+        if(authHeader == null) System.out.println("authHeader is null");
+        else System.out.println(authHeader);
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
         	System.out.println("authHeader is null");
             filterChain.doFilter(request,response);
             return;
         }
+
         String token = authHeader.substring(7);//Bearer +공백 7자 제거
-        String userEmail = jwtService.extractUserEmail(token);
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailService.loadUserByUsername(userEmail);
+        String userId = jwtService.extractUserEmail(token);
+        if(userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailService.loadUserByUsername(userId);
             if(jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
