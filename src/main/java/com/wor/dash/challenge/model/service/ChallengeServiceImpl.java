@@ -2,6 +2,7 @@ package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.mapper.ChallengeMapper;
+import com.wor.dash.pageInfo.model.PageInfo;
 import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,26 +20,35 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void addChallenge(Challenge challenge) {
-        List<Challenge> challenges = challengeMapper.insertChallenge(challenge);
+        challengeMapper.insertChallenge(challenge);
 
     }
 
     @Override
     public PageResponse<Challenge> getAllChallenges(int currentPage, int pageSize) {
-
-        return challengeMapper.selectChallengeList();
+        List<Challenge> challenges = challengeMapper.selectAllChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
     public PageResponse<Challenge> getActiveChallenges(int currentPage, int pageSize) {
-
-        return challengeMapper.selectActiveChallengeList();
+        List<Challenge> challenges = challengeMapper.selectActiveChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
     public PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize) {
-
-        return challengeMapper.selectEndedChallengeList();
+        List<Challenge> challenges = challengeMapper.selectEndedChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
