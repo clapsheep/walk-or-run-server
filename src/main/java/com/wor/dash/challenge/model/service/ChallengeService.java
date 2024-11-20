@@ -1,6 +1,7 @@
 package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,15 +16,15 @@ public interface ChallengeService {
 
     Challenge getChallengeById(int challengeId);
 
-    boolean editChallenge(Challenge challenge);
+    boolean editChallenge(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
 
     boolean removeChallenge(int challengeId);
 
-    void addDailyChallenge();
+    void addDailyChallenge(int challenge_scheduler_cycle);
 
-    void addWeeklyChallenge();
+    void addWeeklyChallenge(int challenge_scheduler_cycle);
 
-    void addMonthlyChallenge();
+    void addMonthlyChallenge(int challenge_scheduler_cycle);
 
     void checkIsEndedChallenge();
 }

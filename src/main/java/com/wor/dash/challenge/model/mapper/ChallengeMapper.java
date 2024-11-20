@@ -17,9 +17,15 @@ public interface ChallengeMapper {
 
     Challenge selectChallenge(int challengeId);
 
-    int updateChallenge(Challenge challenge);
+    int updateChallenge(int challengeId, Challenge challenge);
 
     int deleteChallenge(int challengeId);
 
     void autoDeleteChallenge(String endTime);
+
+    void addDailyChallenge(int challengeSchedulerCycle);
+
+    void addWeeklyChallenge(int challengeSchedulerCycle);
+
+    void addMonthlyChallenge(int challengeSchedulerCycle);
 }

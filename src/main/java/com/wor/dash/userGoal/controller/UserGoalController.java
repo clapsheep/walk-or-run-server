@@ -23,7 +23,7 @@ public class UserGoalController {
     private final UserGoalService userGoalService;
 
 
-    @Operation(summary = "로그인한 유저의 목표 리스트 가져오기", description = "목표 목록 API  \n\n <필수입력>  \n\n ### path \n - userId : 로그인한 유저ID")
+    @Operation(summary = "로그인한 유저의 목표 리스트 조회", description = "목표 목록 API  \n\n <필수입력>  \n\n ### path \n - userId : 로그인한 유저ID")
     @GetMapping
     public ResponseEntity<?> getUserGoalList(@PathVariable int userId) {
         try {
@@ -39,7 +39,7 @@ public class UserGoalController {
         }
     }
 
-    @Operation(summary = "특정 목표의 상세정보 가져오기", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID \n - goalId : 확인할 목표의 ID")
+    @Operation(summary = "특정 목표의 상세정보 조회", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID \n - goalId : 확인할 목표의 ID")
     @GetMapping("/{userGoalId}")
     public ResponseEntity<?> getUserGoalById(@PathVariable("userId") int userId, @PathVariable("userGoalId") int userGoalId) {
         try {
@@ -51,7 +51,7 @@ public class UserGoalController {
 
     }
 
-    @Operation(summary = "목표 등록하기", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID  \n \n ### body \n - challengeCategoryCode :  카테고리(달리기 = 1, 걷기 = 2) \n - challengeCategoryUnitCode :  단위(시간(h) = 1, 거리(km) = 2) \n - startDate :  목표 시작일(ex. 2024-07-01) \n - endDate :  목표 종료일(ex. 2024-07-08) \n - targetAmount : 설정 기간동안 단위 목표량")
+    @Operation(summary = "목표 추가", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID  \n \n ### body \n - challengeCategoryCode :  카테고리(달리기 = 1, 걷기 = 2) \n - challengeCategoryUnitCode :  단위(시간(h) = 1, 거리(km) = 2) \n - startDate :  목표 시작일(ex. 2024-07-01) \n - endDate :  목표 종료일(ex. 2024-07-08) \n - targetAmount : 설정 기간동안 단위 목표량")
     @PostMapping
     public ResponseEntity<?> createUserGoal(@PathVariable("userId") int userId, @RequestBody UserGoal userGoal) {
         try {
@@ -62,7 +62,7 @@ public class UserGoalController {
         }
     }
 
-    @Operation(summary = "특정 목표의 상세정보 수정하기", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID  \n - userGoalId :  수정할 목표 ID \n \n ### body \n - challengeCategoryCode :  카테고리(달리기 = 1, 걷기 = 2) \n - challengeCategoryUnitCode :  단위(시간(h) = 1, 거리(km) = 2) \n - startDate :  목표 시작일(ex. 2024-07-01) \n - endDate :  목표 종료일(ex. 2024-07-08) \n - targetAmount : 설정 기간동안 단위 목표량")
+    @Operation(summary = "특정 목표의 상세정보 수정", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path \n - userId :  로그인 유저 ID  \n - userGoalId :  수정할 목표 ID \n \n ### body \n - challengeCategoryCode :  카테고리(달리기 = 1, 걷기 = 2) \n - challengeCategoryUnitCode :  단위(시간(h) = 1, 거리(km) = 2) \n - startDate :  목표 시작일(ex. 2024-07-01) \n - endDate :  목표 종료일(ex. 2024-07-08) \n - targetAmount : 설정 기간동안 단위 목표량")
     @PutMapping("/{userGoalId}")
     public ResponseEntity<?> updateUserGoal(@PathVariable("userId") int userId, @PathVariable("userGoalId") int userGoalId, @RequestBody UserGoal userGoal) {
         try {
@@ -74,7 +74,7 @@ public class UserGoalController {
     }
 
 
-    @Operation(summary = "목표 삭제하기", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path  \n - userId :  로그인 유저 ID \n - userGoalId :  삭제할 목표 ID")
+    @Operation(summary = "목표 삭제", description = "목표 디테일 API  \n\n <필수입력> \n\n ### path  \n - userId :  로그인 유저 ID \n - userGoalId :  삭제할 목표 ID")
     @DeleteMapping("/{userGoalId}")
     public ResponseEntity<?> deleteUserGoal(@PathVariable("userId") int userId, @PathVariable("userGoalId") int userGoalId) {
         try {
