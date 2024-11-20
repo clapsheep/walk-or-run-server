@@ -16,8 +16,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public void addComment(Comment comment) {
-        commentMapper.insertComment(comment);
+    public void addComment(int challengeId, Comment comment) {
+        commentMapper.insertComment(challengeId, comment);
     }
 
     @Override
@@ -30,14 +30,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean editComment(Comment comment) {
-        int result = commentMapper.updateComment(comment);
+    public boolean editComment(int challengeId, int commentId, Comment comment) {
+        int result = commentMapper.updateComment(challengeId, commentId, comment);
         return result == 1;
     }
 
     @Override
-    public boolean removeComment(int commentId) {
-        int result = commentMapper.deleteComment(commentId);
+    public boolean removeComment(int challengeId, int commentId) {
+        int result = commentMapper.deleteComment(challengeId, commentId);
 
         return result == 1;
     }

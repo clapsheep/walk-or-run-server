@@ -22,22 +22,22 @@ public class UserGoalServiceImpl implements UserGoalService {
     }
 
     @Override
-    public UserGoal getUserGoalById(int userGoalId) {
-        return userGoalMapper.selectUserGoalById(userGoalId);
+    public UserGoal getUserGoalById(int userId, int userGoalId) {
+        return userGoalMapper.selectUserGoalById(userId, userGoalId);
     }
 
     @Override
-    public int addUserGoal(UserGoal userGoal) {
-        return userGoalMapper.insertUserGoal(userGoal);
+    public int addUserGoal(int userId, UserGoal userGoal) {
+        return userGoalMapper.insertUserGoal(userId, userGoal);
     }
 
     @Override
-    public int editUserGoal(UserGoal userGoal) {
-        return userGoalMapper.updateUserGoal(userGoal);
+    public int editUserGoal(int userId, int userGoalId, UserGoal userGoal) {
+        return userGoalMapper.updateUserGoal(userId, userGoalId, userGoal);
     }
 
     @Override
-    public int removeUserGoal(int userGoalId) {
-        return userGoalMapper.deleteUserGoal(userGoalId);
+    public int removeUserGoal(int userId, int userGoalId) {
+        return userGoalMapper.deleteUserGoal(userId, userGoalId);
     }
 }
