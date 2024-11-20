@@ -17,6 +17,6 @@ public interface UserMapper {
 	Integer updateUserPassword(User user);
 	User selectUserImportantInfo(String userEmail);
 	String selectUserEmailById(int userId);
-	List<User> getUsersForSearch(@Param("type") String type, @Param("value") String value);
+	List<User> getUserListForSearch(@Param("type") String type, @Param("value") String value);
 
 }
