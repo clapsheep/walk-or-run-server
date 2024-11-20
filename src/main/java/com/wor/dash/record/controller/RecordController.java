@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/user/{userId}")
 @RequiredArgsConstructor
 @Tag(name = "Record", description = "운동 기록 관리 API")
 public class RecordController {
@@ -38,7 +38,7 @@ public class RecordController {
 
     // 심박수, 차트, 주간데이터
     @GetMapping("/record/heartRate")
-    public ResponseEntity<?> getHeartRateData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getHeartRateData(@PathVariable("userId") int userId) {
         try {
             List<HeartRate> result = recordService.getHeartRateData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class RecordController {
 
     // 운동중 걸음수, 차트, 주간 데이터
     @GetMapping("/record/step")
-    public ResponseEntity<?> getStepData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getStepData(@PathVariable("userId") int userId) {
         try {
             List<Step> result = recordService.getStepData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -66,7 +66,7 @@ public class RecordController {
 
     // 칼로리, 차트, 주간데이터
     @GetMapping("/record/calorie")
-    public ResponseEntity<?> getCalorieData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getCalorieData(@PathVariable("userId") int userId) {
         try {
             List<Calorie> result = recordService.getCalorieData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -80,7 +80,7 @@ public class RecordController {
 
     // 케이던스 = (총 걸음수) / (총 걸린시간, 분), 수치, 일간데이터
     @GetMapping("/record/cadence")
-    public ResponseEntity<?> getCadenceData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getCadenceData(@PathVariable("userId") int userId) {
         try {
             Cadence result = recordService.getCadenceData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -94,7 +94,7 @@ public class RecordController {
 
     // 누적거리(m), 수치, 일간데이터
     @GetMapping("/record/distance")
-    public ResponseEntity<?> getDistanceData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getDistanceData(@PathVariable("userId") int userId) {
         try {
             Distance result = recordService.getDistanceData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -108,7 +108,7 @@ public class RecordController {
 
     // 주간 평균 속도(m/s), 수치, 일간 데이터
     @GetMapping("/record/speed")
-    public ResponseEntity<?> getSpeedData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getSpeedData(@PathVariable("userId") int userId) {
         try {
             Speed result = recordService.getSpeedData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -122,7 +122,7 @@ public class RecordController {
 
     // 모든 데이터
     @GetMapping("/record/record")
-    public ResponseEntity<?> getRecordData(@RequestParam(defaultValue = "0") int userId) {
+    public ResponseEntity<?> getRecordData(@PathVariable("userId") int userId) {
         try {
             List<Record> result = recordService.getRecordData(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
