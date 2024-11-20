@@ -21,5 +21,8 @@ public class User {
 	private String userWithdrawalDate;
 	private int userWithdrawalStatus;
 	private String userRole;
+	private int userPasswordQuestionId;
+	private String userPasswordQuestionDesc;
+	private String userPasswordAnswer;
 	private List<MyChallenge> myChallenges;
 }

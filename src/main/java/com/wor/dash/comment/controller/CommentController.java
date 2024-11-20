@@ -19,7 +19,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Operation(summary = "댓글 게시", description = "특정 챌린지에 댓글을 달기 위한 API  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 달 챌린지ID \n \n ### body \n - commentContent : 댓글 내용 \n - commentAuthorId : 로그인한 유저ID")
+    @Operation(summary = "댓글 추가", description = "특정 챌린지에 댓글을 달기 위한 API  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 달 챌린지ID \n \n ### body \n - commentContent : 댓글 내용 \n - commentAuthorId : 로그인한 유저ID")
     @PostMapping
     public ResponseEntity<?> createComment(@PathVariable int challengeId, @RequestBody Comment comment) {
         try {
@@ -31,7 +31,7 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 목록 가져오기(paging)", description = "특정 챌린지에 달린 댓글 목록을 가져오기 위한 API \n (페이지 정보 포함)  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 단 챌린지ID \n\n ### query \n - page : 요청할 페이지 \n - size : 한 페이지 당 표시할 컨텐츠 수")
+    @Operation(summary = "댓글 목록 조회(paging)", description = "특정 챌린지에 달린 댓글 목록을 가져오기 위한 API \n (페이지 정보 포함)  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 단 챌린지ID \n\n ### query \n - page : 요청할 페이지 \n - size : 한 페이지 당 표시할 컨텐츠 수")
     @GetMapping
     public ResponseEntity<?> getCommentList(@PathVariable int challengeId, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         try {
@@ -48,7 +48,7 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 갯수 가져오기", description = "특정 챌린지에 달린 댓글 수를 가져오기 위한 API  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 단 챌린지ID")
+    @Operation(summary = "댓글 수 조회", description = "특정 챌린지에 달린 댓글 수를 가져오기 위한 API  \n\n <필수입력> \n\n ### path \n - challengeId : 댓글을 단 챌린지ID")
     @GetMapping("/count")
     public ResponseEntity<ApiResponse> getCountComments(@PathVariable int challengeId) {
         try {

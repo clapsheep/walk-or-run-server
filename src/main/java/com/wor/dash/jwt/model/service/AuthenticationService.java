@@ -11,12 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface AuthenticationService {
 	
 	public AuthenticationResponse register(User request);
-	
-	
 	public AuthenticationResponse authenticate(User request);
-	
-	
-	public ResponseEntity<AuthenticationResponse> refreshToken(
-			HttpServletRequest request,
-			HttpServletResponse response);
+	public AuthenticationResponse refreshToken(
+			String userEmail, String authHeader);
 }

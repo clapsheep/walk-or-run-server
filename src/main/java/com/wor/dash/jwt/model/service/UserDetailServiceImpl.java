@@ -22,9 +22,8 @@ private UserService userService;
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
-		int userId = userService.getUserId(useremail).get();
-		Optional<User> nUser = userService.getPublicInfo(userId); //조인으로 수정
+	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+		Optional<User> nUser = userService.getUserImportantInfo(userEmail); //조인으로 수정
 		return nUser.map(CustomUserDetails::new)
 		        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}

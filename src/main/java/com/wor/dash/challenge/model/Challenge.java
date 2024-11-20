@@ -11,7 +11,6 @@ import lombok.*;
 public class Challenge {
     @NonNull
     private Integer challengeCategoryCode;
-    @NonNull
     private String challengeCategoryName;
     private Integer challengeId;
     @NonNull

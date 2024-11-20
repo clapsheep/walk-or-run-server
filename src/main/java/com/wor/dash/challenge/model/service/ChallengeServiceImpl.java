@@ -2,12 +2,12 @@ package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.mapper.ChallengeMapper;
+import com.wor.dash.pageInfo.model.PageInfo;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -25,18 +25,30 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public List<Challenge> getAllChallenges() {
-        return challengeMapper.selectChallengeList();
+    public PageResponse<Challenge> getAllChallenges(int currentPage, int pageSize) {
+        List<Challenge> challenges = challengeMapper.selectAllChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
-    public List<Challenge> getActiveChallenges() {
-        return challengeMapper.selectActiveChallengeList();
+    public PageResponse<Challenge> getActiveChallenges(int currentPage, int pageSize) {
+        List<Challenge> challenges = challengeMapper.selectActiveChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
-    public List<Challenge> getEndedChallenges() {
-        return challengeMapper.selectEndedChallengeList();
+    public PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize) {
+        List<Challenge> challenges = challengeMapper.selectEndedChallengeList(currentPage, pageSize);
+        int totalElements = challenges.size();
+        int offset = (currentPage - 1) * pageSize;
+        PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+        return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
@@ -46,8 +58,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public boolean editChallenge(Challenge challenge) {
-        int result = challengeMapper.updateChallenge(challenge);
+    public boolean editChallenge(int challengeId, Challenge challenge) {
+        int result = challengeMapper.updateChallenge(challengeId, challenge);
 
         return result == 1;
     }
@@ -60,54 +72,18 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public void addDailyChallenge() {
-        int month = dateTimeUtil.getNowMonthStr();
-        int day = dateTimeUtil.getNowDayStr();
-
-        Challenge challenge = new Challenge();
-        challenge.setChallengeCategoryCode(2);
-        challenge.setChallengeCategoryName("걷거나(걷기)");
-        challenge.setChallengeTitle("[Daily] " + month + " / " + day  + " 챌린지");
-        challenge.setChallengeDescription("다시 한 번 시작입니다! 같이 걸어봐요!");
-        challenge.setChallengeAuthorId(2);
-        challenge.setChallengeTargetCnt(100);
-        challenge.setChallengeDeleteDate(dateTimeUtil.getOneDayLaterStr());
-
-        challengeMapper.insertChallenge(challenge);
+    public void addDailyChallenge(int challenge_scheduler_cycle) {
+        challengeMapper.addDailyChallenge(challenge_scheduler_cycle);
     }
 
     @Override
-    public void addWeeklyChallenge() {
-        int month = dateTimeUtil.getNowMonthStr();
-        int day = dateTimeUtil.getNowDayStr();
-
-        Challenge challenge = new Challenge();
-        challenge.setChallengeCategoryCode(2);
-        challenge.setChallengeCategoryName("걷거나(걷기)");
-        challenge.setChallengeTitle("[Weekly] " + month + " / " + day  + " 챌린지");
-        challenge.setChallengeDescription("다시 한 번 시작입니다! 같이 걸어봐요!");
-        challenge.setChallengeAuthorId(2);
-        challenge.setChallengeTargetCnt(500);
-        challenge.setChallengeDeleteDate(dateTimeUtil.getOneWeekLaterStr());
-
-        challengeMapper.insertChallenge(challenge);
+    public void addWeeklyChallenge(int challenge_scheduler_cycle) {
+        challengeMapper.addWeeklyChallenge(challenge_scheduler_cycle);
     }
 
     @Override
-    public void addMonthlyChallenge() {
-        int month = dateTimeUtil.getNowMonthStr();
-        int day = dateTimeUtil.getNowDayStr();
-
-        Challenge challenge = new Challenge();
-        challenge.setChallengeCategoryCode(1);
-        challenge.setChallengeCategoryName("걷거나(걷기)");
-        challenge.setChallengeTitle("[Monthly] " + month + " / " + day  + " 챌린지");
-        challenge.setChallengeDescription("한 달 Running Challenge! 모두 할 수 있어요!");
-        challenge.setChallengeAuthorId(2);
-        challenge.setChallengeTargetCnt(1000);
-        challenge.setChallengeDeleteDate(dateTimeUtil.getOneMonthLaterStr());
-
-        challengeMapper.insertChallenge(challenge);
+    public void addMonthlyChallenge(int challenge_scheduler_cycle) {
+        challengeMapper.addMonthlyChallenge(challenge_scheduler_cycle);
     }
 
 

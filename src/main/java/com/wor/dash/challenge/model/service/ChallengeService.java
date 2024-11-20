@@ -1,29 +1,31 @@
 package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.pageInfo.model.PageResponse;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface ChallengeService {
     void addChallenge(Challenge challenge);
 
-    List<Challenge> getAllChallenges();
+    PageResponse<Challenge> getAllChallenges(int currentPage, int pageSize);
 
-    List<Challenge> getActiveChallenges();
+    PageResponse<Challenge> getActiveChallenges(int currentPage, int pageSize);
 
-    List<Challenge> getEndedChallenges();
+    PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize);
 
     Challenge getChallengeById(int challengeId);
 
-    boolean editChallenge(Challenge challenge);
+    boolean editChallenge(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
 
     boolean removeChallenge(int challengeId);
 
-    void addDailyChallenge();
+    void addDailyChallenge(int challenge_scheduler_cycle);
 
-    void addWeeklyChallenge();
+    void addWeeklyChallenge(int challenge_scheduler_cycle);
 
-    void addMonthlyChallenge();
+    void addMonthlyChallenge(int challenge_scheduler_cycle);
 
     void checkIsEndedChallenge();
 }
