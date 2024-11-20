@@ -2,7 +2,6 @@ package com.wor.dash.challenge.controller;
 
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.service.ChallengeService;
-import com.wor.dash.comment.model.Comment;
 import com.wor.dash.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +20,6 @@ import java.util.List;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
-    private List<Comment> commentList;
 
     @Operation(summary = "챌린지 추가", description = "챌린지 추가를 위한 API \n\n " +
             "<필수입력> \n\n " +
@@ -56,7 +54,7 @@ public class ChallengeController {
     public ResponseEntity<List<Challenge>> getAllChallenges() {
         List<Challenge> challenges = null;
         try {
-            challenges = challengeService.getAllChallenges();
+            challenges = challengeService.getAllChallengeList();
             if (challenges.size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
@@ -72,7 +70,7 @@ public class ChallengeController {
     public ResponseEntity<List<Challenge>> getActiveChallengeList() {
         List<Challenge> challenges = null;
         try {
-            challenges = challengeService.getActiveChallenges();
+            challenges = challengeService.getActiveChallengeList();
             if (challenges.size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
@@ -88,7 +86,7 @@ public class ChallengeController {
     public ResponseEntity<List<Challenge>> getEndedChallengeList() {
         List<Challenge> challenges = null;
         try {
-            challenges = challengeService.getEndedChallenges();
+            challenges = challengeService.getEndedChallengeList();
             if (challenges.size() > 0) {
                 return new ResponseEntity<>(challenges, HttpStatus.OK);
             }
