@@ -2,6 +2,8 @@ package com.wor.dash.jwt.filter;
 
 import java.io.IOException;
 
+import com.wor.dash.user.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,15 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	
 	private final JwtService jwtService;
 	private final UserDetailServiceImpl userDetailService;
-	
-	public JwtAuthenticationFilter(JwtService jwtService, UserDetailServiceImpl userDetailService) {
-		this.jwtService = jwtService;
-		this.userDetailService = userDetailService;
-	}
+    private final UserService userService;
 	
 	@Override
 	protected void doFilterInternal(
@@ -47,9 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = authHeader.substring(7);//Bearer +공백 7자 제거
-        String username = jwtService.extractUserEmail(token);
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailService.loadUserByUsername(username);
+        String userEmail = jwtService.extractUserEmail(token);
+        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailService.loadUserByUsername(userEmail);
             if(jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

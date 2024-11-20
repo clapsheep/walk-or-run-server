@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableBatchProcessing
 @EnableScheduling
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.wor.dash"})
+//@ComponentScan(basePackages = {"com.wor.dash"})
 public class WalkOrRunServerApplication {
 
     public static void main(String[] args) {

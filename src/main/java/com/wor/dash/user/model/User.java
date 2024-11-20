@@ -1,6 +1,6 @@
 package com.wor.dash.user.model;
 
-import java.sql.Date;
+import java.util.List;
 
 import lombok.*;
 
@@ -21,4 +21,5 @@ public class User {
 	private String userWithdrawalDate;
 	private int userWithdrawalStatus;
 	private String userRole;
+	private List<MyChallenge> myChallenges;
 }
