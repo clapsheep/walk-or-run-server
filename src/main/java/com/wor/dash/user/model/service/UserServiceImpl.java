@@ -3,6 +3,8 @@ package com.wor.dash.user.model.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.wor.dash.pageInfo.model.PageInfo;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.password.PasswordChangeUtil;
 import com.wor.dash.user.model.MyChallenge;
 import lombok.AllArgsConstructor;
@@ -49,9 +51,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<List<MyChallenge>> getChallenges(int userId) {
-		List<MyChallenge> challenges = userMapper.selectChallengesByUserId(userId);
-		return Optional.ofNullable(challenges);
+	public Optional<PageResponse<MyChallenge>> getChallenges(int userId, int currentPage, int pageSize) {
+		List<MyChallenge> challenges = userMapper.selectChallengesByUserId(userId, currentPage, pageSize);
+		int totalElements = challenges.size();
+		int offset = (currentPage - 1) * pageSize;
+		PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
+		return Optional.ofNullable(new PageResponse<>(challenges, pageInfo));
 	}
 
 	@Override

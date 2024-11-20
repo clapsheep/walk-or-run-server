@@ -1,7 +1,6 @@
 package com.wor.dash.user.model;
 
-import java.util.List;
-
+import com.wor.dash.pageInfo.model.PageResponse;
 import lombok.*;
 
 @Getter
@@ -24,5 +23,5 @@ public class User {
 	private int userPasswordQuestionId;
 	private String userPasswordQuestionDesc;
 	private String userPasswordAnswer;
-	private List<MyChallenge> myChallenges;
+	private PageResponse<MyChallenge> challenges;
 }

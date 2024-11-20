@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.wor.dash.password.model.PasswordAnswer;
 import com.wor.dash.password.model.service.PasswordService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +15,6 @@ import com.wor.dash.response.AuthenticationResponse;
 import com.wor.dash.user.model.User;
 import com.wor.dash.user.model.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -107,9 +102,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         revokeAllTokenByUser(user);
         saveUserToken(accessToken, refreshToken, user);
+        tokenRepository.updateLogin(accessToken);
 
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
 	}
+
+    @Override
+    public AuthenticationResponse logout(String accessToken) {
+        log.debug("AuthenticationServiceImpl/logout");
+        tokenRepository.updateLogout(accessToken);
+        return new AuthenticationResponse(null, null, "Logout successful");
+    }
 	
 	private void revokeAllTokenByUser(User user) {
 		List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getUserId());

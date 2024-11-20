@@ -12,5 +12,7 @@ public interface TokenMapper {
 	Token selectByRefreshToken(String cond);
 	int insertSelective(Token token);
 	int updateBySelective(TokenSelective tokenSelective);
+	int updateLoginStatus(String accessToken);
+	int updateLogoutStatus(String accessToken);
 
 }

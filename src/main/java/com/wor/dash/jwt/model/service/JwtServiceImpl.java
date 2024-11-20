@@ -98,6 +98,8 @@ public class JwtServiceImpl implements JwtService {
         String token = Jwts
                 .builder()
                 .subject(user.getUserEmail())
+                .claim("userId", user.getUserId())
+                .claim("userRole", user.getUserRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expireTime ))
                 .signWith(getSigninKey())
@@ -109,5 +111,17 @@ public class JwtServiceImpl implements JwtService {
     private SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public int getUserIdFromToken(String token) {
+        return extractAllClaims(token).get("userId", Integer.class);
+    }
+
+    public String getUserEmailFromToken(String token) {
+        return extractAllClaims(token).getSubject(); // Subject 값
+    }
+
+    public String getUserRoleFromToken(String token) {
+        return extractAllClaims(token).get("userRole", String.class);
     }
 }

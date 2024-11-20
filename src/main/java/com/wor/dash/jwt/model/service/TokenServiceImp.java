@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.wor.dash.jwt.model.TokenSelective;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,14 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class TokenServiceImp implements TokenService {
 
-	private TokenMapper tokenMapper;
-	
-	public TokenServiceImp(TokenMapper tokenMapper) {
-		super();
-		this.tokenMapper = tokenMapper;
-	}
+	private final TokenMapper tokenMapper;
+
 /*
 select t from Token t inner join User u on t.user.id = u.id
 where t.user.id = :userId and t.loggedOut = false
@@ -66,7 +64,7 @@ where t.user.id = :userId and t.loggedOut = false
 	@Override
 	@Transactional
 	public void addAllTokens(List<Token> validTokens) {
-		if(validTokens != null && validTokens.size() > 0) {
+		if(validTokens != null && !validTokens.isEmpty()) {
 			for(int i=0; i < validTokens.size(); i++) {
 				TokenSelective tokenSelective = new TokenSelective();
 				tokenSelective.setCond(validTokens.get(i).getTokenId());
@@ -83,6 +81,16 @@ where t.user.id = :userId and t.loggedOut = false
 		tokenSelective.setLogout(1);
 		tokenSelective.setCond(storedToken.getTokenId());
 		tokenMapper.updateBySelective(tokenSelective);
+	}
+
+	@Override
+	public void updateLogin(String accessToken) {
+		tokenMapper.updateLoginStatus(accessToken);
+	}
+
+	@Override
+	public void updateLogout(String accessToken) {
+		tokenMapper.updateLogoutStatus(accessToken);
 	}
 
 }

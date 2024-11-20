@@ -1,5 +1,7 @@
 package com.wor.dash.user.controller;
 
+import com.wor.dash.jwt.model.service.JwtService;
+import com.wor.dash.pageInfo.model.PageResponse;
 import com.wor.dash.response.AuthenticationResponse;
 import com.wor.dash.user.model.MyChallenge;
 import com.wor.dash.user.model.service.UserService;
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class UserController {
 	
 	private final AuthenticationService authService;
+	private final JwtService jwtService;
 	private final UserService userService;
 
 	@Operation(summary = "회원가입", description = "회원가입을 위한 API \n" +
@@ -46,10 +49,10 @@ public class UserController {
 		log.debug("AuthController/register 컨트롤러 회원가입");
     	try {
 			AuthenticationResponse response = authService.register(request);
-			if(response.getAccessToken() != null) return new ResponseEntity<ApiResponse>(new ApiResponse("success","register",201), HttpStatus.CREATED);
-			else return new ResponseEntity<ApiResponse>(new ApiResponse("User Already Exists", "register", 400), HttpStatus.BAD_REQUEST);
+			if(response.getAccessToken() != null) return new ResponseEntity<>(new ApiResponse("success","register",201), HttpStatus.CREATED);
+			else return new ResponseEntity<>(new ApiResponse("User Already Exists", "register", 400), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse>(new ApiResponse("fail","register",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ApiResponse("fail","register",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
 
@@ -65,9 +68,9 @@ public class UserController {
     	try {
 			AuthenticationResponse response = authService.authenticate(request);
     		if(response.getAccessToken() != null) return ResponseEntity.ok(response);
-			else return new ResponseEntity<ApiResponse>(new ApiResponse("withdrawn user", "login", 403), HttpStatus.UNAUTHORIZED);
+			else return new ResponseEntity<>(new ApiResponse("withdrawn user", "login", 403), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse>(new ApiResponse("fail","login",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ApiResponse("fail","login",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
 
@@ -81,7 +84,7 @@ public class UserController {
     	try {
     		 return  ResponseEntity.ok(authService.refreshToken(userService.getUserEmail(userId), authHeader));
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse>(new ApiResponse("fail","refreshToken",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ApiResponse("fail","refreshToken",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
 
@@ -89,18 +92,27 @@ public class UserController {
 			"<필수입력> \n " +
 			"- userId : User table의 Primary Key")
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<?> getUserInfo(@PathVariable("userId") int userId) {
+	public ResponseEntity<?> getUserInfo(
+			@RequestHeader("Authorization") String authHeader,
+			@PathVariable("userId") int userId,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size) {
 		log.debug("AuthenticationController/getUserInfo");
 		try {
-			Optional<User> challenges = userService.getPublicInfo(userService.getUserEmail(userId));
-			log.debug(challenges.toString());
-			if(challenges.isPresent()) {
-				return new ResponseEntity<User>(challenges.get(), HttpStatus.OK);
+			// 여기서 내가 참여한 챌린지 따로 가져와야 함 지금 퍼블릭 인포에서는 그 로직 뺌
+			String token = authHeader.substring(7);
+			String userEmail = jwtService.getUserEmailFromToken(token);
+			User user = userService.getPublicInfo(userEmail).get();
+			Optional<PageResponse<MyChallenge>> challenges = userService.getChallenges(userId, page, size);
+			if(user != null) user.setChallenges(challenges.get());
+			log.debug(user.toString());
+			if(user != null) {
+				return new ResponseEntity<>(user, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<ApiResponse>(new ApiResponse("empty","getUserInfo",204), HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>(new ApiResponse("empty","getUserInfo",204), HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","getUserInfo",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<> (new ApiResponse("fail","getUserInfo",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -112,9 +124,9 @@ public class UserController {
 		log.debug("AuthenticationController/updateUserRole");
 		try {
 			Optional<Integer> change = userService.updateUserRole(userId);
-			return new ResponseEntity<ApiResponse>(new ApiResponse("success", "updateUserRole", 200), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("success", "updateUserRole", 200), HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","updateUserRole",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<> (new ApiResponse("fail","updateUserRole",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -124,9 +136,9 @@ public class UserController {
 		log.debug("AuthenticationController/updateUserInfo");
 		try {
 			Optional<Integer> change = userService.updateUserInfo(user);
-			return new ResponseEntity<ApiResponse> (new ApiResponse("success", "modifyUserInfo", 200), HttpStatus.OK);
+			return new ResponseEntity<> (new ApiResponse("success", "modifyUserInfo", 200), HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","modifyUserInfo",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<> (new ApiResponse("fail","modifyUserInfo",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -134,17 +146,20 @@ public class UserController {
 			"<필수입력> \n " +
 			"- userId : User table의 Primary Key")
 	@GetMapping("/user/{userId}/challenge")
-	public ResponseEntity<?> getChallenges(@PathVariable("userId") int userId) {
+	public ResponseEntity<?> getChallenges(
+			@PathVariable("userId") int userId,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size) {
 		log.debug("AuthenticationController/getChallenges");
 		try {
-			Optional<List<MyChallenge>> challenges = userService.getChallenges(userId);
+			Optional<PageResponse<MyChallenge>> challenges = userService.getChallenges(userId, page, size);
 			if(challenges.isPresent()) {
-				return new ResponseEntity<List<MyChallenge>> (challenges.get(), HttpStatus.OK);
+				return new ResponseEntity<> (challenges.get().getContent(), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<ApiResponse> (new ApiResponse("empty", "getChallenges", 204), HttpStatus.NO_CONTENT);
+				return new ResponseEntity<> (new ApiResponse("empty", "getChallenges", 204), HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","getChallenges",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<> (new ApiResponse("fail","getChallenges",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -154,9 +169,17 @@ public class UserController {
 		log.debug("AuthenticationController/withdraw");
 		try {
 			Optional<Integer> delete = userService.withdrawUser(userId);
-			return new ResponseEntity<ApiResponse> (new ApiResponse("success", "withdraw", 200), HttpStatus.OK);
+			return new ResponseEntity<> (new ApiResponse("success", "withdraw", 200), HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<ApiResponse> (new ApiResponse("fail","withdraw",500), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<> (new ApiResponse("fail","withdraw",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@GetMapping("/user/logout")
+	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+		log.debug("AuthenticationController/logout");
+		String token = authHeader.substring(7);
+		authService.logout(token);
+		return new ResponseEntity<> (new ApiResponse("success", "logout", 200), HttpStatus.OK);
 	}
 }

@@ -12,7 +12,7 @@ public interface UserMapper {
 	User selectPublicInfo(String userEmail);
 	int updateUserRole(int userId);
 	int updateUser(User user);
-	List<MyChallenge> selectChallengesByUserId(int userId);
+	List<MyChallenge> selectChallengesByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("pageSize") int limit);
 	int deleteUser(int userId);
 	Integer updateUserPassword(User user);
 	User selectUserImportantInfo(String userEmail);

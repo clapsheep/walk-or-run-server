@@ -6,18 +6,13 @@ import com.wor.dash.user.model.User;
 
 public interface JwtService {
 	
-	public String extractUserEmail(String token);
-	
-	
-	public boolean isValid(String token, UserDetails user);
-	
-	
-	public boolean isValidRefreshToken(String token, User user);
-	
-	
-	public String generateAccessToken(User user);
-	
-	
-	public String generateRefreshToken(User user);
+	String extractUserEmail(String token);
+	boolean isValid(String token, UserDetails user);
+	boolean isValidRefreshToken(String token, User user);
+	String generateAccessToken(User user);
+	String generateRefreshToken(User user);
+	int getUserIdFromToken(String token);
+	String getUserEmailFromToken(String token);
+	String getUserRoleFromToken(String token);
 
 }

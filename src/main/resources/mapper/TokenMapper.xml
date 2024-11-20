@@ -80,5 +80,17 @@
     </set>
     where id = #{cond}
   </update>
+
+  <update id="updateLoginStatus" parameterType="String">
+    update Token
+    set logout = 0
+    where access_token = #{accessToken}
+  </update>
+
+  <update id="updateLogoutStatus" parameterType="String">
+    update Token
+    set logout = 1
+    where access_token = #{accessToken}
+  </update>
   
 </mapper>
