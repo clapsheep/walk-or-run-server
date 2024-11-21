@@ -28,7 +28,7 @@ public class RecordController {
             "- userId : 로그인한 유저ID \n")
     @PostMapping("/record/upload")
     public ResponseEntity<?> uploadCsvFile(@RequestParam("csv") MultipartFile file,
-                                       @PathVariable("userId") int userId) {
+                                           @PathVariable("userId") int userId) {
         if (file.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse("fail", "FileEmpty", 400), HttpStatus.BAD_REQUEST);
         }

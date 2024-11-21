@@ -1,7 +1,6 @@
 package com.wor.dash.challenge.model.mapper;
 
 import com.wor.dash.challenge.model.Challenge;
-import com.wor.dash.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,31 +18,15 @@ public interface ChallengeMapper {
 
     Challenge selectChallenge(int challengeId);
 
-    int updateChallenge(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
+    int updateChallenge(int challengeId, Challenge challenge);
 
     int deleteChallenge(int challengeId);
 
     void autoDeleteChallenge(String endTime);
 
-    void insertDailyChallenge(int challengeSchedulerCycle);
+    void addDailyChallenge(int challengeSchedulerCycle);
 
-    void insertWeeklyChallenge(int challengeSchedulerCycle);
+    void addWeeklyChallenge(int challengeSchedulerCycle);
 
-    void insertMonthlyChallenge(int challengeSchedulerCycle);
-
-    int insertChallengeParticipant(@Param("user") User user, @Param("challengeId") int challengeId);
-
-    int deleteChallengeParticipant(@Param("user") User user, @Param("challengeId") int challengeId);
-
-    void insertChallengeSchedule(Challenge challenge);
-
-    int updateChallengeSchedule(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
-
-    int deleteChallengeSchedule(int challengeId);
-
-    List<Challenge> selectAllChallengeScheduleList();
-
-    List<Challenge> selectActiveChallengeScheduleList();
-
-    List<Challenge> selectEndedChallengeScheduleList();
+    void addMonthlyChallenge(int challengeSchedulerCycle);
 }

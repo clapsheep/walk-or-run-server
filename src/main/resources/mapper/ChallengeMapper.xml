@@ -77,7 +77,6 @@
         from Challenge ch
         where challenge_id = #{challengeId}
     </select>
-
     <insert id="insertChallenge" parameterType="Challenge">
         insert into Challenge
         (
@@ -103,7 +102,7 @@
         )
     </insert>
 
-    <insert id="insertDailyChallenge" parameterType="int">
+    <insert id="addDailyChallenge" parameterType="int">
         insert into Challenge (challenge_category_code,
                                challenge_title,
                                challenge_description,
@@ -123,10 +122,9 @@
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
            or s.challenge_delete_date IS NULL
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
     </insert>
 
-    <insert id="insertWeeklyChallenge" parameterType="int">
+    <insert id="addWeeklyChallenge" parameterType="int">
         insert into Challenge (challenge_category_code,
                                challenge_title,
                                challenge_description,
@@ -146,10 +144,9 @@
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
            or s.challenge_delete_date IS NULL
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
     </insert>
 
-    <insert id="insertMonthlyChallenge" parameterType="int">
+    <insert id="addMonthlyChallenge" parameterType="int">
         insert into Challenge (challenge_category_code,
                                challenge_title,
                                challenge_description,
@@ -171,28 +168,7 @@
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
            or s.challenge_delete_date IS NULL
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
     </insert>
-
-    <insert id="insertChallengeParticipant">
-        insert into Challenge_Participant (challenge_id,
-                                           user_id)
-        SELECT #{challengeId},
-               #{user.userId}
-        WHERE EXISTS (SELECT 1
-                      FROM Challenge c
-                      WHERE c.challenge_id = #{challengeId}
-                        AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
-                                                         FROM Challenge_Participant
-                                                         WHERE challenge_id = #{challengeId}))
-    </insert>
-
-    <delete id="deleteChallengeParticipant">
-        delete
-        from Challenge_Participant
-        where challenge_id = #{challengeId}
-          and user_id = #{user.userId}
-    </delete>
 
     <update id="updateChallenge">
         update Challenge
@@ -206,6 +182,9 @@
         <if test="challenge.challengeDeleteDate != null">
             challenge_delete_date = #{challenge.challengeDeleteDate},
         </if>
+        <if test="challenge.challengeIsEnded != null">
+            challenge_is_Ended = #{challenge.challengeIsEnded}
+        </if>
         where challenge_id = #{challengeId}
     </update>
 
@@ -218,119 +197,8 @@
 
     <update id="autoDeleteChallenge" parameterType="String">
         update Challenge
-        set challenge_is_ended = 1
-        where challenge_delete_date <![CDATA[<=]]> #{currentTime}
-          and challenge_is_ended = 0
+        set challenge_is_ended = 1,
+            where challenge_delete_date &lt;= #{currentTime}
+                and challenge_is_ended = 0
     </update>
-
-    <insert id="insertChallengeSchedule" parameterType="Challenge">
-        insert into Challenge_Scheduler
-        (
-        challenge_category_code,
-        challenge_title,
-        challenge_description,
-        challenge_author_id,
-        challenge_target_cnt,
-        <if test="challengeCreateDate != null">
-            challenge_create_date,
-        </if>
-        <if test="challengeDeleteDate != null">
-            challenge_delete_date,
-        </if>
-        challenge_scheduler_cycle
-        )
-        values
-        (
-        #{challengeCategoryCode},
-        #{challengeTitle},
-        #{challengeDescription},
-        #{challengeAuthorId},
-        #{challengeTargetCnt},
-        <if test="challengeCreateDate != null">
-            #{challengeCreateDate},
-        </if>
-        <if test="challengeDeleteDate != null">
-            #{challengeDeleteDate},
-        </if>
-        #{challengeSchedulerCycle}
-        )
-    </insert>
-
-    <update id="updateChallengeSchedule">
-        update Challenge_Scheduler
-        set challenge_category_code = #{challenge.challengeCategoryCode},
-        challenge_title = #{challenge.challengeTitle},
-        challenge_description = #{challenge.challengeDescription},
-        challenge_target_cnt = #{challenge.challengeTargetCnt},
-        <if test="challenge.challengeCreateDate != null">
-            challenge_create_date = #{challenge.challengeCreateDate},
-        </if>
-        <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate},
-        </if>
-        <if test="challenge.challengeSchedulerCycle != null">
-            challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
-        </if>
-        where challenge_id = #{challengeId}
-    </update>
-
-    <update id="deleteChallengeSchedule">
-        update Challenge_Scheduler
-        set challenge_is_ended = 1
-        where challenge_id = #{challengeId}
-          and challenge_is_ended = 0
-    </update>
-
-    <select id="selectAllChallengeScheduleList" resultType="Challenge">
-        select challenge_id
-             , challenge_category_code
-             , challenge_title
-             , challenge_description
-             , challenge_author_id
-             , challenge_create_date
-             , challenge_delete_date
-             , challenge_is_ended
-             , challenge_target_cnt
-             , (select challenge_category_name
-                from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
-        from Challenge_Scheduler ch
-    </select>
-
-    <select id="selectActiveChallengeScheduleList" resultType="Challenge">
-        select challenge_id
-             , challenge_category_code
-             , challenge_title
-             , challenge_description
-             , challenge_author_id
-             , challenge_create_date
-             , challenge_delete_date
-             , challenge_is_ended
-             , challenge_target_cnt
-             , (select challenge_category_name
-                from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
-        from Challenge_Scheduler ch
-        where ch.challenge_is_ended = 0
-    </select>
-
-    <select id="selectEndedChallengeScheduleList" resultType="Challenge">
-        select challenge_id
-             , challenge_category_code
-             , challenge_title
-             , challenge_description
-             , challenge_author_id
-             , challenge_create_date
-             , challenge_delete_date
-             , challenge_is_ended
-             , challenge_target_cnt
-             , (select challenge_category_name
-                from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
-        from Challenge_Scheduler ch
-        where ch.challenge_is_ended = 1
-    </select>
 </mapper>
