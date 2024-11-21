@@ -187,6 +187,7 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "로그아웃", description = "로그아웃을 위한 API")
 	@GetMapping("/user/logout")
 	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
 		log.info("UserController/logout");
@@ -195,6 +196,10 @@ public class UserController {
 		return new ResponseEntity<> (new ApiResponse("success", "logout", 200), HttpStatus.OK);
 	}
 
+	@Operation(summary = "아이디 찾기", description = "아이디 찾기(이메일)를 위한 API \n \n" +
+			"<필수입력> \n " +
+			"- userName : 유저 이름 \n" +
+			"- userPhoneNumber : 유저 휴대폰 번호")
 	@PostMapping("/auth/email")
 	public ResponseEntity<?> findEmail(
 			@RequestBody User user
@@ -210,6 +215,24 @@ public class UserController {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<> (new ApiResponse("fail","findEmail",500), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Operation(summary = "이메일 중복확인", description = "이메일 중복확인을 위한 API \n \n" +
+			"<필수입력> \n " +
+			"- userEmail : 유저 이메일")
+	@GetMapping("/user/validEmail/{userEmail}")
+	public ResponseEntity<?> checkEmail(@PathVariable("userEmail") String userEmail) {
+		log.info("UserController/checkEmail");
+		try {
+			Optional<Integer> hasEmail = userService.checkUserEmail(userEmail);
+			if (hasEmail.isPresent() && hasEmail.get() == 0) {
+				return new ResponseEntity<>(new ApiResponse("success", "checkEmail", 200), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ApiResponse("empty", "checkEmail", 204), HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ApiResponse("fail","checkEmail",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

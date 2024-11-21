@@ -19,5 +19,5 @@ public interface UserMapper {
 	String selectUserEmailById(int userId);
 	List<User> selectUserListForSearch(@Param("type") String type, @Param("value") String value, @Param("offset") int offset, @Param("pageSize") int limit);
 	String selectUserEmailByInfo(User user);
-
+	Integer selectUserEmailCount(String userEmail);
 }
