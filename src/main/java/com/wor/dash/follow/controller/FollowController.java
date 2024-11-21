@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
+@CrossOrigin("*")
 @RequestMapping("api/user/{userId}/follow")
 @RequiredArgsConstructor
 @Tag(name = "Follow Controller", description = "팔로우 기능을 관리합니다.")

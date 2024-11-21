@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/user/{userId}")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Record", description = "대시보드 파일 입출력 기능을 관리합니다.")
 public class RecordController {
