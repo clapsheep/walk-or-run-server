@@ -10,20 +10,21 @@ import lombok.*;
 @RequiredArgsConstructor
 public class Challenge {
     @NonNull
-    private Integer challengeCategoryCode;
+    private int challengeCategoryCode;
     private String challengeCategoryName;
-    private Integer challengeId;
+    private int challengeId;
     @NonNull
     private String challengeTitle;
     @NonNull
     private String challengeDescription;
     @NonNull
-    private Integer challengeAuthorId;
+    private int challengeAuthorId;
     @NonNull
-    private Integer challengeParticipantCnt;
+    private int challengeParticipantCnt;
     private String challengeCreateDate;
     private String challengeDeleteDate;
-    private Integer challengeIsEnded;
+    private int challengeIsEnded;
     @NonNull
-    private Integer challengeTargetCnt;
+    private int challengeTargetCnt;
+    private int challengeSchedulerCycle;
 }
