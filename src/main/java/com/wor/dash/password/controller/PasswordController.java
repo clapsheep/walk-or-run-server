@@ -53,9 +53,7 @@ public class PasswordController {
 
     @Operation(summary = "비밀번호 찾기", description = "비밀번호 모를 때 유저가 있는지 확인하기 위한 API \n \n" +
             "<필수입력> \n " +
-            "- userId : 유저 아이디(pk) \n" +
             "- userEmail : 유저 이메일 \n" +
-            "- userPhoneNumber : 유저 휴대폰 번호 \n" +
             "- userPasswordQuestionId : 유저 비밀번호 확인 질문의 id \n" +
             "- userPasswordAnswer : 유저 비밀번호 확인 질문 답변 \n")
     @PostMapping("/password/find")
