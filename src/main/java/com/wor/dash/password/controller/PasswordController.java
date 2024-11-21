@@ -51,6 +51,37 @@ public class PasswordController {
         }
     }
 
+    @PostMapping("/password/find")
+    public ResponseEntity<?> findPassword(
+            @RequestBody User user
+    ) {
+        log.info("PasswordController/findPassword");
+        try {
+            Optional<Integer> isUser = passwordService.findPassword(user);
+            if (isUser.isPresent()) {
+                return new ResponseEntity<>(new ApiResponse("success", "findPassword", 200), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ApiResponse("empty", "findPassword", 204), HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "findPassword", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/password/change")
+    public ResponseEntity<?> changePassword(@RequestBody User user) {
+        log.info("PasswordController/changePassword");
+        try {
+            Optional<Integer> change = userService.updateUserPassword(user);
+            if(change.isPresent()) {
+                return new ResponseEntity<>(new ApiResponse("success", "changePassword", 200), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("empty", "changePassword", 204), HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "changePassword", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/{userId}/password/change")
     public ResponseEntity<?> changePw(
             HttpServletRequest request,

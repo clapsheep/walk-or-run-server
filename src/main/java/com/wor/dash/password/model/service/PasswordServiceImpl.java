@@ -4,6 +4,7 @@ import com.wor.dash.password.model.PasswordAnswer;
 import com.wor.dash.password.model.PasswordFindQnA;
 import com.wor.dash.password.model.PasswordQuestion;
 import com.wor.dash.password.model.mapper.PasswordMapper;
+import com.wor.dash.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,4 +58,11 @@ class PasswordServiceImpl implements PasswordService {
         log.info("PasswordService/updateAnswer");
         return Optional.of(passwordMapper.updatePasswordAnswer(passwordAnswer));
     }
+
+    @Override
+    public Optional<Integer> findPassword(User user) {
+        log.info("PasswordService/findPassword");
+        return Optional.ofNullable(passwordMapper.selectUserIdByQnA(user));
+    }
+
 }
