@@ -51,6 +51,13 @@ public class PasswordController {
         }
     }
 
+    @Operation(summary = "비밀번호 찾기", description = "비밀번호 모를 때 유저가 있는지 확인하기 위한 API \n \n" +
+            "<필수입력> \n " +
+            "- userId : 유저 아이디(pk) \n" +
+            "- userEmail : 유저 이메일 \n" +
+            "- userPhoneNumber : 유저 휴대폰 번호 \n" +
+            "- userPasswordQuestionId : 유저 비밀번호 확인 질문의 id \n" +
+            "- userPasswordAnswer : 유저 비밀번호 확인 질문 답변 \n")
     @PostMapping("/password/find")
     public ResponseEntity<?> findPassword(
             @RequestBody User user
@@ -67,11 +74,17 @@ public class PasswordController {
         }
     }
 
+    @Operation(summary = "비밀번호 변경", description = "비밀번호 변경을 위한 API \n \n" +
+            "<필수입력> \n " +
+            "- userEmail : 유저 이메일" +
+            "- userPassword: 새 비밀번호")
     @PostMapping("/password/change")
     public ResponseEntity<?> changePassword(@RequestBody User user) {
         log.info("PasswordController/changePassword");
         try {
-            Optional<Integer> change = userService.updateUserPassword(user);
+            User changeUser = userService.getUserImportantInfo(user.getUserEmail()).get();
+            changeUser.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+            Optional<Integer> change = userService.updateUserPassword(changeUser);
             if(change.isPresent()) {
                 return new ResponseEntity<>(new ApiResponse("success", "changePassword", 200), HttpStatus.OK);
             } else {
@@ -82,6 +95,13 @@ public class PasswordController {
         }
     }
 
+    @Operation(summary = "마이페이지에서 비밀번호 변경", description = "마이페이지에서 비밀번호 변경을 위한 API \n \n" +
+            "<필수입력> \n " +
+            "- header(Authorization) : 현재 로그인된 유저의 access token" +
+            "- userid : 유저 아이디(pk)" +
+            "- userPassword : 유저 현재 패스워드" +
+            "- newPassword : 바꿀 패스워드" +
+            "- userPasswordAnswer : 유저 비밀번호 확인질문 답변")
     @PostMapping("/{userId}/password/change")
     public ResponseEntity<?> changePw(
             HttpServletRequest request,
