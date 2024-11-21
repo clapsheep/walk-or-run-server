@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/challenge/{challengeId}/comment")
 @RequiredArgsConstructor
 @Tag(name = "Comment Controller", description = "챌린지 댓글 기능을 관리합니다.")

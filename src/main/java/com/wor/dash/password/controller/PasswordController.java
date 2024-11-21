@@ -24,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user/")
+@CrossOrigin("*")
 @AllArgsConstructor
 @Slf4j
 @Tag(name = "Password Controller", description = "비밀번호 찾기 기능을 관리합니다.")
