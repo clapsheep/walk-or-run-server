@@ -113,4 +113,9 @@
         where user_name = #{userName}
         and user_phone_number = #{userPhoneNumber}
     </select>
+    <select id="selectUserEmailCount" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM User
+        WHERE user_email = #{userEmail}
+    </select>
 </mapper>

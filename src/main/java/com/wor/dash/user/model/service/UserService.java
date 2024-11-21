@@ -20,5 +20,5 @@ public interface UserService {
 	String getUserEmail(int userId);
 	Optional<User> getUserImportantInfo(String userEmail);
 	Optional<String> findEmail(User user);
-
+	Optional<Integer> checkUserEmail(String userEmail);
 }
