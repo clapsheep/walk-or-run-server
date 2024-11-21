@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wor.dash.userGoal.model.mapper.UserGoalMapper">
+
+    <select id="selectUserGoals" parameterType="int" resultType="UserGoal">
+       <![CDATA[
+        SELECT g.user_goal_id,
+               g.user_id,
+               DATE_FORMAT(g.start_date, '%Y-%m-%d') as start_date,
+               DATE_FORMAT(g.end_date, '%Y-%m-%d')   as end_date,
+               g.target_amount,
+               c.challenge_category_code,
+               c.challenge_category_name,
+               u.challenge_category_unit_code,
+               u.challenge_category_unit_name,
+               CASE
+                   WHEN g.challenge_category_unit_code = 1 THEN
+                       COALESCE(SUM(
+                                        CASE
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
+                                                AND g.challenge_category_code = 1 THEN
+                                                TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
+                                                AND g.challenge_category_code = 2 THEN
+                                                TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)
+                                            ELSE 0
+                                            END
+                                ) / 60.0, 0)
+                   WHEN g.challenge_category_unit_code = 2 THEN
+                       COALESCE(SUM(
+                                        CASE
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
+                                                AND g.challenge_category_code = 1 THEN
+                                                r.distance / 1000.0
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
+                                                AND g.challenge_category_code = 2 THEN
+                                                r.distance / 1000.0
+                                            ELSE 0
+                                            END
+                                ), 0)
+                   END                               as current_amount
+        FROM User_Goal g
+                 LEFT JOIN Challenge_Category c ON g.challenge_category_code = c.challenge_category_code
+                 LEFT JOIN Challenge_Category_Unit u ON g.challenge_category_unit_code = u.challenge_category_unit_code
+                 LEFT JOIN Record r ON r.user_id = g.user_id
+            AND r.start_time >= g.start_date
+            AND r.end_time <= g.end_date
+        WHERE g.user_id = #{userId}
+        GROUP BY g.user_goal_id, g.user_id, g.start_date, g.end_date, g.target_amount,
+                 c.challenge_category_code, c.challenge_category_name,
+                 u.challenge_category_unit_code, u.challenge_category_unit_name
+        ORDER BY g.start_date DESC
+        ]]>
+   </select>
+
+    <select id="selectUserGoalById" parameterType="int" resultType="UserGoal">
+       <![CDATA[
+        SELECT g.user_goal_id,
+               g.user_id,
+               DATE_FORMAT(g.start_date, '%Y-%m-%d') as start_date,
+               DATE_FORMAT(g.end_date, '%Y-%m-%d')   as end_date,
+               g.target_amount,
+               c.challenge_category_code,
+               c.challenge_category_name,
+               u.challenge_category_unit_code,
+               u.challenge_category_unit_name,
+               CASE
+                   WHEN g.challenge_category_unit_code = 1 THEN
+                       COALESCE(SUM(
+                                        CASE
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
+                                                AND g.challenge_category_code = 1 THEN
+                                                TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
+                                                AND g.challenge_category_code = 2 THEN
+                                                TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)
+                                            ELSE 0
+                                            END
+                                ) / 60.0, 0)
+                   WHEN g.challenge_category_unit_code = 2 THEN
+                       COALESCE(SUM(
+                                        CASE
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) >= 130
+                                                AND g.challenge_category_code = 1 THEN
+                                                r.distance / 1000.0
+                                            WHEN (r.step_count / TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time)) < 130
+                                                AND g.challenge_category_code = 2 THEN
+                                                r.distance / 1000.0
+                                            ELSE 0
+                                            END
+                                ), 0)
+                   END                               as current_amount
+        FROM User_Goal g
+                 LEFT JOIN Challenge_Category c ON g.challenge_category_code = c.challenge_category_code
+                 LEFT JOIN Challenge_Category_Unit u ON g.challenge_category_unit_code = u.challenge_category_unit_code
+                 LEFT JOIN Record r ON r.user_id = g.user_id
+            AND r.start_time >= g.start_date
+            AND r.end_time <= g.end_date
+        WHERE g.user_goal_id = #{userGoalId}
+        GROUP BY g.user_goal_id, g.user_id, g.start_date, g.end_date, g.target_amount,
+                 c.challenge_category_code, c.challenge_category_name,
+                 u.challenge_category_unit_code, u.challenge_category_unit_name
+        ]]>
+   </select>
+
+    <insert id="insertUserGoal">
+        INSERT INTO User_Goal (user_id, start_date, end_date, target_amount, challenge_category_code,
+                               challenge_category_unit_code)
+        VALUES (#{userId},
+                STR_TO_DATE(#{userGoal.startDate}, '%Y-%m-%d'),
+                STR_TO_DATE(#{userGoal.endDate}, '%Y-%m-%d'),
+                #{userGoal.targetAmount},
+                #{userGoal.challengeCategoryCode},
+                #{userGoal.challengeCategoryUnitCode})
+    </insert>
+
+    <update id="updateUserGoal">
+        UPDATE User_Goal
+        SET start_date                   = #{userGoal.startDate},
+            end_date                     = #{userGoal.endDate},
+            target_amount                = #{userGoal.targetAmount},
+            challenge_category_code      = #{userGoal.challengeCategoryCode},
+            challenge_category_unit_code = #{userGoal.challengeCategoryUnitCode}
+        WHERE user_goal_id = #{userGoalId}
+    </update>
+
+    <delete id="deleteUserGoal" parameterType="int">
+        DELETE
+        FROM User_Goal
+        WHERE user_goal_id = #{userGoalId}
+    </delete>
+</mapper>
