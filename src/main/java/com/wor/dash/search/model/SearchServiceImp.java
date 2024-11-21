@@ -17,7 +17,7 @@ public class SearchServiceImp implements SearchService {
     @Override
     public PageResponse<User> searchUser(String type, String value, int currentPage, int pageSize) {
         if (type.equals("email") || type.equals("nickname")) {
-            List<User> users = userMapper.getUserListForSearch(type, value, currentPage, pageSize);
+            List<User> users = userMapper.selectUserListForSearch(type, value, currentPage, pageSize);
             int totalElements = users.size();
             int offset = (currentPage - 1) * pageSize;
             PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);

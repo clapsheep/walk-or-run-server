@@ -13,9 +13,9 @@ import com.wor.dash.user.model.service.UserService;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
-	
-private UserService userService;
-	
+
+	private UserService userService;
+
 	public UserDetailServiceImpl(UserService userService) {
 		super();
 		this.userService = userService;
@@ -25,6 +25,6 @@ private UserService userService;
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 		Optional<User> nUser = userService.getUserImportantInfo(userEmail); //조인으로 수정
 		return nUser.map(CustomUserDetails::new)
-		        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 }

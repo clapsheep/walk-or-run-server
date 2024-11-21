@@ -24,25 +24,25 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	
-	private final JwtService jwtService;
-	private final UserDetailsService userDetailService;
+
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailService;
     private final UserService userService;
-	
-	@Override
-	protected void doFilterInternal(
-			HttpServletRequest request, 
-			HttpServletResponse response, 
-			FilterChain filterChain)
-			throws ServletException, IOException {
-		System.out.println("Filter");
-		
-		String authHeader = request.getHeader("Authorization");
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
+        System.out.println("Filter");
+
+        String authHeader = request.getHeader("Authorization");
         if(authHeader == null) System.out.println("authHeader is null");
         else System.out.println(authHeader);
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-        	System.out.println("authHeader is null");
+            System.out.println("authHeader is null");
             filterChain.doFilter(request,response);
             return;
         }
@@ -62,6 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-	}
+    }
 
 }

@@ -18,40 +18,40 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-	
-	@Value("${jwt.secret}")
-	private String secretKey;
-	
-	@Value("${jwt.access-token-expiration}")
+
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.access-token-expiration}")
     private long accessTokenExpire;
 
     @Value("${jwt.refresh-token-expiration}")
     private long refreshTokenExpire;
-    
+
     private final TokenService tokenRepository;
 
     public JwtServiceImpl(TokenService tokenRepository) {
-    	this.tokenRepository = tokenRepository;
+        this.tokenRepository = tokenRepository;
     }
 
-	@Override
-	public String extractUserEmail(String token) {
-		return extractClaim(token, Claims::getSubject);
-	}
+    @Override
+    public String extractUserEmail(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
-	@Override
-	public boolean isValid(String token, UserDetails user) {
-		String userEmail = extractUserEmail(token);
-		
-		int validToken = tokenRepository
-				.findByAccessToken(token)
-				.map(t -> t.getLogout()^1)
-				.orElse(1);
-		
-		return (userEmail.equals(user.getUsername())) && !isTokenExpired(token) && validToken == 1;
-	}
+    @Override
+    public boolean isValid(String token, UserDetails user) {
+        String userEmail = extractUserEmail(token);
 
-	public boolean isValidRefreshToken(String token, User user) {
+        int validToken = tokenRepository
+                .findByAccessToken(token)
+                .map(t -> t.getLogout()^1)
+                .orElse(1);
+
+        return (userEmail.equals(user.getUsername())) && !isTokenExpired(token) && validToken == 1;
+    }
+
+    public boolean isValidRefreshToken(String token, User user) {
         String userEmail = extractUserEmail(token);
 
         int validRefreshToken = tokenRepository
@@ -78,10 +78,12 @@ public class JwtServiceImpl implements JwtService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
-                .verifyWith(getSigninKey())
+//                .verifyWith(getSigninKey())
+                .setSigningKey(getSigninKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
+//                .getPayload();
+                .getBody();
     }
 
 
@@ -92,12 +94,14 @@ public class JwtServiceImpl implements JwtService {
     public String generateRefreshToken(User user) {
         return generateToken(user, refreshTokenExpire );
     }
-    
-    //86400000 밀리세컨드-> 86400세컨드 -> 1440 분 -> 24시간 
+
+    //86400000 밀리세컨드-> 86400세컨드 -> 1440 분 -> 24시간
     private String generateToken(User user, long expireTime) {
         String token = Jwts
                 .builder()
                 .subject(user.getUserEmail())
+                .claim("userId", user.getUserId())
+                .claim("userRole", user.getUserRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expireTime ))
                 .signWith(getSigninKey())
@@ -109,5 +113,17 @@ public class JwtServiceImpl implements JwtService {
     private SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public int getUserIdFromToken(String token) {
+        return extractAllClaims(token).get("userId", Integer.class);
+    }
+
+    public String getUserEmailFromToken(String token) {
+        return extractAllClaims(token).getSubject(); // Subject 값
+    }
+
+    public String getUserRoleFromToken(String token) {
+        return extractAllClaims(token).get("userRole", String.class);
     }
 }
