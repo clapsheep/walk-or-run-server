@@ -6,10 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-/**
- * https://www.baeldung.com/spring-aop-test-aspect
- * AOP 연습용
- */
+
 @Aspect
 @Component
 public class ExecutionTimeAspect {

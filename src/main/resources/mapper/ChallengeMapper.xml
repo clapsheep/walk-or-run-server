@@ -17,7 +17,7 @@
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
         from Challenge ch
         ORDER BY challenge_create_date desc
-        LIMIT #{offset}, #{pageSize}
+            LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="selectActiveChallengeList" resultType="Challenge">
@@ -37,7 +37,7 @@
         from Challenge ch
         where ch.challenge_is_ended = 0
         ORDER BY challenge_create_date desc
-        LIMIT #{offset}, #{pageSize}
+            LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="selectEndedChallengeList" resultType="Challenge">
@@ -57,7 +57,7 @@
         from Challenge ch
         where ch.challenge_is_ended = 1
         ORDER BY challenge_create_date desc
-        LIMIT #{offset}, #{pageSize}
+            LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="selectChallenge" parameterType="int">
@@ -179,12 +179,12 @@
                                            user_id)
         SELECT #{challengeId},
                #{user.userId}
-        WHERE EXISTS (SELECT 1
+            WHERE EXISTS (SELECT 1
                       FROM Challenge c
                       WHERE c.challenge_id = #{challengeId}
-                        AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
-                                                         FROM Challenge_Participant
-                                                         WHERE challenge_id = #{challengeId}))
+                AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
+                FROM Challenge_Participant
+                WHERE challenge_id = #{challengeId}))
     </insert>
 
     <delete id="deleteChallengeParticipant">

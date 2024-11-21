@@ -7,33 +7,31 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.wor.dash.user.model.User;
-
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
 @ToString
 public class CustomUserDetails implements UserDetails {
-	
-	private final User user;
-	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(user.getUserRole()));
-	}
 
-	@Override
-	public String getPassword() {
-		return user.getUserPassword();
-	}
+    private final User user;
 
-	@Override
-	public String getUsername() {
-		return user.getUserEmail();
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getUserRole()));
+    }
 
-	@Override
+    @Override
+    public String getPassword() {
+        return user.getUserPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUserEmail();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }

@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @CrossOrigin("*")
@@ -27,6 +25,7 @@ public class SearchController {
     @Operation(summary = "사용자 검색", description = "이메일 또는 닉네임으로 사용자를 검색합니다.")
     @GetMapping("/user")
     public ResponseEntity<?> searchUser(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, @RequestParam String key, @RequestParam String value) {
+        log.info("SearchController/searchUser");
         try {
             PageResponse<User> res = searchService.searchUser(key, value, page, size);
             if (res.getContent().isEmpty()) {
@@ -34,6 +33,7 @@ public class SearchController {
             }
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
             return ResponseEntity.badRequest().body("Invalid search type");
         }
     }
