@@ -9,9 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Distance {
+public class ExerciseTime {
     private int recordId;
     private int userId;
-    private double distance;
     private String startTime;
+    private String endTime;
+    private int timeInterval;
 }
+
