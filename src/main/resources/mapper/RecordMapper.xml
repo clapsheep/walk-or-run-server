@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wor.dash.record.model.mapper.RecordMapper">
 
-    <insert id="batchInsertRecords" parameterType="java.util.List">
+    <insert id="batchInsertRecords" parameterType="map">
         INSERT INTO Record (
         user_id,
         total_calorie,
@@ -16,15 +16,15 @@
         start_time,
         end_time
         ) VALUES
-        <foreach collection="list" item="record" separator=",">
+        <foreach collection="batch" item="record" separator=",">
             (
-            #{record.userId},
+            #{userId},
             #{record.totalCalorie},
             #{record.distance},
             #{record.maxHeartRate},
             #{record.minHeartRate},
             #{record.meanHeartRate},
-            #{record.count},
+            #{record.stepCount},
             #{record.meanSpeed},
             #{record.maxSpeed},
             #{record.startTime},
@@ -32,17 +32,139 @@
             )
         </foreach>
     </insert>
+
+    <select id="getCadenceList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                step_count as stepCount,
+                TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time) as totalMinutes,
+                ROUND(r.step_count / NULLIF(TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time), 0), 2) as cadence,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+	            AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getCalorieList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.total_calorie as totalCalorie,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getDistanceList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.distance as distance,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getHeartRateList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.min_heart_rate as minHeartRate,
+                r.max_heart_rate as maxHeartRate,
+                r.mean_heart_rate as meanHeartRate,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getRecordList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.total_calorie as totalCalorie,
+                r.distance as distance,
+                r.max_heart_rate as maxHeartRate,
+                r.min_heart_rate as minHeartRate,
+                r.mean_heart_rate as meanHeartRate,
+                r.step_count as stepCount,
+                r.mean_speed as meanSpeed,
+                r.max_speed as maxSpeed,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime,
+                DATE_FORMAT(r.end_time, '%Y-%m-%d %H:%i:%s') as endTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getSpeedList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.max_speed as maxSpeed,
+                r.mean_speed as meanSpeed,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getStepList">
+        <![CDATA[
+            SELECT
+                r.record_id as recordId,
+                r.user_id as userId,
+                r.step_count as stepCount,
+                DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime
+            FROM Record r
+            WHERE r.user_id = #{userId}
+                AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+                AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+            ORDER BY startTime DESC;
+        ]]>
+    </select>
+
+    <select id="getExerciseTimeList">
+        <![CDATA[
+        SELECT
+            r.record_id as recordId,
+            r.user_id as userId,
+            DATE_FORMAT(r.start_time, '%Y-%m-%d %H:%i:%s') as startTime,
+            DATE_FORMAT(r.end_time, '%Y-%m-%d %H:%i:%s') as endTime,
+            TIMESTAMPDIFF(MINUTE, r.start_time, r.end_time) as timeInterval
+        FROM Record r
+        WHERE r.user_id = #{userId}
+          AND r.start_time >= CONCAT(#{startTime}, ' 00:00:00')
+          AND r.start_time <= CONCAT(#{endTime}, ' 23:59:59')
+        ORDER BY startTime DESC;
+        ]]>
+    </select>
 </mapper>
 
-<!--        private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");-->
-<!--        private Integer userId;-->
-<!--        private Integer totalCalorie; // 총소모칼로리-->
-<!--        private String startTime; // 운동 시작 시간-->
-<!--        private Integer meanHeartRate; // 평균 심박수-->
-<!--        private Integer count; // 걸음수-->
-<!--        private Integer maxHeartRate; // 최대 심박수-->
-<!--        private Integer maxSpeed; // 최대 속도 (m/s)-->
-<!--        private Integer minHeartRate; // 최소 심박수-->
-<!--        private Double distance; // 이동 거리(미터)-->
-<!--        private Double meanSpeed;-->
-<!--        private String endTime;-->

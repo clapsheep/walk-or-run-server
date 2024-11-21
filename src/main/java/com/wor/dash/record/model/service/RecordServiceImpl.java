@@ -1,6 +1,7 @@
 package com.wor.dash.record.model.service;
 
 import com.wor.dash.record.model.Record;
+import com.wor.dash.record.model.*;
 import com.wor.dash.record.model.mapper.RecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     @Transactional
-    public void uploadCsvFile(MultipartFile file) throws IOException {
+    public void uploadCsvFile(MultipartFile file, int userId) throws IOException {
         List<Record> records = new ArrayList<>();
         Map<Integer, Record> orderedRecords = new TreeMap<>();
         AtomicInteger lineCounter = new AtomicInteger(0);
@@ -104,9 +104,90 @@ public class RecordServiceImpl implements RecordService {
         for (int i = 0; i < totalSize; i += BATCH_SIZE) {
             int endIndex = Math.min(i + BATCH_SIZE, totalSize);
             List<Record> batch = records.subList(i, endIndex);
-            recordMapper.batchInsertRecords(batch);
+            recordMapper.batchInsertRecords(batch, userId);
         }
     }
+
+    @Override
+    public List<Cadence> getCadenceList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getCadenceList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Calorie> getCalorieList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getCalorieList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Distance> getDistanceList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getDistanceList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<HeartRate> getHeartRateList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getHeartRateList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Record> getRecordList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getRecordList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Speed> getSpeedList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getSpeedList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Step> getStepList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getStepList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<ExerciseTime> getExerciseTimeList(int userId, String startTime, String endTime) {
+        try {
+            return recordMapper.getExerciseTimeList(userId, startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 
     private Record parseRecord(String[] data, Map<String, Integer> columnMap) {
         try {
@@ -119,7 +200,7 @@ public class RecordServiceImpl implements RecordService {
             record.setMaxHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.max_heart_rate")));
             record.setMinHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.min_heart_rate")));
             record.setMeanHeartRate(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.mean_heart_rate")));
-            record.setCount(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.count")));
+            record.setStepCount(parseIntOrNull(getValue(data, columnMap, "com.samsung.health.exercise.count")));
             record.setMeanSpeed(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.mean_speed")));
             record.setMaxSpeed(parseDoubleOrNull(getValue(data, columnMap, "com.samsung.health.exercise.max_speed")));
 
@@ -146,4 +227,6 @@ public class RecordServiceImpl implements RecordService {
         }
         return null;
     }
+
+
 }
