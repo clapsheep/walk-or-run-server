@@ -221,8 +221,8 @@ public class UserController {
 	@Operation(summary = "이메일 중복확인", description = "이메일 중복확인을 위한 API \n \n" +
 			"<필수입력> \n " +
 			"- userEmail : 유저 이메일")
-	@GetMapping("/auth/valid-email/{userEmail}")
-	public ResponseEntity<?> checkEmail(@RequestParam("userEmail") String userEmail) {
+	@GetMapping("/auth/valid-email")
+	public ResponseEntity<?> checkEmail(@RequestParam("email") String userEmail) {
 		log.info("UserController/checkEmail");
 		try {
 			Optional<Integer> hasEmail = userService.checkUserEmail(userEmail);
