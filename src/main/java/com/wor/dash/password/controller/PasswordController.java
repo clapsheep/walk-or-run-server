@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/")
 @CrossOrigin("*")
 @AllArgsConstructor
 @Slf4j
@@ -36,7 +36,7 @@ public class PasswordController {
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "비밀번호 확인질문 리스트", description = "비밀번호 확인질문 리스트 조회를 위한 API")
-    @GetMapping("/password")
+    @GetMapping("/auth/password")
     public ResponseEntity<?> getQuestionList() {
         log.info("PasswordController/getQuestionList");
         Optional<List<PasswordQuestion>> list = passwordService.allQuestions();
@@ -57,7 +57,7 @@ public class PasswordController {
             "- userEmail : 유저 이메일 \n" +
             "- userPasswordQuestionId : 유저 비밀번호 확인 질문의 id \n" +
             "- userPasswordAnswer : 유저 비밀번호 확인 질문 답변 \n")
-    @PostMapping("/password/find")
+    @PostMapping("/auth/password/find")
     public ResponseEntity<?> findPassword(
             @RequestBody User user
     ) {
@@ -77,7 +77,7 @@ public class PasswordController {
             "<필수입력> \n " +
             "- userEmail : 유저 이메일" +
             "- userPassword: 새 비밀번호")
-    @PostMapping("/password/change")
+    @PostMapping("/user/password/change")
     public ResponseEntity<?> changePassword(@RequestBody User user) {
         log.info("PasswordController/changePassword");
         try {
@@ -101,7 +101,7 @@ public class PasswordController {
             "- userPassword : 유저 현재 패스워드" +
             "- newPassword : 바꿀 패스워드" +
             "- userPasswordAnswer : 유저 비밀번호 확인질문 답변")
-    @PostMapping("/{userId}/password/change")
+    @PostMapping("/user/{userId}/password/change")
     public ResponseEntity<?> changePw(
             HttpServletRequest request,
             @RequestBody PasswordChangeUtil passwordChangeUtil) {
