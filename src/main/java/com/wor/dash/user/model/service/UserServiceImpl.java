@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Optional<String> findEmail(User user) {
 		log.info("UserService/findEmail");
-		return Optional.ofNullable(userMapper.selectUserEmailByQuestion(user));
+		return Optional.ofNullable(userMapper.selectUserEmailByInfo(user));
 	}
 
 }

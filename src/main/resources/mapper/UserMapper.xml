@@ -107,12 +107,10 @@
         </where>
         ORDER BY user_nickname LIMIT #{offset}, #{pageSize}
     </select>
-    <select id="selectUserEmailByQuestion" parameterType="user" resultType="string">
-        select u.user_email
+    <select id="selectUserEmailByInfo" parameterType="user" resultType="string">
+        select user_email
         from User u
-        inner join Password_Answer pa on u.user_id = pa.user_id
-        where pa.question_id = #{userPasswordQuestionId}
-          and pa.password_question_answer = #{userPasswordAnswer}
-        and u.user_id = #{userId}
+        where user_name = #{userName}
+        and user_phone_number = #{userPhoneNumber}
     </select>
 </mapper>
