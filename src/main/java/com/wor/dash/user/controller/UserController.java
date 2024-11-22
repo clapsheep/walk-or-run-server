@@ -44,7 +44,7 @@ public class UserController {
 			"- userName : 유저 이름 \n " +
 			"- userEmail : 이메일(아이디로 사용) \n" +
 			"- userNickname : 닉네임 \n" +
-			"- userPhoneNumber : 휴대폰 번호")
+			"- userPhoneNumber : 휴대폰 번호(ex: 01000000000)")
 	@PostMapping("/auth/register")
 	public ResponseEntity<?> register(
 			@RequestBody User request
