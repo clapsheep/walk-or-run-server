@@ -12,13 +12,13 @@
   <select id="selectByAccessToken" parameterType="String" resultType="Token">
   	select token_id, user_id, logout, access_token, refresh_token
   	from Token
-  	where access_token = #{token} and logout = 1
+  	where access_token = #{token} and logout = 0
   </select>
   
   <select id="selectByRefreshToken" parameterType="String" resultType="Token">
   	select token_id, user_id, logout, access_token, refresh_token
   	from Token
-  	where refresh_token = #{token} and logout = 1
+  	where refresh_token = #{token} and logout = 0
   </select>
   
   <insert id="insertSelective" parameterType="Token">
@@ -78,7 +78,7 @@
         logout = #{logout, jdbcType=INTEGER}
       </if>
     </set>
-    where user_id = #{cond}
+    where token_id = #{cond}
   </update>
 
   <update id="updateLoginStatus" parameterType="String">

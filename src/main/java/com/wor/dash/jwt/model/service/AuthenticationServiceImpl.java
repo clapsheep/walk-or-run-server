@@ -100,12 +100,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
     }
 
-    @Override
-    public AuthenticationResponse logout(String accessToken) {
-        log.info("AuthenticationService/logout");
-        tokenRepository.updateLogout(accessToken);
-        return new AuthenticationResponse(null, null, "Logout successful");
-    }
+//    @Override
+//    public AuthenticationResponse logout(String accessToken) {
+//        log.info("AuthenticationService/logout");
+//        tokenRepository.updateLogout(accessToken);
+//        return new AuthenticationResponse(null, null, "Logout successful");
+//    }
 
     private void revokeAllTokenByUser(User user) {
         List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getUserId());
