@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,11 +24,15 @@ class PasswordServiceImpl implements PasswordService {
 
     @Override
     public
-    Optional<List<PasswordQuestion>> allQuestions() {
+    Optional<Map<Integer, String>> allQuestions() {
         log.info("PasswordService/allQuestions");
-        List<PasswordQuestion> questionList = passwordMapper.selectAllQuestions();
-        if(questionList != null && !questionList.isEmpty()) {
-            return Optional.ofNullable(questionList);
+        Map<Integer, String> map = new HashMap<>();
+        List<PasswordQuestion> pq = passwordMapper.selectAllQuestions();
+        for(PasswordQuestion q: pq) {
+            map.put(q.getQuestionId(), q.getQuestionDescription());
+        }
+        if(pq != null && !pq.isEmpty()) {
+            return Optional.ofNullable(map);
         } else {
             return Optional.ofNullable(null);
         }
