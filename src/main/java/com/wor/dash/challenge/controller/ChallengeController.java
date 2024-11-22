@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api")
 @Tag(name = "Challenge Controller", description = "챌린지 기능을 관리합니다. " +
         "챌린지의 진행여부(challengeIsEnded)는 진행중(0), 종료(1)입니다.")
+@CrossOrigin("*")
 public class ChallengeController {
 
     private final ChallengeService challengeService;
