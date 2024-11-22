@@ -32,7 +32,7 @@ public class SwaggerConfig {
         // SecurityScheme 정의 (Bearer 토큰 방식)
         SecurityScheme bearerAuth = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
+                .scheme("Bearer")
                 .bearerFormat("JWT");
 
         // SecurityRequirement 정의
