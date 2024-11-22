@@ -61,35 +61,13 @@
 
   <update id="updateBySelective" parameterType="TokenSelective">
     update Token
-    <set>
-      <if test="tokenId != null">
-        token_id = #{tokenId, jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId, jdbcType=INTEGER},
-      </if>
-      <if test="accessToken != null">
-        access_token = #{accessToken, jdbcType=VARCHAR},
-      </if>
-      <if test="refreshToken != null">
-        refresh_token = #{refreshToken, jdbcType=VARCHAR},
-      </if>
-      <if test="logout != null">
-        logout = #{logout, jdbcType=INTEGER}
-      </if>
-    </set>
+    set logout = #{logout, jdbcType=INTEGER}
     where token_id = #{cond}
   </update>
 
   <update id="updateLoginStatus" parameterType="String">
     update Token
     set logout = 0
-    where access_token = #{accessToken}
-  </update>
-
-  <update id="updateLogoutStatus" parameterType="String">
-    update Token
-    set logout = 1
     where access_token = #{accessToken}
   </update>
   

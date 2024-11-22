@@ -9,10 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public
 class TokenSelective extends Token{
-    private Integer tokenId;
-    private int userId;
-    private String accessToken;
-    private String refreshToken;
     private int logout;
     private int cond;
 }

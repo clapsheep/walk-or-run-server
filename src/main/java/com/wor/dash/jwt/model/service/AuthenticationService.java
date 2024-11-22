@@ -10,5 +10,4 @@ public interface AuthenticationService {
 	AuthenticationResponse authenticate(User request);
 	AuthenticationResponse refreshToken(
 			String userEmail, String authHeader);
-//	AuthenticationResponse logout(String accessToken);
 }
