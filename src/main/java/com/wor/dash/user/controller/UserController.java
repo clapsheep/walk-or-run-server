@@ -44,7 +44,9 @@ public class UserController {
 			"- userName : 유저 이름 \n " +
 			"- userEmail : 이메일(아이디로 사용) \n" +
 			"- userNickname : 닉네임 \n" +
-			"- userPhoneNumber : 휴대폰 번호")
+			"- userPhoneNumber : 휴대폰 번호(ex: 01000000000) \n" +
+			"- userPasswordQuestionId : 비밀번호 질문 id값(pk) \n" +
+			"- userPasswordQuestionAnswer : 비밀번호 질문 답변")
 	@PostMapping("/auth/register")
 	public ResponseEntity<?> register(
 			@RequestBody User request
@@ -218,7 +220,7 @@ public class UserController {
 		}
 	}
 
-	@Operation(summary = "이메일 중복확인", description = "이메일 중복확인을 위한 API \n \n" +
+	@Operation(summary = "이메일 중복확인", description = "이메일 중복확인을 위한 API. 반환값이 0이면 이메일이 없는 것, 1이면 있는 것 \n \n" +
 			"<필수입력> \n " +
 			"- userEmail : 유저 이메일")
 	@GetMapping("/auth/valid-email")
@@ -227,9 +229,9 @@ public class UserController {
 		try {
 			Optional<Integer> hasEmail = userService.checkUserEmail(userEmail);
 			if (hasEmail.isPresent() && hasEmail.get() == 0) {
-				return new ResponseEntity<>(new ApiResponse("success", "checkEmail", 200), HttpStatus.OK);
+				return new ResponseEntity<>(new ApiResponse("0", "checkEmail", 200), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(new ApiResponse("empty", "checkEmail", 204), HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>(new ApiResponse("1", "checkEmail", 200), HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ApiResponse("fail","checkEmail",500), HttpStatus.INTERNAL_SERVER_ERROR);
