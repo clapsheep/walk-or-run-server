@@ -74,7 +74,7 @@ public class UserController {
 		try {
 			AuthenticationResponse response = authService.authenticate(request);
 			if(response.getAccessToken() != null) return ResponseEntity.ok(response);
-			else return new ResponseEntity<>(new ApiResponse("withdrawn user", "login", 403), HttpStatus.UNAUTHORIZED);
+			else return new ResponseEntity<>(new ApiResponse("withdrawn user", "login", 401), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(new ApiResponse("fail","login",500), HttpStatus.INTERNAL_SERVER_ERROR);
