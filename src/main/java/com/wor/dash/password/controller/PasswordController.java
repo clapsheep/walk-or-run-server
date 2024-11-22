@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -36,10 +37,10 @@ public class PasswordController {
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "비밀번호 확인질문 리스트", description = "비밀번호 확인질문 리스트 조회를 위한 API")
-    @GetMapping("/auth/password")
+    @GetMapping("/auth/password-question")
     public ResponseEntity<?> getQuestionList() {
         log.info("PasswordController/getQuestionList");
-        Optional<List<PasswordQuestion>> list = passwordService.allQuestions();
+        Optional<Map<Integer, String>> list = passwordService.allQuestions();
         try {
             if(list.isPresent()) {
                 return new ResponseEntity<>(list.get(), HttpStatus.OK);
