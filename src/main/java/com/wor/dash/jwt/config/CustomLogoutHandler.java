@@ -32,7 +32,6 @@ public class CustomLogoutHandler implements LogoutHandler {
         String token = authHeader.substring(7);//Bearer  제거
         Token storedToken = tokenRepository.findByAccessToken(token).orElse(null);
         if(storedToken != null) {
-            storedToken.setLogout(1);
             tokenRepository.updatgDsave(storedToken);
         }
     }

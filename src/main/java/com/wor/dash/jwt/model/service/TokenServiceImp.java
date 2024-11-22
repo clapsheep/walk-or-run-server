@@ -75,7 +75,6 @@ where t.user.id = :userId and t.loggedOut = false
 	@Override
 	public void updatgDsave(Token storedToken) {
 		TokenSelective tokenSelective = new TokenSelective();
-		tokenSelective.setTokenId(storedToken.getTokenId());
 		tokenSelective.setLogout(1);
 		tokenSelective.setCond(storedToken.getTokenId());
 		tokenMapper.updateBySelective(tokenSelective);
@@ -84,11 +83,6 @@ where t.user.id = :userId and t.loggedOut = false
 	@Override
 	public void updateLogin(String accessToken) {
 		tokenMapper.updateLoginStatus(accessToken);
-	}
-
-	@Override
-	public void updateLogout(String accessToken) {
-		tokenMapper.updateLogoutStatus(accessToken);
 	}
 
 }
