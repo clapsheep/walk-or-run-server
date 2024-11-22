@@ -53,9 +53,7 @@ where t.user.id = :userId and t.loggedOut = false
 	@Override
 	public void addToken(Token token) {
 		token.setTokenId(null);
-		log.debug("TokenServiceImpl/addToken=============================={}111", token);
 		tokenMapper.insertSelective(token);
-		log.debug("TokenServiceImpl/addToken=============================={}222", token);
 	}
 
 	/**
@@ -67,7 +65,7 @@ where t.user.id = :userId and t.loggedOut = false
 		if(validTokens != null && !validTokens.isEmpty()) {
 			for(int i=0; i < validTokens.size(); i++) {
 				TokenSelective tokenSelective = new TokenSelective();
-				tokenSelective.setCond(validTokens.get(i).getTokenId());
+				tokenSelective.setCond(validTokens.get(i).getUserId());
 				tokenSelective.setLogout(1);
 				tokenMapper.updateBySelective(tokenSelective);
 			}

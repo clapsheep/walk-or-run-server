@@ -4,9 +4,9 @@
   
   <select id="selectAllAccessTokensByUser" parameterType="Integer" resultType="Token">
     select 
-    t.token_id, t.access_token, t.logout, t.refresh_token, t.user_id
-    from Token t inner join User u on t.user_id = u.user_id
-	where t.user_id= #{userId} and t.logout = 0
+    token_id, access_token, logout, refresh_token, user_id
+    from Token
+	where user_id= #{userId} and logout = 0
   </select>
   
   <select id="selectByAccessToken" parameterType="String" resultType="Token">
@@ -60,7 +60,7 @@
   </insert>
 
   <update id="updateBySelective" parameterType="TokenSelective">
-    update User
+    update Token
     <set>
       <if test="tokenId != null">
         token_id = #{tokenId, jdbcType=INTEGER},
@@ -78,7 +78,7 @@
         logout = #{logout, jdbcType=INTEGER}
       </if>
     </set>
-    where id = #{cond}
+    where user_id = #{cond}
   </update>
 
   <update id="updateLoginStatus" parameterType="String">
