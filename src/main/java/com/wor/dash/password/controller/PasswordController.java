@@ -78,7 +78,7 @@ public class PasswordController {
             "<필수입력> \n " +
             "- userEmail : 유저 이메일" +
             "- userPassword: 새 비밀번호")
-    @PostMapping("/user/password/change")
+    @PostMapping("/auth/password/change")
     public ResponseEntity<?> changePassword(@RequestBody User user) {
         log.info("PasswordController/changePassword");
         try {
