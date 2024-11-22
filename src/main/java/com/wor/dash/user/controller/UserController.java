@@ -189,15 +189,6 @@ public class UserController {
 		}
 	}
 
-//	@Operation(summary = "로그아웃", description = "로그아웃을 위한 API")
-//	@GetMapping("/user/logout")
-//	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
-//		log.info("UserController/logout");
-//		String token = authHeader.substring(7);
-//		authService.logout(token);
-//		return new ResponseEntity<> (new ApiResponse("success", "logout", 200), HttpStatus.OK);
-//	}
-
 	@Operation(summary = "아이디 찾기", description = "아이디 찾기(이메일)를 위한 API \n \n" +
 			"<필수입력> \n " +
 			"- userName : 유저 이름 \n" +

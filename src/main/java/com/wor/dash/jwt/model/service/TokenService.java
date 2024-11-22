@@ -14,6 +14,5 @@ public interface TokenService {
 	void addAllTokens(List<Token> validTokens);
 	void updatgDsave(Token storedToken);
 	void updateLogin(String accessToken);
-	void updateLogout(String accessToken);
 
 }
