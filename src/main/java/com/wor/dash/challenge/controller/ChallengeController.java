@@ -50,8 +50,8 @@ public class ChallengeController {
             "### path \n" +
             "- challengeId : 조회할 챌린지 ID")
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
-        Challenge challenge = challengeService.getChallengeById(challengeId);
+    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId, @RequestParam("userId") int userId) {
+        Challenge challenge = challengeService.getChallengeById(challengeId, userId);
 
         return ResponseEntity.ok(challenge);
     }
@@ -142,6 +142,7 @@ public class ChallengeController {
             " - userId : 로그인한 유저 ID")
     @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> registerChallenge(@RequestBody User user, @PathVariable("challengeId") int challengeId) {
+        log.debug("ChallengeController/registerChallenge");
         boolean isS = challengeService.registerChallenge(user, challengeId);
         if (isS) return new ResponseEntity<>(new ApiResponse("success", "registerChallenge", 200), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse("empty", "registerChallenge", 409), HttpStatus.CONFLICT);
