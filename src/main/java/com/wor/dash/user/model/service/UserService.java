@@ -21,4 +21,6 @@ public interface UserService {
 	Optional<User> getUserImportantInfo(String userEmail);
 	Optional<String> findEmail(User user);
 	Optional<Integer> checkUserEmail(String userEmail);
+	Optional<Integer> findUserId(String userEmail);
+
 }

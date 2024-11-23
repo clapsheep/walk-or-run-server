@@ -15,6 +15,12 @@
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , case
+                   when DATEDIFF(challenge_delete_date, NOW()) > 0
+                       then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
+                   when DATEDIFF(challenge_delete_date, NOW()) = 0
+                       then 'D-Day'
+                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
         from Challenge ch
         ORDER BY challenge_is_ended, challenge_create_date desc
             LIMIT #{offset}, #{pageSize}
@@ -34,6 +40,12 @@
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , case
+                   when DATEDIFF(challenge_delete_date, NOW()) > 0
+                       then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
+                   when DATEDIFF(challenge_delete_date, NOW()) = 0
+                       then 'D-Day'
+                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
         from Challenge ch
         where ch.challenge_is_ended = 0
         ORDER BY challenge_create_date desc
@@ -54,6 +66,12 @@
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , case
+                   when DATEDIFF(challenge_delete_date, NOW()) > 0
+                       then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
+                   when DATEDIFF(challenge_delete_date, NOW()) = 0
+                       then 'D-Day'
+                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
         from Challenge ch
         where ch.challenge_is_ended = 1
         ORDER BY challenge_create_date desc
@@ -74,6 +92,12 @@
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , case
+                   when DATEDIFF(challenge_delete_date, NOW()) > 0
+                       then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
+                   when DATEDIFF(challenge_delete_date, NOW()) = 0
+                       then 'D-Day'
+                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
         from Challenge ch
         where challenge_id = #{challengeId}
     </select>
