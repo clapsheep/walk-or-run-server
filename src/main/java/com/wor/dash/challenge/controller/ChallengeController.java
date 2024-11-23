@@ -58,7 +58,7 @@ public class ChallengeController {
 
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/challenge")
-    public ResponseEntity<?> getAllChallenges(int page, int size) {
+    public ResponseEntity<?> getAllChallenges(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         log.info("ChallengeController/getAllChallenges");
         try {
             PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
@@ -74,7 +74,7 @@ public class ChallengeController {
 
     @Operation(summary = "진행중인 챌린지 조회", description = "진행중인 챌린지를 전체 조회하기 위한 API")
     @GetMapping("/challenge/active")
-    public ResponseEntity<?> getActiveChallengeList(int page, int size) {
+    public ResponseEntity<?> getActiveChallengeList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             PageResponse<Challenge> challenges = challengeService.getActiveChallenges(page, size);
             if (challenges.getContent().size() > 0) {
@@ -89,7 +89,7 @@ public class ChallengeController {
 
     @Operation(summary = "종료된 챌린지 조회", description = "종료된 챌린지를 전체 조회하기 위한 API")
     @GetMapping("/challenge/end")
-    public ResponseEntity<?> getEndedChallengeList(int page, int size) {
+    public ResponseEntity<?> getEndedChallengeList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             PageResponse<Challenge> challenges = challengeService.getEndedChallenges(page, size);
             if (challenges.getContent().size() > 0) {

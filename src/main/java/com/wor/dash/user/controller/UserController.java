@@ -143,7 +143,9 @@ public class UserController {
 
 	@Operation(summary = "내 정보 변경", description = "개인정보 변경을 위한 API \n \n")
 	@PutMapping("/user/{userId}")
-	public ResponseEntity<?> updateUserInfo(@PathVariable("userId") @RequestBody User user) {
+	public ResponseEntity<?> updateUserInfo(
+			@PathVariable("userId") int userId,
+			@RequestBody User user) {
 		log.info("UserController/updateUserInfo");
 		try {
 			Optional<Integer> change = userService.updateUserInfo(user);
