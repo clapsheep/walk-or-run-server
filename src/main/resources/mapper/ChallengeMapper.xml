@@ -16,7 +16,7 @@
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
         from Challenge ch
-        ORDER BY challenge_create_date desc
+        ORDER BY challenge_is_ended, challenge_create_date desc
             LIMIT #{offset}, #{pageSize}
     </select>
 
