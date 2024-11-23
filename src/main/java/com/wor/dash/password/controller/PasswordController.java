@@ -64,6 +64,8 @@ public class PasswordController {
     ) {
         log.info("PasswordController/findPassword");
         try {
+            int userId = userService.findUserId(user.getUserEmail()).get();
+            user.setUserId(userId);
             Optional<Integer> isUser = passwordService.findPassword(user);
             if (isUser.isPresent()) {
                 return new ResponseEntity<>(new ApiResponse("success", "findPassword", 200), HttpStatus.OK);
