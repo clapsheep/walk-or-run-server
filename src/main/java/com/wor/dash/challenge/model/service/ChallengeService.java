@@ -16,7 +16,7 @@ public interface ChallengeService {
 
     PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize);
 
-    Challenge getChallengeById(int challengeId);
+    Challenge getChallengeById(int challengeId, int userId);
 
     boolean editChallenge(int challengeId, Challenge challenge);
 

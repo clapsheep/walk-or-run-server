@@ -17,7 +17,7 @@ public interface ChallengeMapper {
 
     List<Challenge> selectEndedChallengeList(@Param("offset") int offset, @Param("pageSize") int limit);
 
-    Challenge selectChallenge(int challengeId);
+    Challenge selectChallenge(@Param("challengeId") int challengeId, @Param("userId") int userId);
 
     int updateChallenge(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
 

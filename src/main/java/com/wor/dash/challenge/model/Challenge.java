@@ -26,6 +26,7 @@ public class Challenge {
     private int challengeIsEnded;
     @NonNull
     private int challengeTargetCnt;
+    private int challengeIsParticipant;
     private int challengeSchedulerCycle;
     private String dDay;
 }
