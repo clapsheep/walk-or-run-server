@@ -84,8 +84,8 @@
              , challenge_title
              , challenge_description
              , challenge_author_id
-             , DATE_FORMAT(challenge_create_date, '%Y-%m-%d')
-             , DATE_FORMAT(challenge_delete_date, '%Y-%m-%d')
+             , challenge_create_date
+             , challenge_delete_date
              , challenge_is_ended
              , challenge_target_cnt
              , (select challenge_category_name
