@@ -65,8 +65,8 @@ public class SecurityConfig {
                                 .permitAll()
 //                                .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-//                                .anyRequest()
-//                                .authenticated()
+                                .anyRequest()
+                                .authenticated()
                 ).userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
