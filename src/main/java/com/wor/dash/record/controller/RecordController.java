@@ -27,7 +27,7 @@ public class RecordController {
             " <필수 입력> \n\n" +
             "### path \n" +
             "- userId : 로그인한 유저ID \n")
-    @PostMapping("/record/upload")
+    @PostMapping("/record")
     public ResponseEntity<?> uploadCsvFile(@RequestParam("csv") MultipartFile file,
                                            @PathVariable("userId") int userId) {
         if (file.isEmpty()) {
@@ -233,7 +233,7 @@ public class RecordController {
             "### query \n" +
             "- startTime : 시작 날짜 (ex.2024-07-01, 해당 날짜의 00:00:00부터 조회함) \n " +
             "- endTime : 종료 날짜 (ex.2024-07-01, 해당 날짜의 23:59:59까지 조회함) \n")
-    @GetMapping("/record/record")
+    @GetMapping("/record")
     public ResponseEntity<?> getRecordData(@PathVariable("userId") int userId,
                                            @RequestParam("startTime") String startTime,
                                            @RequestParam("endTime") String endTime) {
