@@ -14,7 +14,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
@@ -39,7 +39,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
@@ -65,7 +65,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
@@ -92,6 +92,7 @@
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
              , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id and cp.user_id = #{userId}) as challenge_is_participant
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
