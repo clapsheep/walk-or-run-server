@@ -27,4 +27,5 @@ public class Challenge {
     @NonNull
     private int challengeTargetCnt;
     private int challengeSchedulerCycle;
+    private String dDay;
 }

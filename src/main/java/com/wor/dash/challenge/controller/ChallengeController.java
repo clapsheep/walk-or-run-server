@@ -9,6 +9,7 @@ import com.wor.dash.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 @Tag(name = "Challenge Controller", description = "챌린지 기능을 관리합니다. " +
         "챌린지의 진행여부(challengeIsEnded)는 진행중(0), 종료(1)입니다.")
 @CrossOrigin("*")
+@Slf4j
 public class ChallengeController {
 
     private final ChallengeService challengeService;
@@ -57,6 +59,7 @@ public class ChallengeController {
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/challenge")
     public ResponseEntity<?> getAllChallenges(int page, int size) {
+        log.info("ChallengeController/getAllChallenges");
         try {
             PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
             if (challenges.getContent().size() > 0) {
