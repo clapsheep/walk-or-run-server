@@ -84,14 +84,14 @@
              , challenge_title
              , challenge_description
              , challenge_author_id
-             , challenge_create_date
-             , challenge_delete_date
+             , DATE_FORMAT(challenge_create_date, '%Y-%m-%d')
+             , DATE_FORMAT(challenge_delete_date, '%Y-%m-%d')
              , challenge_is_ended
              , challenge_target_cnt
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
