@@ -58,7 +58,8 @@
         WHERE user_id = #{userId}
     </update>
     <select id="selectChallengesByUserId" resultType="MyChallenge">
-        select cc.challenge_category_name,
+        select c.challenge_id,
+               cc.challenge_category_name,
                c.challenge_title,
                c.challenge_description,
                a.user_nickname                                                          as author,
