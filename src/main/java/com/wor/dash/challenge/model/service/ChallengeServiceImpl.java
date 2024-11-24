@@ -27,27 +27,27 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public PageResponse<Challenge> getAllChallenges(int currentPage, int pageSize) {
-        List<Challenge> challenges = challengeMapper.selectAllChallengeList(currentPage, pageSize);
-        int totalElements = challenges.size();
         int offset = (currentPage - 1) * pageSize;
+        List<Challenge> challenges = challengeMapper.selectAllChallengeList(offset, pageSize);
+        int totalElements = challengeMapper.selectAllChallengesCount();
         PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
         return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
     public PageResponse<Challenge> getActiveChallenges(int currentPage, int pageSize) {
-        List<Challenge> challenges = challengeMapper.selectActiveChallengeList(currentPage, pageSize);
-        int totalElements = challenges.size();
         int offset = (currentPage - 1) * pageSize;
+        List<Challenge> challenges = challengeMapper.selectActiveChallengeList(offset, pageSize);
+        int totalElements = challengeMapper.selectActiveChallengesCount();
         PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
         return new PageResponse<>(challenges, pageInfo);
     }
 
     @Override
     public PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize) {
-        List<Challenge> challenges = challengeMapper.selectEndedChallengeList(currentPage, pageSize);
-        int totalElements = challenges.size();
         int offset = (currentPage - 1) * pageSize;
+        List<Challenge> challenges = challengeMapper.selectEndedChallengeList(offset, pageSize);
+        int totalElements = challengeMapper.selectEndedChallengesCount();
         PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
         return new PageResponse<>(challenges, pageInfo);
     }

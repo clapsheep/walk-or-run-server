@@ -107,6 +107,16 @@
         </where>
         ORDER BY user_nickname LIMIT #{offset}, #{pageSize}
     </select>
+    <select id="countSearchUser" resultType="int">
+        select count(*)
+        from User
+        <where>
+            <choose>
+                <when test="type == 'email'">user_email like concat('%', #{value}, '%')</when>
+                <when test="type == 'nickname'">user_nickname like concat('%', #{value}, '%')</when>
+            </choose>
+        </where>
+    </select>
     <select id="selectUserEmailByInfo" parameterType="user" resultType="string">
         select user_email
         from User u

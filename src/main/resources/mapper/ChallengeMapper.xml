@@ -358,4 +358,21 @@
         from Challenge_Scheduler ch
         where ch.challenge_is_ended = 1
     </select>
+
+    <select id="selectAllChallengesCount" resultType="int">
+        select count(*)
+        from Challenge
+    </select>
+
+    <select id="selectActiveChallengesCount" resultType="int">
+        select count(*)
+        from Challenge
+        where challenge_is_ended = 0
+    </select>
+
+    <select id="selectEndedChallengesCount" resultType="int">
+        select count(*)
+        from Challenge
+        where challenge_is_ended = 1
+    </select>
 </mapper>
