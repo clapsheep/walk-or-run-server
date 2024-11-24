@@ -103,6 +103,7 @@ public class PasswordController {
             "- userid : 유저 아이디(pk)" +
             "- userPassword : 유저 현재 패스워드" +
             "- newPassword : 바꿀 패스워드" +
+            "- userPasswordQuestionId : 유저 비밀번호 확인질문 아이디" +
             "- userPasswordAnswer : 유저 비밀번호 확인질문 답변")
     @PostMapping("/user/{userId}/password/change")
     public ResponseEntity<?> changePw(
@@ -110,7 +111,7 @@ public class PasswordController {
             @RequestBody PasswordChangeUtil passwordChangeUtil) {
         log.info("PasswordController/changePw");
 
-        if(!userService.checkUserPassword(passwordChangeUtil)) {
+        if(!passwordService.checkUserPassword(passwordChangeUtil)) {
             return new ResponseEntity<ApiResponse>(new ApiResponse("Current password is incorrect", "changePw", 400), HttpStatus.BAD_REQUEST);
         }
 
@@ -123,8 +124,8 @@ public class PasswordController {
         User nUser = userService.getUserImportantInfo(user.getUserEmail()).get();
         PasswordAnswer answer = new PasswordAnswer();
         answer.setUserId(nUser.getUserId());
-        answer.setQuestionId(user.getUserPasswordQuestionId());
-        answer.setPasswordQuestionAnswer(user.getUserPasswordAnswer());
+        answer.setQuestionId(passwordChangeUtil.getUserPasswordQuestionId());
+        answer.setPasswordQuestionAnswer(passwordChangeUtil.getUserPasswordAnswer());
         passwordService.updateAnswer(answer);
 
         AuthenticationResponse authenticationResponse = authService.refreshToken(user.getUserEmail(), authHeader);

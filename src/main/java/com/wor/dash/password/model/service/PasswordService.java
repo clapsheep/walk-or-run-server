@@ -1,5 +1,6 @@
 package com.wor.dash.password.model.service;
 
+import com.wor.dash.password.PasswordChangeUtil;
 import com.wor.dash.password.model.PasswordAnswer;
 import com.wor.dash.password.model.PasswordFindQnA;
 import com.wor.dash.password.model.PasswordQuestion;
@@ -19,5 +20,6 @@ interface PasswordService {
     Optional<Integer> addAnswer(PasswordAnswer passwordAnswer);
     Optional<Integer> updateAnswer(PasswordAnswer passwordAnswer);
     Optional<Integer> findPassword(User user);
+    boolean checkUserPassword(PasswordChangeUtil passwordChangeUtil);
 
 }

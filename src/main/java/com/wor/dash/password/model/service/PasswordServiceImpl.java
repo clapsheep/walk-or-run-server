@@ -1,12 +1,15 @@
 package com.wor.dash.password.model.service;
 
+import com.wor.dash.password.PasswordChangeUtil;
 import com.wor.dash.password.model.PasswordAnswer;
 import com.wor.dash.password.model.PasswordFindQnA;
 import com.wor.dash.password.model.PasswordQuestion;
 import com.wor.dash.password.model.mapper.PasswordMapper;
 import com.wor.dash.user.model.User;
+import com.wor.dash.user.model.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,6 +24,8 @@ public
 class PasswordServiceImpl implements PasswordService {
 
     private final PasswordMapper passwordMapper;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public
@@ -69,6 +74,16 @@ class PasswordServiceImpl implements PasswordService {
     public Optional<Integer> findPassword(User user) {
         log.info("PasswordService/findPassword");
         return Optional.ofNullable(passwordMapper.selectUserIdByQnA(user));
+    }
+
+    @Override
+    public
+    boolean checkUserPassword(PasswordChangeUtil passwordChangeUtil) {
+        log.info("UserService/checkUserPassword");
+        String email = userMapper.selectUserEmailById(passwordChangeUtil.getUserId());
+        User curUser = userMapper.selectUserImportantInfo(email);
+        String encodedPassword = curUser.getUserPassword();
+        return passwordEncoder.matches(passwordChangeUtil.getUserPassword(), encodedPassword);
     }
 
 }
