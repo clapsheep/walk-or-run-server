@@ -117,4 +117,10 @@ public class UserServiceImpl implements UserService {
 		return Optional.ofNullable(userMapper.selectUserId(userEmail));
 	}
 
+	@Override
+	public Optional<Integer> checkUserNickname(String userNickname) {
+		log.info("UserService/checkUserNickname");
+		return Optional.ofNullable(userMapper.selectUserNicknameCount(userNickname));
+	}
+
 }
