@@ -168,7 +168,7 @@ public class UserController {
 		try {
 			Optional<PageResponse<MyChallenge>> challenges = userService.getChallenges(userId, page, size);
 			if(challenges.isPresent()) {
-				return new ResponseEntity<> (challenges.get().getContent(), HttpStatus.OK);
+				return new ResponseEntity<> (challenges.get(), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<> (new ApiResponse("empty", "getChallenges", 204), HttpStatus.NO_CONTENT);
 			}
