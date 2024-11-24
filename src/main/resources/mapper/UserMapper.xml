@@ -118,4 +118,9 @@
         FROM User
         WHERE user_email = #{userEmail}
     </select>
+    <select id="selectUserNicknameCount" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM User
+        WHERE user_nickname = #{userNickname}
+    </select>
 </mapper>
