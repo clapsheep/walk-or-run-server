@@ -20,7 +20,7 @@
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
+                   else '종료' end as dDay
         from Challenge ch
         ORDER BY challenge_is_ended, challenge_create_date desc
             LIMIT #{offset}, #{pageSize}
@@ -45,7 +45,7 @@
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
+                   else '종료' end as dDay
         from Challenge ch
         where ch.challenge_is_ended = 0
         ORDER BY challenge_create_date desc
@@ -71,7 +71,7 @@
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
+                   else '종료' end as dDay
         from Challenge ch
         where ch.challenge_is_ended = 1
         ORDER BY challenge_create_date desc
