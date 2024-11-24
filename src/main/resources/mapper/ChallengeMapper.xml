@@ -144,9 +144,9 @@
                s.challenge_target_cnt,
                DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
+           or s.challenge_delete_date IS NULL)
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
             and s.challenge_is_ended = 0
     </insert>
@@ -167,9 +167,9 @@
                s.challenge_target_cnt,
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
+           or s.challenge_delete_date IS NULL)
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
             and s.challenge_is_ended = 0
     </insert>
@@ -192,9 +192,9 @@
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH) - INTERVAL 1 DAY, '%Y-%m-%d 23:59:59')
                 ]]> as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
+           or s.challenge_delete_date IS NULL)
             and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
             and s.challenge_is_ended = 0
     </insert>
