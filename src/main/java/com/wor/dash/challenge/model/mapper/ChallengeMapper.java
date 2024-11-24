@@ -46,4 +46,11 @@ public interface ChallengeMapper {
     List<Challenge> selectActiveChallengeScheduleList();
 
     List<Challenge> selectEndedChallengeScheduleList();
+
+    int selectAllChallengesCount();
+
+    int selectActiveChallengesCount();
+
+    int selectEndedChallengesCount();
+
 }
