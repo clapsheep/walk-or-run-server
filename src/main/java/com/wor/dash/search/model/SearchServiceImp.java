@@ -20,9 +20,9 @@ public class SearchServiceImp implements SearchService {
     public PageResponse<User> searchUser(String type, String value, int currentPage, int pageSize) {
         log.info("SearchService/searchUser");
         if (type.equals("email") || type.equals("nickname")) {
-            List<User> users = userMapper.selectUserListForSearch(type, value, currentPage, pageSize);
-            int totalElements = users.size();
             int offset = (currentPage - 1) * pageSize;
+            List<User> users = userMapper.selectUserListForSearch(type, value, offset, pageSize);
+            int totalElements = userMapper.countSearchUser(type, value);
             PageInfo pageInfo = new PageInfo(currentPage, pageSize, totalElements);
             return new PageResponse<>(users, pageInfo);
         }
