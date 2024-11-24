@@ -11,5 +11,6 @@ public class PasswordChangeUtil {
     private int userId;
     private String userPassword;
     private String newPassword;
+    private int userPasswordQuestionId;
     private String userPasswordAnswer;
 }
