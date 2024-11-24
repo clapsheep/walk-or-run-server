@@ -230,4 +230,22 @@ public class UserController {
 			return new ResponseEntity<>(new ApiResponse("fail","checkEmail",500), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@Operation(summary = "이메일 중복확인", description = "닉네임 중복확인을 위한 API. 반환값이 0이면 닉네임이 없는 것, 1이면 있는 것 \n \n" +
+			"<필수입력> \n " +
+			"- userNickname : 유저 닉네임")
+	@GetMapping("/auth/valid-nickname")
+	public ResponseEntity<?> checkNickname(@RequestParam("nickname") String userNickname) {
+		log.info("UserController/checkNickname");
+		try {
+			Optional<Integer> hasNickname = userService.checkUserNickname(userNickname);
+			if (hasNickname.isPresent() && hasNickname.get() == 0) {
+				return new ResponseEntity<>(new ApiResponse("0", "checkNickname", 200), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ApiResponse("1", "checkNickname", 200), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ApiResponse("fail","checkNickname",500), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

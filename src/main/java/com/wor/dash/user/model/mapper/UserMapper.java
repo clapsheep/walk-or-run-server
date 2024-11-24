@@ -21,5 +21,6 @@ public interface UserMapper {
 	String selectUserEmailByInfo(User user);
 	Integer selectUserEmailCount(String userEmail);
 	Integer selectUserId(String userEmail);
+	Integer selectUserNicknameCount(String userNickname);
 
 }
