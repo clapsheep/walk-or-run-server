@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyChallenge {
+    private int challengeId;
     private String challengeCategoryName;
     private String challengeTitle;
     private String challengeDescription;
