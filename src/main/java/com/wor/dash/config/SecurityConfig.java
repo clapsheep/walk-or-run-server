@@ -90,7 +90,11 @@ public class SecurityConfig {
                         CorsConfiguration configuration = new CorsConfiguration();
 
                         configuration.setAllowedOrigins(Arrays.asList(allowOriginUrl));
+<<<<<<< HEAD
                         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+=======
+                        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+>>>>>>> baa562386e88d52ad70ba1bdf8e5386224c6a73a
                         configuration.setAllowCredentials(true);
                         configuration.addAllowedHeader("*");
                         configuration.setExposedHeaders(List.of("Authorization"));
