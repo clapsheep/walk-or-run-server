@@ -12,23 +12,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Value("${project.origin-url}")
 	private String allowOrginUrl;
-	
+
 	private final Logger logger = LoggerFactory.getLogger(WebMvcConfiguration.class);
+
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-		    .allowedOrigins(allowOrginUrl)
+				.allowedOrigins(allowOrginUrl)
 				.allowedMethods(
-						HttpMethod.GET.name(), 
-						HttpMethod.POST.name(), 
+						HttpMethod.GET.name(),
+						HttpMethod.POST.name(),
 						HttpMethod.PUT.name(),
-						HttpMethod.DELETE.name(), 
-						HttpMethod.HEAD.name(), 
+						HttpMethod.DELETE.name(),
+						HttpMethod.HEAD.name(),
 						HttpMethod.OPTIONS.name(),
 						HttpMethod.PATCH.name())
-//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
-//				.allowedMethods("*")
-				.maxAge(1800); // 1800초 동안 preflight 결과를 캐시에 저장
+				.maxAge(1800);
+
+		// Swagger UI 관련 CORS 설정 추가
+		registry.addMapping("/v3/api-docs/**")
+				.allowedOrigins(allowOrginUrl)
+				.allowedMethods(HttpMethod.GET.name());
+		registry.addMapping("/swagger-ui/**")
+				.allowedOrigins(allowOrginUrl)
+				.allowedMethods(HttpMethod.GET.name());
 	}
-	
 }
