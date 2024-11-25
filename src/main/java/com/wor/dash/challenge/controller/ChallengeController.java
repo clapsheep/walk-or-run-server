@@ -52,8 +52,8 @@ public class ChallengeController {
             "### path \n" +
             "- challengeId : 조회할 챌린지 ID")
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId, @RequestParam("userId") int userId) {
-        Challenge challenge = challengeService.getChallengeById(challengeId, userId);
+    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
+        Challenge challenge = challengeService.getChallengeById(challengeId);
 
         return ResponseEntity.ok(challenge);
     }

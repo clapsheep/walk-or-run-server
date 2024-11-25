@@ -55,9 +55,9 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public Challenge getChallengeById(int challengeId, int userId) {
+    public Challenge getChallengeById(int challengeId) {
 
-        return challengeMapper.selectChallenge(challengeId, userId);
+        return challengeMapper.selectChallenge(challengeId);
     }
 
     @Override
