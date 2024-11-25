@@ -58,4 +58,4 @@ jwt:
   refresh-token-expiration: ${JWT_REFRESH_VALIDITY}
 
 project:
-  origin-url: http://localhost:5173
+  origin-url: http://localhost:5173, https://wor-dashboard.netlify.app, https://walkorrun-uu.netlify.app
