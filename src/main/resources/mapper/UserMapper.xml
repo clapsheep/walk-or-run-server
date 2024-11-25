@@ -99,7 +99,7 @@
         where user_id = #{userId}
     </select>
     <select id="selectUserListForSearch" resultType="User">
-        select user_id, user_nickname from User
+        select user_id, user_nickname, user_role from User
         <where>
             <choose>
                 <when test="type == 'email'">user_email like concat('%', #{value}, '%')</when>
