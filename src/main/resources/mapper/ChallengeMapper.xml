@@ -78,29 +78,55 @@
             LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="selectChallenge" parameterType="int">
-        select challenge_id
-             , challenge_category_code
-             , challenge_title
-             , challenge_description
-             , challenge_author_id
-             , challenge_create_date
-             , challenge_delete_date
-             , challenge_is_ended
-             , challenge_target_cnt
-             , (select challenge_category_name
-                from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
-             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id and cp.user_id = #{userId}) as challenge_is_participant
-             , case
-                   when DATEDIFF(challenge_delete_date, NOW()) > 0
-                       then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
-                   when DATEDIFF(challenge_delete_date, NOW()) = 0
-                       then 'D-Day'
-                   else CONCAT('D+', ABS(DATEDIFF(challenge_delete_date, NOW()))) end as dDay
-        from Challenge ch
-        where challenge_id = #{challengeId}
+    <resultMap id="challengeDetailMap" type="Challenge">
+        <id property="challengeId" column="challenge_id"/>
+        <result property="challengeCategoryCode" column="challenge_category_code"/>
+        <result property="challengeTitle" column="challenge_title"/>
+        <result property="challengeDescription" column="challenge_description"/>
+        <result property="challengeAuthorId" column="challenge_author_id"/>
+        <result property="challengeCreateDate" column="challenge_create_date"/>
+        <result property="challengeDeleteDate" column="challenge_delete_date"/>
+        <result property="challengeIsEnded" column="challenge_is_ended"/>
+        <result property="challengeTargetCnt" column="challenge_target_cnt"/>
+        <result property="challengeCategoryName" column="challenge_category_name"/>
+        <result property="challengeParticipantCnt" column="challenge_participant_cnt"/>
+        <result property="dDay" column="d_day"/>
+        <collection property="challengeParticipants" ofType="User">
+            <id property="userId" column="user_id"/>
+            <result property="userPassword" column="user_password"/>
+            <result property="userName" column="user_name"/>
+            <result property="userEmail" column="user_email"/>
+            <result property="userNickname" column="user_nickname"/>
+            <result property="userJoinDate" column="user_join_date"/>
+            <result property="userWithdrawalDate" column="user_withdrawal_date"/>
+            <result property="userRole" column="user_role"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectChallenge" parameterType="int" resultMap="challengeDetailMap">
+        SELECT Ch.*
+             , Cc.challenge_category_name
+             , (SELECT count(*) FROM Challenge_Participant Cp WHERE Cp.challenge_id = Ch.challenge_id) as challenge_participant_cnt
+             , CASE
+                   WHEN DATEDIFF(Ch.challenge_delete_date, NOW()) > 0
+                       THEN CONCAT('D-', DATEDIFF(Ch.challenge_delete_date, NOW()))
+                   WHEN DATEDIFF(Ch.challenge_delete_date, NOW()) = 0
+                       THEN 'D-Day'
+                   ELSE CONCAT('D+', ABS(DATEDIFF(Ch.challenge_delete_date, NOW())))
+            END as d_day
+             , U.user_id
+             , U.user_password
+             , U.user_name
+             , U.user_email
+             , U.user_nickname
+             , U.user_join_date
+             , U.user_withdrawal_date
+             , U.user_role
+        FROM Challenge Ch
+                 LEFT JOIN Challenge_Category Cc ON Ch.challenge_category_code = Cc.challenge_category_code
+                 LEFT JOIN Challenge_Participant Cp ON Ch.challenge_id = Cp.challenge_id
+                 LEFT JOIN User U ON Cp.user_id = U.user_id
+        WHERE Ch.challenge_id = #{challengeId}
     </select>
 
     <insert id="insertChallenge" parameterType="Challenge">
