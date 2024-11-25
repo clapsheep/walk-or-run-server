@@ -1,6 +1,7 @@
 package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.challenge.model.mapper.ChallengeMapper;
 import com.wor.dash.pageInfo.model.PageInfo;
 import com.wor.dash.user.model.User;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -136,5 +138,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public List<Challenge> getEndedChallengeScheduleList() {
         return challengeMapper.selectEndedChallengeScheduleList();
+    }
+
+    @Override
+    public Optional<List<ChallengeCategory>> getChallengeCategories() {
+        return Optional.ofNullable(challengeMapper.selectChallengeCategories());
     }
 }
