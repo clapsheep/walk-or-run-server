@@ -1,6 +1,7 @@
 package com.wor.dash.challenge.controller;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.challenge.model.service.ChallengeService;
 import com.wor.dash.comment.model.Comment;
 import com.wor.dash.pageInfo.model.PageResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -262,5 +264,20 @@ public class ChallengeController {
             return new ResponseEntity<>(new ApiResponse("success", "deleteScheduleChallenge", 200), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse("fail", "deleteScheduleChallenge", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Operation(summary = "챌린지 카테고리 반환", description = "챌린지 카테고리를 가져오기 위한 API \n\n ")
+    @GetMapping("/challenge/category")
+    public ResponseEntity<?> getChallengeCategory() {
+        Optional<List<ChallengeCategory>> list = challengeService.getChallengeCategories();
+        try {
+            if (list.isPresent()) {
+                return new ResponseEntity<>(list.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("empty", "getChallengeCategory", 204), HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "getChallengeCategory", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -375,4 +375,9 @@
         from Challenge
         where challenge_is_ended = 1
     </select>
+
+    <select id="selectChallengeCategories" resultType="ChallengeCategory">
+        select challenge_category_code, challenge_category_name
+        from Challenge_Category
+    </select>
 </mapper>
