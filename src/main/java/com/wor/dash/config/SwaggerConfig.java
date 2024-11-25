@@ -22,12 +22,13 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         Info info = new Info()
-                .title("WalkOrRun REST API 명세서")
-                .description("REST API를 이용한 WalkOrRun 서비스 기능 명세서")
+                .title("WALK OR RUN REST API")
+                .description("삼성헬스 데이터를 활용한 운동 기록 분석, 러닝 & 걷기 통계 확인, 다양한 챌린지 참여 기능을 제공하는 WALK OR RUN 서비스의 REST API 명세서입니다.")
                 .version("v1")
                 .contact(new io.swagger.v3.oas.models.info.Contact()
-                        .name("JaeSeoHan")
-                        .email("hanahyun1@korea.ac.cr").url("https://github.com/clapsheep/WalkOrRun-server"));
+                        .name("워꼴런 & UUID")
+                        .email("")
+                        .url("https://wor-dashboard.netlify.app"));
 
         // SecurityScheme 정의 (Bearer 토큰 방식)
         SecurityScheme bearerAuth = new SecurityScheme()

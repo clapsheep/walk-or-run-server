@@ -29,12 +29,28 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 						HttpMethod.PATCH.name())
 				.maxAge(1800);
 
-		// Swagger UI 관련 CORS 설정 추가
 		registry.addMapping("/v3/api-docs/**")
 				.allowedOrigins(allowOrginUrl)
-				.allowedMethods(HttpMethod.GET.name());
+				.allowedMethods(
+						HttpMethod.GET.name(),
+						HttpMethod.POST.name(),
+						HttpMethod.PUT.name(),
+						HttpMethod.DELETE.name(),
+						HttpMethod.HEAD.name(),
+						HttpMethod.OPTIONS.name(),
+						HttpMethod.PATCH.name())
+				.maxAge(1800);
+
 		registry.addMapping("/swagger-ui/**")
 				.allowedOrigins(allowOrginUrl)
-				.allowedMethods(HttpMethod.GET.name());
+				.allowedMethods(
+						HttpMethod.GET.name(),
+						HttpMethod.POST.name(),
+						HttpMethod.PUT.name(),
+						HttpMethod.DELETE.name(),
+						HttpMethod.HEAD.name(),
+						HttpMethod.OPTIONS.name(),
+						HttpMethod.PATCH.name())
+				.maxAge(1800);
 	}
 }
