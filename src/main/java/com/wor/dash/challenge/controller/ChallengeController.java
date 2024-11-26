@@ -37,7 +37,11 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
+<<<<<<< HEAD
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
+=======
+            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
+>>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59)"
     )
@@ -132,7 +136,11 @@ public class ChallengeController {
             "- challengeCategoryCode : 챌린지 카테고리 코드 \n " +
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
+<<<<<<< HEAD
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
+=======
+            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
+>>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n")
     @PutMapping("/admin/challenge/{challengeId}")
@@ -263,8 +271,13 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
+<<<<<<< HEAD
             "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
+=======
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
+>>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
     @PutMapping("/admin/challenge/schedule/{challengeId}")
