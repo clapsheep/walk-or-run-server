@@ -139,20 +139,25 @@
 
     <insert id="insertChallenge" parameterType="Challenge">
         insert into Challenge
-        (challenge_category_code,
-         challenge_title,
-         challenge_description,
-         challenge_author_id,
-         challenge_target_cnt,
-         challenge_create_date,
-         challenge_delete_date)
-        values (#{challengeCategoryCode},
-                #{challengeTitle},
-                #{challengeDescription},
-                #{challengeAuthorId},
-                #{challengeTargetCnt},
-                #{challengeCreateDate},
-                #{challengeDeleteDate})
+        (
+        challenge_category_code,
+        challenge_title,
+        challenge_description,
+        challenge_author_id,
+        challenge_target_cnt,
+        challenge_create_date,
+        challenge_delete_date
+        )
+        values
+        (
+        #{challengeCategoryCode},
+        #{challengeTitle},
+        #{challengeDescription},
+        #{challengeAuthorId},
+        #{challengeTargetCnt},
+        #{challengeCreateDate},
+        #{challengeDeleteDate}
+        )
     </insert>
 
     <insert id="insertDailyChallenge" parameterType="int">
@@ -172,10 +177,10 @@
                DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
             or s.challenge_delete_date IS NULL)
-          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-          and s.challenge_is_ended = 0
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
+            and s.challenge_is_ended = 0
     </insert>
 
     <insert id="insertWeeklyChallenge" parameterType="int">
@@ -195,10 +200,10 @@
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
-            or s.challenge_delete_date IS NULL)
-          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-          and s.challenge_is_ended = 0
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
+           or s.challenge_delete_date IS NULL)
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
+            and s.challenge_is_ended = 0
     </insert>
 
     <insert id="insertMonthlyChallenge" parameterType="int">
@@ -220,23 +225,20 @@
                 ]]> as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
-            or s.challenge_delete_date IS NULL)
-          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-          and s.challenge_is_ended = 0
+            and s.challenge_delete_date <![CDATA[>=]]> NOW()
+           or s.challenge_delete_date IS NULL)
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
+            and s.challenge_is_ended = 0
+
     </insert>
 
     <insert id="insertChallengeParticipant">
         insert into Challenge_Participant (challenge_id,
                                            user_id)
         SELECT #{challengeId},
-               #{user.userId}
-        WHERE EXISTS (SELECT 1
+               #{user.userId} WHERE EXISTS (SELECT 1
                       FROM Challenge c
-                      WHERE c.challenge_id = #{challengeId}
-                        AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
-                                                         FROM Challenge_Participant
-                                                         WHERE challenge_id = #{challengeId}))
+                      WHERE c.challenge_id = #{challengeId} AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*) FROM Challenge_Participant WHERE challenge_id = #{challengeId}))
     </insert>
 
     <delete id="deleteChallengeParticipant">
@@ -261,45 +263,50 @@
         update Challenge
         set challenge_is_ended = 1
         where challenge_id = #{challengeId}
-          and challenge_is_ended = 0
+        and challenge_is_ended = 0
     </update>
 
     <update id="autoDeleteChallenge" parameterType="String">
         update Challenge
         set challenge_is_ended = 1
         where challenge_delete_date <![CDATA[<=]]> #{currentTime}
-          and challenge_is_ended = 0
+        and challenge_is_ended = 0
     </update>
 
     <insert id="insertChallengeSchedule" parameterType="Challenge">
         insert into Challenge_Scheduler
-        (challenge_category_code,
-         challenge_title,
-         challenge_description,
-         challenge_author_id,
-         challenge_target_cnt,
-         challenge_create_date,
-         challenge_delete_date,
-         challenge_scheduler_cycle)
-        values (#{challengeCategoryCode},
-                #{challengeTitle},
-                #{challengeDescription},
-                #{challengeAuthorId},
-                #{challengeTargetCnt},
-                #{challengeCreateDate},
-                #{challengeDeleteDate},
-                #{challengeSchedulerCycle})
+        (
+        challenge_category_code,
+        challenge_title,
+        challenge_description,
+        challenge_author_id,
+        challenge_target_cnt,
+        challenge_create_date,
+        challenge_delete_date,
+        challenge_scheduler_cycle
+        )
+        values
+        (
+        #{challengeCategoryCode},
+        #{challengeTitle},
+        #{challengeDescription},
+        #{challengeAuthorId},
+        #{challengeTargetCnt},
+        #{challengeCreateDate},
+        #{challengeDeleteDate},
+        #{challengeSchedulerCycle}
+        )
     </insert>
 
     <update id="updateChallengeSchedule">
         update Challenge_Scheduler
-        set challenge_category_code   = #{challenge.challengeCategoryCode},
-            challenge_title           = #{challenge.challengeTitle},
-            challenge_description     = #{challenge.challengeDescription},
-            challenge_target_cnt      = #{challenge.challengeTargetCnt},
-            challenge_create_date     = #{challenge.challengeCreateDate},
-            challenge_delete_date     = #{challenge.challengeDeleteDate},
-            challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
+        set challenge_category_code = #{challenge.challengeCategoryCode},
+        challenge_title = #{challenge.challengeTitle},
+        challenge_description = #{challenge.challengeDescription},
+        challenge_target_cnt = #{challenge.challengeTargetCnt},
+        challenge_create_date = #{challenge.challengeCreateDate},
+        challenge_delete_date = #{challenge.challengeDeleteDate},
+        challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
         where challenge_id = #{challengeId}
     </update>
 
@@ -324,7 +331,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
         from Challenge_Scheduler ch
     </select>
 
@@ -342,7 +349,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
         from Challenge_Scheduler ch
         where ch.challenge_is_ended = 0
     </select>
@@ -361,7 +368,7 @@
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Comment cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
+             , (select count(*) from Challenge_Participant cm where cm.challenge_id = ch.challenge_id) as challenge_participant_cnt
         from Challenge_Scheduler ch
         where ch.challenge_is_ended = 1
     </select>
