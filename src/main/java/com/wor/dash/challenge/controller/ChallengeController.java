@@ -28,7 +28,6 @@ import java.util.Optional;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
-    private List<Comment> commentList;
 
     @Operation(summary = "챌린지 추가", description = "챌린지 추가를 위한 API \n\n " +
             "<필수입력> \n\n " +
@@ -59,24 +58,12 @@ public class ChallengeController {
             "### path \n" +
             "- challengeId : 조회할 챌린지 ID")
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId, @RequestParam("userId") int userId) {
-        Challenge challenge = null;
-        try {
-            challenge = challengeService.getChallengeById(challengeId);
-            return ResponseEntity.ok(challenge);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
         Challenge challenge = null;
         try {
             challenge = challengeService.getChallengeById(challengeId);
             return ResponseEntity.ok(challenge);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -91,7 +78,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -106,7 +92,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -121,7 +106,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -194,7 +178,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -210,7 +193,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -226,7 +208,6 @@ public class ChallengeController {
             }
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -250,7 +231,6 @@ public class ChallengeController {
             challengeService.addChallengeSchedule(challenge);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch(Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
