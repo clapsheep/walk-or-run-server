@@ -37,23 +37,21 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
-<<<<<<< HEAD
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
-=======
-            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59)"
     )
     @PostMapping("/admin/challenge")
     public ResponseEntity<?> createChallenge(@RequestBody Challenge challenge) {
+        ResponseEntity<?> result;
         try {
             challengeService.addChallenge(challenge);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            result = ResponseEntity.status(HttpStatus.CREATED).build();
         } catch(Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            result = new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return result;
     }
 
     @Operation(summary = "챌린지 상세 조회", description = "챌린지를 상세 조회하기 위한 API \n \n" +
@@ -135,12 +133,7 @@ public class ChallengeController {
             "### body \n" +
             "- challengeCategoryCode : 챌린지 카테고리 코드 \n " +
             "- challengeTitle : 챌린지 제목 \n " +
-            "- challengeDescription : 챌린지 내용 \n" +
-<<<<<<< HEAD
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
-=======
-            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n")
     @PutMapping("/admin/challenge/{challengeId}")
@@ -271,15 +264,9 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
-<<<<<<< HEAD
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
-=======
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
-            "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
-    )
+            "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)")
     @PutMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> updateScheduleChallenge(@PathVariable("challengeId") int challengeId, @RequestBody Challenge challenge) {
         boolean isS = challengeService.editChallengeSchedule(challengeId, challenge);

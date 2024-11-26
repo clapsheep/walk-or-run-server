@@ -139,7 +139,6 @@
 
     <insert id="insertChallenge" parameterType="Challenge">
         insert into Challenge
-<<<<<<< HEAD
         (
         challenge_category_code,
         challenge_title,
@@ -159,22 +158,6 @@
         #{challengeCreateDate},
         #{challengeDeleteDate}
         )
-=======
-        (challenge_category_code,
-         challenge_title,
-         challenge_description,
-         challenge_author_id,
-         challenge_target_cnt,
-         challenge_create_date,
-         challenge_delete_date)
-        values (#{challengeCategoryCode},
-                #{challengeTitle},
-                #{challengeDescription},
-                #{challengeAuthorId},
-                #{challengeTargetCnt},
-                #{challengeCreateDate},
-                #{challengeDeleteDate})
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
     </insert>
 
     <insert id="insertDailyChallenge" parameterType="int">
@@ -292,7 +275,6 @@
 
     <insert id="insertChallengeSchedule" parameterType="Challenge">
         insert into Challenge_Scheduler
-<<<<<<< HEAD
         (
         challenge_category_code,
         challenge_title,
@@ -314,29 +296,10 @@
         #{challengeDeleteDate},
         #{challengeSchedulerCycle}
         )
-=======
-        (challenge_category_code,
-         challenge_title,
-         challenge_description,
-         challenge_author_id,
-         challenge_target_cnt,
-         challenge_create_date,
-         challenge_delete_date,
-         challenge_scheduler_cycle)
-        values (#{challengeCategoryCode},
-                #{challengeTitle},
-                #{challengeDescription},
-                #{challengeAuthorId},
-                #{challengeTargetCnt},
-                #{challengeCreateDate},
-                #{challengeDeleteDate},
-                #{challengeSchedulerCycle})
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
     </insert>
 
     <update id="updateChallengeSchedule">
         update Challenge_Scheduler
-<<<<<<< HEAD
         set challenge_category_code = #{challenge.challengeCategoryCode},
         challenge_title = #{challenge.challengeTitle},
         challenge_description = #{challenge.challengeDescription},
@@ -344,15 +307,6 @@
         challenge_create_date = #{challenge.challengeCreateDate},
         challenge_delete_date = #{challenge.challengeDeleteDate},
         challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
-=======
-        set challenge_category_code   = #{challenge.challengeCategoryCode},
-            challenge_title           = #{challenge.challengeTitle},
-            challenge_description     = #{challenge.challengeDescription},
-            challenge_target_cnt      = #{challenge.challengeTargetCnt},
-            challenge_create_date     = #{challenge.challengeCreateDate},
-            challenge_delete_date     = #{challenge.challengeDeleteDate},
-            challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
->>>>>>> 878e7c9aac9abc5fe724a3a1506475dd3bc385c3
         where challenge_id = #{challengeId}
     </update>
 
