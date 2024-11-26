@@ -13,7 +13,7 @@
                c.comment_content,
                c.comment_author_id,
                c.comment_create_date,
-               u.user_name as commentAuthorName
+               u.user_nickname as commentAuthorName
         FROM Comment c
                  LEFT JOIN User u ON c.comment_author_id = u.user_id
         WHERE c.challenge_id = #{challengeId}
