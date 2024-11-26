@@ -139,27 +139,20 @@
 
     <insert id="insertChallenge" parameterType="Challenge">
         insert into Challenge
-        (
-        challenge_category_code,
-        challenge_title,
-        challenge_description,
-        challenge_author_id,
-        challenge_target_cnt
-        <if test="challengeDeleteDate != null">
-            , challenge_delete_date
-        </if>
-        )
-        values
-        (
-        #{challengeCategoryCode},
-        #{challengeTitle},
-        #{challengeDescription},
-        #{challengeAuthorId},
-        #{challengeTargetCnt}
-        <if test="challengeDeleteDate != null">
-            , #{challengeDeleteDate}
-        </if>
-        )
+        (challenge_category_code,
+         challenge_title,
+         challenge_description,
+         challenge_author_id,
+         challenge_target_cnt,
+         challenge_create_date,
+         challenge_delete_date)
+        values (#{challengeCategoryCode},
+                #{challengeTitle},
+                #{challengeDescription},
+                #{challengeAuthorId},
+                #{challengeTargetCnt},
+                #{challengeCreateDate},
+                #{challengeDeleteDate})
     </insert>
 
     <insert id="insertDailyChallenge" parameterType="int">
@@ -256,15 +249,11 @@
     <update id="updateChallenge">
         update Challenge
         set challenge_category_code = #{challenge.challengeCategoryCode},
-        challenge_title = #{challenge.challengeTitle},
-        challenge_description = #{challenge.challengeDescription},
-        challenge_target_cnt = #{challenge.challengeTargetCnt},
-        <if test="challenge.challengeCreateDate != null">
-            challenge_create_date = #{challenge.challengeCreateDate},
-        </if>
-        <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate}
-        </if>
+            challenge_title         = #{challenge.challengeTitle},
+            challenge_description   = #{challenge.challengeDescription},
+            challenge_target_cnt    = #{challenge.challengeTargetCnt},
+            challenge_create_date   = #{challenge.challengeCreateDate},
+            challenge_delete_date   = #{challenge.challengeDeleteDate}
         where challenge_id = #{challengeId}
     </update>
 
@@ -284,52 +273,33 @@
 
     <insert id="insertChallengeSchedule" parameterType="Challenge">
         insert into Challenge_Scheduler
-        (
-        challenge_category_code,
-        challenge_title,
-        challenge_description,
-        challenge_author_id,
-        challenge_target_cnt,
-        <if test="challengeCreateDate != null">
-            challenge_create_date,
-        </if>
-        <if test="challengeDeleteDate != null">
-            challenge_delete_date,
-        </if>
-        challenge_scheduler_cycle
-        )
-        values
-        (
-        #{challengeCategoryCode},
-        #{challengeTitle},
-        #{challengeDescription},
-        #{challengeAuthorId},
-        #{challengeTargetCnt},
-        <if test="challengeCreateDate != null">
-            #{challengeCreateDate},
-        </if>
-        <if test="challengeDeleteDate != null">
-            #{challengeDeleteDate},
-        </if>
-        #{challengeSchedulerCycle}
-        )
+        (challenge_category_code,
+         challenge_title,
+         challenge_description,
+         challenge_author_id,
+         challenge_target_cnt,
+         challenge_create_date,
+         challenge_delete_date,
+         challenge_scheduler_cycle)
+        values (#{challengeCategoryCode},
+                #{challengeTitle},
+                #{challengeDescription},
+                #{challengeAuthorId},
+                #{challengeTargetCnt},
+                #{challengeCreateDate},
+                #{challengeDeleteDate},
+                #{challengeSchedulerCycle})
     </insert>
 
     <update id="updateChallengeSchedule">
         update Challenge_Scheduler
-        set challenge_category_code = #{challenge.challengeCategoryCode},
-        challenge_title = #{challenge.challengeTitle},
-        challenge_description = #{challenge.challengeDescription},
-        challenge_target_cnt = #{challenge.challengeTargetCnt},
-        <if test="challenge.challengeCreateDate != null">
-            challenge_create_date = #{challenge.challengeCreateDate},
-        </if>
-        <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate},
-        </if>
-        <if test="challenge.challengeSchedulerCycle != null">
+        set challenge_category_code   = #{challenge.challengeCategoryCode},
+            challenge_title           = #{challenge.challengeTitle},
+            challenge_description     = #{challenge.challengeDescription},
+            challenge_target_cnt      = #{challenge.challengeTargetCnt},
+            challenge_create_date     = #{challenge.challengeCreateDate},
+            challenge_delete_date     = #{challenge.challengeDeleteDate},
             challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
-        </if>
         where challenge_id = #{challengeId}
     </update>
 
