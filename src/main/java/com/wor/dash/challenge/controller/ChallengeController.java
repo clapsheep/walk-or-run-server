@@ -38,8 +38,8 @@ public class ChallengeController {
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 현재 시간으로 자동 설정) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 null)"
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59)"
     )
     @PostMapping("/admin/challenge")
     public ResponseEntity<Void> createChallenge(@RequestBody Challenge challenge) {
@@ -113,8 +113,8 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 기존 시간 유지) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 기존 시간 유지) \n")
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n")
     @PutMapping("/admin/challenge/{challengeId}")
     public ResponseEntity<?> updateChallenge(@PathVariable("challengeId") int challengeId, @RequestBody Challenge challenge) {
         boolean isS = challengeService.editChallenge(challengeId, challenge);
@@ -220,8 +220,8 @@ public class ChallengeController {
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 현재 시간으로 자동 설정) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 null) \n" +
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
     @PostMapping("/admin/challenge/schedule")
@@ -239,8 +239,8 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 기존 시간 유지) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 기존 시간 유지) \n" +
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
     @PutMapping("/admin/challenge/schedule/{challengeId}")
