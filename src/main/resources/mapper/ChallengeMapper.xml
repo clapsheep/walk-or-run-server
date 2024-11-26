@@ -13,17 +13,19 @@
              , challenge_target_cnt
              , (select challenge_category_name
                 from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
+                where c.challenge_category_code = ch.challenge_category_code) as challenge_category_name
+             , (select count(*)
+                from Challenge_Participant cp
+                where cp.challenge_id = ch.challenge_id)                      as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else '종료' end as dDay
+                   else '종료' end                                              as dDay
         from Challenge ch
         ORDER BY challenge_is_ended, challenge_create_date desc
-            LIMIT #{offset}, #{pageSize}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="selectActiveChallengeList" resultType="Challenge">
@@ -38,18 +40,20 @@
              , challenge_target_cnt
              , (select challenge_category_name
                 from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
+                where c.challenge_category_code = ch.challenge_category_code) as challenge_category_name
+             , (select count(*)
+                from Challenge_Participant cp
+                where cp.challenge_id = ch.challenge_id)                      as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else '종료' end as dDay
+                   else '종료' end                                              as dDay
         from Challenge ch
         where ch.challenge_is_ended = 0
         ORDER BY challenge_create_date desc
-            LIMIT #{offset}, #{pageSize}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="selectEndedChallengeList" resultType="Challenge">
@@ -64,18 +68,20 @@
              , challenge_target_cnt
              , (select challenge_category_name
                 from Challenge_Category c
-                where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
-             , (select count(*) from Challenge_Participant cp where cp.challenge_id = ch.challenge_id) as challenge_participant_cnt
+                where c.challenge_category_code = ch.challenge_category_code) as challenge_category_name
+             , (select count(*)
+                from Challenge_Participant cp
+                where cp.challenge_id = ch.challenge_id)                      as challenge_participant_cnt
              , case
                    when DATEDIFF(challenge_delete_date, NOW()) > 0
                        then CONCAT('D-', DATEDIFF(challenge_delete_date, NOW()))
                    when DATEDIFF(challenge_delete_date, NOW()) = 0
                        then 'D-Day'
-                   else '종료' end as dDay
+                   else '종료' end                                              as dDay
         from Challenge ch
         where ch.challenge_is_ended = 1
         ORDER BY challenge_create_date desc
-            LIMIT #{offset}, #{pageSize}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
     <resultMap id="challengeDetailMap" type="Challenge">
@@ -106,14 +112,16 @@
     <select id="selectChallenge" parameterType="int" resultMap="challengeDetailMap">
         SELECT Ch.*
              , Cc.challenge_category_name
-             , (SELECT count(*) FROM Challenge_Participant Cp WHERE Cp.challenge_id = Ch.challenge_id) as challenge_participant_cnt
+             , (SELECT count(*)
+                FROM Challenge_Participant Cp
+                WHERE Cp.challenge_id = Ch.challenge_id) as challenge_participant_cnt
              , CASE
                    WHEN DATEDIFF(Ch.challenge_delete_date, NOW()) > 0
                        THEN CONCAT('D-', DATEDIFF(Ch.challenge_delete_date, NOW()))
                    WHEN DATEDIFF(Ch.challenge_delete_date, NOW()) = 0
                        THEN 'D-Day'
                    ELSE CONCAT('D+', ABS(DATEDIFF(Ch.challenge_delete_date, NOW())))
-            END as d_day
+            END                                          as d_day
              , U.user_id
              , U.user_password
              , U.user_name
@@ -171,10 +179,10 @@
                DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-            and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL)
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
+                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
+            or s.challenge_delete_date IS NULL)
+          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+          and s.challenge_is_ended = 0
     </insert>
 
     <insert id="insertWeeklyChallenge" parameterType="int">
@@ -194,10 +202,10 @@
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-            and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL)
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
+                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
+            or s.challenge_delete_date IS NULL)
+          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+          and s.challenge_is_ended = 0
     </insert>
 
     <insert id="insertMonthlyChallenge" parameterType="int">
@@ -219,10 +227,10 @@
                 ]]> as challenge_delete_date
         from Challenge_Scheduler s
         where (s.challenge_create_date <![CDATA[<=]]> NOW()
-            and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL)
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
-            and s.challenge_is_ended = 0
+                   and s.challenge_delete_date <![CDATA[>=]]> NOW()
+            or s.challenge_delete_date IS NULL)
+          and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+          and s.challenge_is_ended = 0
     </insert>
 
     <insert id="insertChallengeParticipant">
@@ -230,12 +238,12 @@
                                            user_id)
         SELECT #{challengeId},
                #{user.userId}
-            WHERE EXISTS (SELECT 1
+        WHERE EXISTS (SELECT 1
                       FROM Challenge c
                       WHERE c.challenge_id = #{challengeId}
-                AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
-                FROM Challenge_Participant
-                WHERE challenge_id = #{challengeId}))
+                        AND c.challenge_target_cnt <![CDATA[>]]> (SELECT COUNT(*)
+                                                         FROM Challenge_Participant
+                                                         WHERE challenge_id = #{challengeId}))
     </insert>
 
     <delete id="deleteChallengeParticipant">
@@ -342,6 +350,7 @@
              , challenge_delete_date
              , challenge_is_ended
              , challenge_target_cnt
+             , challenge_scheduler_cycle
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
@@ -359,6 +368,7 @@
              , challenge_delete_date
              , challenge_is_ended
              , challenge_target_cnt
+             , challenge_scheduler_cycle
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
@@ -377,6 +387,7 @@
              , challenge_delete_date
              , challenge_is_ended
              , challenge_target_cnt
+             , challenge_scheduler_cycle
              , (select challenge_category_name
                 from Challenge_Category c
                 where c.challenge_category_code = ch.challenge_category_code)            as challenge_category_name
@@ -416,6 +427,7 @@
     <select id="selectChallengeParticipant" resultType="int">
         select count(*)
         from Challenge_Participant
-        where user_id = #{userId} and challenge_id = #{challengeId}
+        where user_id = #{userId}
+          and challenge_id = #{challengeId}
     </select>
 </mapper>
