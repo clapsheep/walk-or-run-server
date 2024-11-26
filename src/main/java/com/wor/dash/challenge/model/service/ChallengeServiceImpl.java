@@ -144,4 +144,9 @@ public class ChallengeServiceImpl implements ChallengeService {
     public Optional<List<ChallengeCategory>> getChallengeCategories() {
         return Optional.ofNullable(challengeMapper.selectChallengeCategories());
     }
+
+    @Override
+    public Optional<Challenge> getChallengeSchedule(int challengeId) {
+        return Optional.ofNullable(challengeMapper.selectChallengeSchedule(challengeId));
+    }
 }

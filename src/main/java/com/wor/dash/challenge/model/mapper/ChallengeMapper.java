@@ -55,4 +55,6 @@ public interface ChallengeMapper {
     int selectEndedChallengesCount();
 
     List<ChallengeCategory> selectChallengeCategories();
+
+    Challenge selectChallengeSchedule(int challengeId);
 }
