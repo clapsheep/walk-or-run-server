@@ -110,10 +110,9 @@
         challenge_title,
         challenge_description,
         challenge_author_id,
-        challenge_target_cnt
-        <if test="challengeDeleteDate != null">
-            , challenge_delete_date
-        </if>
+        challenge_target_cnt,
+        challenge_create_date,
+        challenge_delete_date
         )
         values
         (
@@ -121,10 +120,9 @@
         #{challengeTitle},
         #{challengeDescription},
         #{challengeAuthorId},
-        #{challengeTargetCnt}
-        <if test="challengeDeleteDate != null">
-            , #{challengeDeleteDate}
-        </if>
+        #{challengeTargetCnt},
+        #{challengeCreateDate},
+        #{challengeDeleteDate}
         )
     </insert>
 
@@ -144,10 +142,10 @@
                s.challenge_target_cnt,
                DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+           or s.challenge_delete_date IS NULL)
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
             and s.challenge_is_ended = 0
     </insert>
 
@@ -167,10 +165,10 @@
                s.challenge_target_cnt,
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d 23:59:59') as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+           or s.challenge_delete_date IS NULL)
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
             and s.challenge_is_ended = 0
     </insert>
 
@@ -192,10 +190,10 @@
                DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH) - INTERVAL 1 DAY, '%Y-%m-%d 23:59:59')
                 ]]> as challenge_delete_date
         from Challenge_Scheduler s
-        where s.challenge_create_date <![CDATA[<=]]> NOW()
+        where (s.challenge_create_date <![CDATA[<=]]> NOW()
             and s.challenge_delete_date <![CDATA[>=]]> NOW()
-           or s.challenge_delete_date IS NULL
-            and s.challenge_scheduler_cycle = #{challenge_scheduler_cycle}
+           or s.challenge_delete_date IS NULL)
+            and s.challenge_scheduler_cycle = #{challengeSchedulerCycle}
             and s.challenge_is_ended = 0
     </insert>
 
@@ -225,12 +223,8 @@
         challenge_title = #{challenge.challengeTitle},
         challenge_description = #{challenge.challengeDescription},
         challenge_target_cnt = #{challenge.challengeTargetCnt},
-        <if test="challenge.challengeCreateDate != null">
-            challenge_create_date = #{challenge.challengeCreateDate},
-        </if>
-        <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate},
-        </if>
+        challenge_create_date = #{challenge.challengeCreateDate},
+        challenge_delete_date = #{challenge.challengeDeleteDate}
         where challenge_id = #{challengeId}
     </update>
 
@@ -256,12 +250,8 @@
         challenge_description,
         challenge_author_id,
         challenge_target_cnt,
-        <if test="challengeCreateDate != null">
-            challenge_create_date,
-        </if>
-        <if test="challengeDeleteDate != null">
-            challenge_delete_date,
-        </if>
+        challenge_create_date,
+        challenge_delete_date,
         challenge_scheduler_cycle
         )
         values
@@ -271,12 +261,8 @@
         #{challengeDescription},
         #{challengeAuthorId},
         #{challengeTargetCnt},
-        <if test="challengeCreateDate != null">
-            #{challengeCreateDate},
-        </if>
-        <if test="challengeDeleteDate != null">
-            #{challengeDeleteDate},
-        </if>
+        #{challengeCreateDate},
+        #{challengeDeleteDate},
         #{challengeSchedulerCycle}
         )
     </insert>
@@ -287,15 +273,9 @@
         challenge_title = #{challenge.challengeTitle},
         challenge_description = #{challenge.challengeDescription},
         challenge_target_cnt = #{challenge.challengeTargetCnt},
-        <if test="challenge.challengeCreateDate != null">
-            challenge_create_date = #{challenge.challengeCreateDate},
-        </if>
-        <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate},
-        </if>
-        <if test="challenge.challengeSchedulerCycle != null">
-            challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
-        </if>
+        challenge_create_date = #{challenge.challengeCreateDate},
+        challenge_delete_date = #{challenge.challengeDeleteDate},
+        challenge_scheduler_cycle = #{challenge.challengeSchedulerCycle}
         where challenge_id = #{challengeId}
     </update>
 
