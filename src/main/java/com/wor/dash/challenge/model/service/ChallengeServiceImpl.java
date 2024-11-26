@@ -98,8 +98,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public boolean registerChallenge(User user, int challengeId) {
-        int result = challengeMapper.insertChallengeParticipant(user, challengeId);
-        return result == 1;
+        int isParticipant = challengeMapper.selectChallengeParticipant(user.getUserId(), challengeId);
+        if(isParticipant == 0) {
+            int result = challengeMapper.insertChallengeParticipant(user, challengeId);
+            return result == 1;
+        }
+        return false;
     }
 
     @Override

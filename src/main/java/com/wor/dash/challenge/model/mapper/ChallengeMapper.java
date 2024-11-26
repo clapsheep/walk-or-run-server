@@ -3,6 +3,7 @@ package com.wor.dash.challenge.model.mapper;
 import com.wor.dash.challenge.model.Challenge;
 import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.user.model.User;
+import lombok.NonNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -57,4 +58,6 @@ public interface ChallengeMapper {
     List<ChallengeCategory> selectChallengeCategories();
 
     Challenge selectChallengeSchedule(int challengeId);
+
+    int selectChallengeParticipant(@Param("userId") int userId, @Param("challengeId") int challengeId);
 }
