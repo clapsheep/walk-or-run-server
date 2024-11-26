@@ -250,12 +250,12 @@
         set challenge_category_code = #{challenge.challengeCategoryCode},
         challenge_title = #{challenge.challengeTitle},
         challenge_description = #{challenge.challengeDescription},
-        challenge_target_cnt = #{challenge.challengeTargetCnt}
+        challenge_target_cnt = #{challenge.challengeTargetCnt},
         <if test="challenge.challengeCreateDate != null">
             challenge_create_date = #{challenge.challengeCreateDate},
         </if>
         <if test="challenge.challengeDeleteDate != null">
-            challenge_delete_date = #{challenge.challengeDeleteDate},
+            challenge_delete_date = #{challenge.challengeDeleteDate}
         </if>
         where challenge_id = #{challengeId}
     </update>
