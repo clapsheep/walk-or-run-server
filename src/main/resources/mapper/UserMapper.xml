@@ -62,6 +62,7 @@
                cc.challenge_category_name,
                c.challenge_title,
                c.challenge_description,
+               (select count(*) from Challenge_Participant cp where cp.challenge_id = c.challenge_id) as challenge_participant_cnt,
                a.user_nickname                                                          as author,
                case
                    when DATEDIFF(c.challenge_delete_date, NOW()) > 0

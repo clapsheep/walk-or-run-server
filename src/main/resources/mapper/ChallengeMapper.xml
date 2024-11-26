@@ -406,4 +406,10 @@
         select challenge_category_code, challenge_category_name
         from Challenge_Category
     </select>
+
+    <select id="selectChallengeSchedule" parameterType="int" resultType="Challenge">
+        select *
+        from Challenge_Scheduler
+        where challenge_id = #{challengeId}
+    </select>
 </mapper>

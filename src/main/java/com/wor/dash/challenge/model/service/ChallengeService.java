@@ -48,4 +48,6 @@ public interface ChallengeService {
     List<Challenge> getEndedChallengeScheduleList();
 
     Optional<List<ChallengeCategory>> getChallengeCategories();
+
+    Optional<Challenge> getChallengeSchedule(int challengeId);
 }
