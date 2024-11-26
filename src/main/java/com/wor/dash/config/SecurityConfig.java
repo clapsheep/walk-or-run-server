@@ -1,5 +1,6 @@
 package com.wor.dash.config;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SecurityConfig {
 
     @Value("${project.origin-url}")
-    private String allowOrginUrl;
+    private String[] allowOriginUrl;
     private final UserDetailServiceImpl userDetailsServiceImp;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomLogoutHandler logoutHandler;
@@ -88,8 +89,9 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList(allowOrginUrl));
-                        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                        configuration.setAllowedOrigins(Arrays.asList(allowOriginUrl));
+
+                        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                         configuration.setAllowCredentials(true);
                         configuration.addAllowedHeader("*");
                         configuration.setExposedHeaders(List.of("Authorization"));

@@ -1,6 +1,7 @@
 package com.wor.dash.challenge.controller;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.challenge.model.service.ChallengeService;
 import com.wor.dash.comment.model.Comment;
 import com.wor.dash.pageInfo.model.PageResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
-            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
+            "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
             "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
             "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59)"
     )
@@ -48,8 +50,6 @@ public class ChallengeController {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
     }
 
     @Operation(summary = "챌린지 상세 조회", description = "챌린지를 상세 조회하기 위한 API \n \n" +
@@ -60,9 +60,20 @@ public class ChallengeController {
     public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId, @RequestParam("userId") int userId) {
         Challenge challenge = null;
         try {
-            challenge = challengeService.getChallengeById(challengeId, userId);
+            challenge = challengeService.getChallengeById(challengeId);
             return ResponseEntity.ok(challenge);
-        } catch(Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
+        Challenge challenge = null;
+        try {
+            challenge = challengeService.getChallengeById(challengeId);
+            return ResponseEntity.ok(challenge);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -71,7 +82,6 @@ public class ChallengeController {
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/challenge")
     public ResponseEntity<?> getAllChallenges(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        log.info("ChallengeController/getAllChallenges");
         try {
             PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
             if (challenges.getContent().size() > 0) {
@@ -140,7 +150,6 @@ public class ChallengeController {
             "- challengeId : 종료할 챌린지 ID")
     @DeleteMapping("/admin/challenge/{challengeId}")
     public ResponseEntity<?> deleteChallenge(@PathVariable int challengeId) {
-        log.debug("ChallengeController/deleteChallenge");
         boolean isS = challengeService.removeChallenge(challengeId);
         if (isS) return new ResponseEntity<>(new ApiResponse("success", "deleteChallenge", 200), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse("fail", "deleteChallenge", 500), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -155,7 +164,6 @@ public class ChallengeController {
             " - userId : 로그인한 유저 ID")
     @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> registerChallenge(@RequestBody User user, @PathVariable("challengeId") int challengeId) {
-        log.debug("ChallengeController/registerChallenge");
         boolean isS = challengeService.registerChallenge(user, challengeId);
         if (isS) return new ResponseEntity<>(new ApiResponse("success", "registerChallenge", 200), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse("empty", "registerChallenge", 409), HttpStatus.CONFLICT);
@@ -169,7 +177,6 @@ public class ChallengeController {
             " - userId : 로그인한 유저 ID")
     @DeleteMapping("/challenge/{challengeId}")
     public ResponseEntity<?> cancelChallenge(@RequestBody User user, @PathVariable("challengeId") int challengeId) {
-        log.debug("ChallengeController/cancelChallenge");
         boolean isS = challengeService.cancelChallenge(user, challengeId);
         if (isS) return new ResponseEntity<>(new ApiResponse("success", "cancelChallenge", 200), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse("fail", "cancelChallenge", 500), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -178,7 +185,6 @@ public class ChallengeController {
     @Operation(summary = "챌린지 스케쥴 전체 조회", description = "챌린지 스케쥴의 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/admin/challenge/schedule")
     public ResponseEntity<List<Challenge>> getAllChallengeScheduleList() {
-        log.debug("ChallengeController/getAllChallengeScheduleList");
         List<Challenge> challengeList = null;
         try {
             challengeList = challengeService.getAllChallengeScheduleList();
@@ -195,7 +201,6 @@ public class ChallengeController {
     @Operation(summary = "반복중인 챌린지 스케쥴 조회", description = "반복중인 챌린지를 조회하기 위한 API")
     @GetMapping("/admin/challenge/schedule/active")
     public ResponseEntity<List<Challenge>> getActiveChallengeScheduleList() {
-        log.debug("ChallengeController/getActiveChallengeScheduleList");
         List<Challenge> challengeList = null;
         try {
             challengeList = challengeService.getActiveChallengeScheduleList();
@@ -212,7 +217,6 @@ public class ChallengeController {
     @Operation(summary = "반복종료된 챌린지 스케쥴 조회", description = "반복종료된 챌린지를 조회하기 위한 API")
     @GetMapping("/admin/challenge/schedule/end")
     public ResponseEntity<List<Challenge>> getEndedChallengeScheduleList() {
-        log.debug("ChallengeController/getEndedChallengeScheduleList");
         List<Challenge> challengeList = null;
         try {
             challengeList = challengeService.getEndedChallengeScheduleList();
@@ -284,5 +288,37 @@ public class ChallengeController {
             return new ResponseEntity<>(new ApiResponse("success", "deleteScheduleChallenge", 200), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse("fail", "deleteScheduleChallenge", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Operation(summary = "챌린지 카테고리 반환", description = "챌린지 카테고리를 가져오기 위한 API \n\n ")
+    @GetMapping("/challenge/category")
+    public ResponseEntity<?> getChallengeCategory() {
+        Optional<List<ChallengeCategory>> list = challengeService.getChallengeCategories();
+        try {
+            if (list.isPresent()) {
+                return new ResponseEntity<>(list.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("empty", "getChallengeCategory", 204), HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "getChallengeCategory", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Operation(summary = "챌린지 스케쥴 상세 조회", description = "반복하는 챌린지를 상세 조회 하기 위한 API \n\n " +
+            "<필수입력> \n\n " +
+            "- challengeId : 챌린지 스케쥴의 ID")
+    @GetMapping("/admin/challenge/schedule/{challengeId}")
+    public ResponseEntity<?> getChallengeSchedule(@PathVariable("challengeId") int challengeId) {
+        Optional<Challenge> schedule = challengeService.getChallengeSchedule(challengeId);
+        try {
+            if (schedule.isPresent()) {
+                return new ResponseEntity<>(schedule.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("empty", "getChallengeSchedule", 204), HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "getChallengeSchedule", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

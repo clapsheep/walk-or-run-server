@@ -58,9 +58,11 @@
         WHERE user_id = #{userId}
     </update>
     <select id="selectChallengesByUserId" resultType="MyChallenge">
-        select cc.challenge_category_name,
+        select c.challenge_id,
+               cc.challenge_category_name,
                c.challenge_title,
                c.challenge_description,
+               (select count(*) from Challenge_Participant cp where cp.challenge_id = c.challenge_id) as challenge_participant_cnt,
                a.user_nickname                                                          as author,
                case
                    when DATEDIFF(c.challenge_delete_date, NOW()) > 0
@@ -98,7 +100,7 @@
         where user_id = #{userId}
     </select>
     <select id="selectUserListForSearch" resultType="User">
-        select user_id, user_nickname from User
+        select user_id, user_nickname, user_role from User
         <where>
             <choose>
                 <when test="type == 'email'">user_email like concat('%', #{value}, '%')</when>

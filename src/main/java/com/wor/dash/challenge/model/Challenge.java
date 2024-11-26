@@ -1,6 +1,9 @@
 package com.wor.dash.challenge.model;
 
+import com.wor.dash.user.model.User;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,7 +29,7 @@ public class Challenge {
     private int challengeIsEnded;
     @NonNull
     private int challengeTargetCnt;
-    private int challengeIsParticipant;
     private int challengeSchedulerCycle;
     private String dDay;
+    private List<User> challengeParticipants;
 }

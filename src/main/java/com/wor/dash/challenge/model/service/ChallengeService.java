@@ -1,11 +1,12 @@
 package com.wor.dash.challenge.model.service;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.pageInfo.model.PageResponse;
-import org.apache.ibatis.annotations.Param;
 import com.wor.dash.user.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChallengeService {
     void addChallenge(Challenge challenge);
@@ -16,7 +17,7 @@ public interface ChallengeService {
 
     PageResponse<Challenge> getEndedChallenges(int currentPage, int pageSize);
 
-    Challenge getChallengeById(int challengeId, int userId);
+    Challenge getChallengeById(int challengeId);
 
     boolean editChallenge(int challengeId, Challenge challenge);
 
@@ -45,4 +46,8 @@ public interface ChallengeService {
     List<Challenge> getActiveChallengeScheduleList();
 
     List<Challenge> getEndedChallengeScheduleList();
+
+    Optional<List<ChallengeCategory>> getChallengeCategories();
+
+    Optional<Challenge> getChallengeSchedule(int challengeId);
 }

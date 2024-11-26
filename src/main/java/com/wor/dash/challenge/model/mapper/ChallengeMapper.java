@@ -1,7 +1,9 @@
 package com.wor.dash.challenge.model.mapper;
 
 import com.wor.dash.challenge.model.Challenge;
+import com.wor.dash.challenge.model.ChallengeCategory;
 import com.wor.dash.user.model.User;
+import lombok.NonNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,7 +19,7 @@ public interface ChallengeMapper {
 
     List<Challenge> selectEndedChallengeList(@Param("offset") int offset, @Param("pageSize") int limit);
 
-    Challenge selectChallenge(@Param("challengeId") int challengeId, @Param("userId") int userId);
+    Challenge selectChallenge(@Param("challengeId") int challengeId);
 
     int updateChallenge(@Param("challengeId") int challengeId, @Param("challenge") Challenge challenge);
 
@@ -53,4 +55,9 @@ public interface ChallengeMapper {
 
     int selectEndedChallengesCount();
 
+    List<ChallengeCategory> selectChallengeCategories();
+
+    Challenge selectChallengeSchedule(int challengeId);
+
+    int selectChallengeParticipant(@Param("userId") int userId, @Param("challengeId") int challengeId);
 }

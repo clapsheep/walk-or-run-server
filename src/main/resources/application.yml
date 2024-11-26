@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:env.properties    # 환경변수 파일 import
+    import: optional:env.properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
@@ -12,7 +12,7 @@ spring:
       enabled: true
     restart:
       enabled: true
-  
+
   security:
     user:
       name: user
@@ -36,6 +36,7 @@ logging:
 
 server:
   port: 8080
+  forward-headers-strategy: framework
   servlet:
     context-path: /
     encoding:
@@ -47,10 +48,16 @@ springdoc:
     path: /swagger-ui.html
     enabled: true
     disable-swagger-default-url: true
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: WalkOrRun API
+    schemes: [https]
   api-docs:
     path: /v3/api-docs
     enabled: true
   packages-to-scan: com.wor.dash
+  server-url: https://walk-or-run.com
 
 jwt:
   secret: ${JWT_SECRET}
@@ -58,4 +65,6 @@ jwt:
   refresh-token-expiration: ${JWT_REFRESH_VALIDITY}
 
 project:
-  origin-url: http://localhost:5173
+  origin-url: http://localhost:5173,
+    https://wor-dashboard.netlify.app,
+    https://walkorrun-uu.netlify.app,
