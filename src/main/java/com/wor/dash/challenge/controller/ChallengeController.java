@@ -37,14 +37,21 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
-            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 현재 시간으로 자동 설정) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 null)"
+            "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59)"
     )
     @PostMapping("/admin/challenge")
-    public ResponseEntity<Void> createChallenge(@RequestBody Challenge challenge) {
-        challengeService.addChallenge(challenge);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> createChallenge(@RequestBody Challenge challenge) {
+        ResponseEntity<?> result;
+        try {
+            challengeService.addChallenge(challenge);
+            result = ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch(Exception e) {
+            e.printStackTrace();
+            result = new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return result;
     }
 
     @Operation(summary = "챌린지 상세 조회", description = "챌린지를 상세 조회하기 위한 API \n \n" +
@@ -52,16 +59,31 @@ public class ChallengeController {
             "### path \n" +
             "- challengeId : 조회할 챌린지 ID")
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
-        Challenge challenge = challengeService.getChallengeById(challengeId);
+    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId, @RequestParam("userId") int userId) {
+        Challenge challenge = null;
+        try {
+            challenge = challengeService.getChallengeById(challengeId);
+            return ResponseEntity.ok(challenge);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        return ResponseEntity.ok(challenge);
+    public ResponseEntity<?> getChallengeDetail(@PathVariable("challengeId") int challengeId) {
+        Challenge challenge = null;
+        try {
+            challenge = challengeService.getChallengeById(challengeId);
+            return ResponseEntity.ok(challenge);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "챌린지 전체 조회", description = "챌린지 진행여부 상관없이 전체 조회하기 위한 API")
     @GetMapping("/challenge")
     public ResponseEntity<?> getAllChallenges(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        log.info("ChallengeController/getAllChallenges");
         try {
             PageResponse<Challenge> challenges = challengeService.getAllChallenges(page, size);
             if (challenges.getContent().size() > 0) {
@@ -111,10 +133,9 @@ public class ChallengeController {
             "### body \n" +
             "- challengeCategoryCode : 챌린지 카테고리 코드 \n " +
             "- challengeTitle : 챌린지 제목 \n " +
-            "- challengeDescription : 챌린지 내용 \n" +
-            "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 기존 시간 유지) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 기존 시간 유지) \n")
+            "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n")
     @PutMapping("/admin/challenge/{challengeId}")
     public ResponseEntity<?> updateChallenge(@PathVariable("challengeId") int challengeId, @RequestBody Challenge challenge) {
         boolean isS = challengeService.editChallenge(challengeId, challenge);
@@ -144,7 +165,6 @@ public class ChallengeController {
             " - userId : 로그인한 유저 ID")
     @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> registerChallenge(@RequestBody User user, @PathVariable("challengeId") int challengeId) {
-        log.debug("ChallengeController/registerChallenge");
         boolean isS = challengeService.registerChallenge(user, challengeId);
         if (isS) return new ResponseEntity<>(new ApiResponse("success", "registerChallenge", 200), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse("empty", "registerChallenge", 409), HttpStatus.CONFLICT);
@@ -220,14 +240,19 @@ public class ChallengeController {
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeAuthorId : 챌린지 작성자 ID (userId, 관리자만 가능) \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n\n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 현재 시간으로 자동 설정) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 null) \n" +
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
             "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
     )
     @PostMapping("/admin/challenge/schedule")
     public ResponseEntity<?> createScheduleChallenge(@RequestBody Challenge challenge) {
-        challengeService.addChallengeSchedule(challenge);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+            challengeService.addChallengeSchedule(challenge);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "챌린지 스케쥴 수정", description = "반복할 챌린지 변경을 위한 API \n\n " +
@@ -239,10 +264,9 @@ public class ChallengeController {
             "- challengeTitle : 챌린지 제목 \n " +
             "- challengeDescription : 챌린지 내용 \n" +
             "- challengeTargetCnt : 챌린지 목표 인원 수 \n" +
-            "- challengeCreateDate(Optional) : 챌린지 생성날짜 (ex.2024-07-01 00:00:00, 미입력시 기존 시간 유지) \n" +
-            "- challengeDeleteDate(Optional) : 챌린지 종료날짜 (ex.2024-07-07 23:59:59, 미입력시 기존 시간 유지) \n" +
-            "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)"
-    )
+            "- challengeCreateDate : 챌린지 생성날짜 (ex.2024-07-01 00:00:00) \n" +
+            "- challengeDeleteDate : 챌린지 종료날짜 (ex.2024-07-07 23:59:59) \n" +
+            "- challengeSchedulerCycle : 챌린지 사이클 설정 (1: 일일 / 2 : 일주일 / 3 : 한달)")
     @PutMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> updateScheduleChallenge(@PathVariable("challengeId") int challengeId, @RequestBody Challenge challenge) {
         boolean isS = challengeService.editChallengeSchedule(challengeId, challenge);
@@ -259,7 +283,6 @@ public class ChallengeController {
     )
     @DeleteMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> deleteScheduleChallenge(@PathVariable("challengeId") int challengeId) {
-        System.out.println("challengeId: " + challengeId);
         boolean isS = challengeService.deleteChallengeSchedule(challengeId);
         if (isS) {
             return new ResponseEntity<>(new ApiResponse("success", "deleteScheduleChallenge", 200), HttpStatus.OK);
@@ -282,9 +305,9 @@ public class ChallengeController {
         }
     }
 
-    @Operation(summary = "챌린지 스케쥴 종료", description = "반복할 챌린지 종료를 위한 API \n\n " +
+    @Operation(summary = "챌린지 스케쥴 상세 조회", description = "반복하는 챌린지를 상세 조회 하기 위한 API \n\n " +
             "<필수입력> \n\n " +
-            "- challengeId : 이름은 challengeId지만 스케쥴러의 ID")
+            "- challengeId : 챌린지 스케쥴의 ID")
     @GetMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> getChallengeSchedule(@PathVariable("challengeId") int challengeId) {
         Optional<Challenge> schedule = challengeService.getChallengeSchedule(challengeId);
