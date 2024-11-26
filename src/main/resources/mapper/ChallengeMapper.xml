@@ -412,4 +412,10 @@
         from Challenge_Scheduler
         where challenge_id = #{challengeId}
     </select>
+
+    <select id="selectChallengeParticipant" resultType="int">
+        select count(*)
+        from Challenge_Participant
+        where user_id = #{userId} and challenge_id = #{challengeId}
+    </select>
 </mapper>
