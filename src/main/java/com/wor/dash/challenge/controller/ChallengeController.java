@@ -259,6 +259,7 @@ public class ChallengeController {
     )
     @DeleteMapping("/admin/challenge/schedule/{challengeId}")
     public ResponseEntity<?> deleteScheduleChallenge(@PathVariable("challengeId") int challengeId) {
+        System.out.println("challengeId: " + challengeId);
         boolean isS = challengeService.deleteChallengeSchedule(challengeId);
         if (isS) {
             return new ResponseEntity<>(new ApiResponse("success", "deleteScheduleChallenge", 200), HttpStatus.OK);
@@ -278,6 +279,23 @@ public class ChallengeController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("fail", "getChallengeCategory", 500), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Operation(summary = "챌린지 스케쥴 종료", description = "반복할 챌린지 종료를 위한 API \n\n " +
+            "<필수입력> \n\n " +
+            "- challengeId : 이름은 challengeId지만 스케쥴러의 ID")
+    @GetMapping("/admin/challenge/schedule/{challengeId}")
+    public ResponseEntity<?> getChallengeSchedule(@PathVariable("challengeId") int challengeId) {
+        Optional<Challenge> schedule = challengeService.getChallengeSchedule(challengeId);
+        try {
+            if (schedule.isPresent()) {
+                return new ResponseEntity<>(schedule.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse("empty", "getChallengeSchedule", 204), HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse("fail", "getChallengeSchedule", 500), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
