@@ -61,6 +61,7 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/running-server:latest
+        platforms: linux/arm64/v8    # M1/M2 Mac 지원을 위해 추가
 
     - name: Deploy to Clapsheep Server
       uses: appleboy/ssh-action@v1.0.0
@@ -74,15 +75,13 @@ jobs:
         timeout: 60s
         command_timeout: 20m
         script: |
-          cd ~/running-project
+          cd ~/docker-server/projects/running-project    # 경로 수정
           docker compose down --remove-orphans
-          docker rm -f $(docker ps -aq) || true
-          docker network rm running-project_app_network || true
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/running-server:latest
           docker compose up -d
           sleep 30
           
-          if docker ps | grep -q mysql && docker ps | grep -q springboot-app && docker ps | grep -q running-server; then
+          if docker ps | grep -q running-mysql && docker ps | grep -q running-server; then    # 컨테이너 이름 수정
             echo "Deployment successful"
             exit 0
           else
