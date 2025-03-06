@@ -69,6 +69,7 @@ jobs:
         host: ${{ secrets.CLAPSHEEP_SERVER_HOST }}
         username: ${{ secrets.CLAPSHEEP_SERVER_USERNAME }}
         port: 2222
+        debug: true
         key: |
           ${{ secrets.SSH_PRIVATE_KEY }}    # | 문자 추가하여 여러 줄 문자열임을 명시
         script: |
