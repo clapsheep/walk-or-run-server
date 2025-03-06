@@ -75,7 +75,7 @@ jobs:
         timeout: 60s
         command_timeout: 20m
         script: |
-          cd ~/docker-server/projects/running-project    # 경로 수정
+          cd /Users/clapsheep-server/docker-server/projects/running-project    # 절대 경로로 수정
           docker compose down --remove-orphans
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/running-server:latest
           docker compose up -d
