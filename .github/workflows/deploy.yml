@@ -68,20 +68,16 @@ jobs:
       with:
         host: ${{ secrets.CLAPSHEEP_SERVER_HOST }}
         username: ${{ secrets.CLAPSHEEP_SERVER_USERNAME }}
-        password: ${{ secrets.CLAPSHEEP_SERVER_PASSWORD }}
         port: 2222
-        script_stop: true
-        debug: true
-        timeout: 60s
-        command_timeout: 20m
+        key: ${{ secrets.SSH_PRIVATE_KEY }}    # 개인키를 GitHub Secrets에 추가
         script: |
-          cd /Users/clapsheep-server/docker-server/projects/running-project    # 절대 경로로 수정
+          cd /Users/clapsheep-server/docker-server/projects/running-project
           docker compose down --remove-orphans
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/running-server:latest
           docker compose up -d
           sleep 30
           
-          if docker ps | grep -q running-mysql && docker ps | grep -q running-server; then    # 컨테이너 이름 수정
+          if docker ps | grep -q running-mysql && docker ps | grep -q running-server; then
             echo "Deployment successful"
             exit 0
           else
