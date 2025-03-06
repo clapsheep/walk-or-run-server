@@ -70,8 +70,7 @@ jobs:
         username: ${{ secrets.CLAPSHEEP_SERVER_USERNAME }}
         port: 2222
         debug: true
-        key: |
-          ${{ secrets.SSH_PRIVATE_KEY }}    # | 문자 추가하여 여러 줄 문자열임을 명시
+        key: ${{ secrets.SSH_PRIVATE_KEY }}    # | 문자 제거
         script: |
           cd /Users/clapsheep-server/docker-server/projects/running-project
           docker compose down --remove-orphans
