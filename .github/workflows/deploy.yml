@@ -69,15 +69,21 @@ jobs:
         host: ${{ secrets.CLAPSHEEP_SERVER_HOST }}
         username: ${{ secrets.CLAPSHEEP_SERVER_USERNAME }}
         port: 2222
-        debug: true
-        key: ${{ secrets.SSH_PRIVATE_KEY }}    # | 문자 제거
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          # 환경 설정
+          export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH"
+      
+          # 디버깅을 위한 정보 출력
+          echo "Using docker at: $(which docker)"
+          echo "Current user: $(whoami)"
+      
           cd /Users/clapsheep-server/docker-server/projects/running-project
           docker compose down --remove-orphans
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/running-server:latest
           docker compose up -d
           sleep 30
-          
+      
           if docker ps | grep -q running-mysql && docker ps | grep -q running-server; then
             echo "Deployment successful"
             exit 0
